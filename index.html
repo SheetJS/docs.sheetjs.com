@@ -101,7 +101,16 @@ port calculations to web apps; automate common spreadsheet tasks, and much more!
 <li>
 <a href="#getting-started">Getting Started</a>
 <ul>
-<li><a href="#installation">Installation</a></li>
+<li>
+<a href="#installation">Installation</a>
+<ul>
+<li><a href="#standalone-browser-scripts">Standalone Browser Scripts</a></li>
+<li><a href="#ecmascript-modules">ECMAScript Modules</a></li>
+<li><a href="#deno">Deno</a></li>
+<li><a href="#nodejs">NodeJS</a></li>
+<li><a href="#photoshop-and-indesign">Photoshop and InDesign</a></li>
+</ul>
+</li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#the-zen-of-sheetjs">The Zen of SheetJS</a></li>
 <li><a href="#js-ecosystem-demos">JS Ecosystem Demos</a></li>
@@ -248,20 +257,17 @@ port calculations to web apps; automate common spreadsheet tasks, and much more!
 <a id="user-content-getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h2>
 <h3>
 <a id="user-content-installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
-<p><strong>Standalone Browser Scripts</strong></p>
-<p>The complete browser standalone build is saved to <code>dist/xlsx.full.min.js</code> and
-can be directly added to a page with a <code>&lt;script&gt;</code> tag:</p>
-<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">lang</span>="<span class="pl-s">javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">dist/xlsx.full.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
-<p>Each standalone release script is available at <a href="https://cdn.sheetjs.com/" rel="nofollow">https://cdn.sheetjs.com/</a>.  The
-latest version uses the <code>latest</code> tag:</p>
+<h4>
+<a id="user-content-standalone-browser-scripts" class="anchor" href="#standalone-browser-scripts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Standalone Browser Scripts</h4>
+<p>Each standalone release script is available at <a href="https://cdn.sheetjs.com/" rel="nofollow">https://cdn.sheetjs.com/</a>.</p>
+<p>The current version is <code>0.18.7</code> and can be referenced as follows:</p>
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- use version 0.18.7 --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">lang</span>="<span class="pl-s">javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">https://cdn.sheetjs.com/xlsx-0.18.7/package/dist/xlsx.full.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+<p>The <code>latest</code> tag references the latest version and updates with each release:</p>
 <div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- use the latest version --&gt;</span>
 <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">lang</span>="<span class="pl-s">javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
-<p>A specific release can be referenced by version:</p>
-<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- use version 0.18.5 --&gt;</span>
-<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">lang</span>="<span class="pl-s">javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">https://cdn.sheetjs.com/xlsx-0.18.5/package/dist/xlsx.full.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
-<p>For production use, scripts should be downloaded and added to a public folder
-alongside other scripts.</p>
-
+<p><strong>For production use, scripts should be downloaded and added to a public folder
+alongside other scripts.</strong></p>
 <details>
   <summary><b>Browser builds</b> (click to show)</summary>
 <p>The complete single-file version is generated at <code>dist/xlsx.full.min.js</code></p>
@@ -273,48 +279,80 @@ alongside other scripts.</p>
 <li>node stream utils removed</li>
 </ul>
 <p>These scripts are also available on the CDN:</p>
-<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- use xlsx.mini.min.js from the latest version --&gt;</span>
-<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">lang</span>="<span class="pl-s">javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.mini.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- use xlsx.mini.min.js from version 0.18.7 --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">lang</span>="<span class="pl-s">javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">https://cdn.sheetjs.com/xlsx-0.18.7/package/dist/xlsx.mini.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
 </details>
-<p>With <a href="https://bower.io/search/?q=js-xlsx" rel="nofollow">bower</a>:</p>
-<div class="highlight highlight-source-shell"><pre>$ bower install js-xlsx</pre></div>
-<p><strong>ECMAScript Modules</strong></p>
+<p><a href="https://bower.io/" rel="nofollow">Bower</a> plays nice with the CDN tarballs:</p>
+<div class="highlight highlight-source-shell"><pre>$ npx bower install https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz</pre></div>
+<p>Bower will place the standalone scripts in <code>bower_components/js-xlsx/dist/</code></p>
+<details>
+  <summary><b>Internet Explorer and ECMAScript 3 Compatibility</b> (click to show)</summary>
+<p>For broad compatibility with JavaScript engines, the library is written using
+ECMAScript 3 language dialect as well as some ES5 features like <code>Array#forEach</code>.
+Older browsers require shims to provide missing functions.</p>
+<p>To use the shim, add the shim before the script tag that loads <code>xlsx.js</code>:</p>
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- add the shim first --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">shim.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>
+<span class="pl-c">&lt;!-- after the shim is referenced, add the library --&gt;</span>
+<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">xlsx.full.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+<p>Due to SSL certificate compatibility issues, it is highly recommended to save
+the Standalone and Shim scripts from <a href="https://cdn.sheetjs.com/" rel="nofollow">https://cdn.sheetjs.com/</a> and add to a
+public directory in the site.</p>
+<p>The script also includes <code>IE_LoadFile</code> and <code>IE_SaveFile</code> for loading and saving
+files in Internet Explorer versions 6-9.  The <code>xlsx.extendscript.js</code> script
+bundles the shim in a format suitable for Photoshop and other Adobe products.</p>
+</details>
+<h4>
+<a id="user-content-ecmascript-modules" class="anchor" href="#ecmascript-modules" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ECMAScript Modules</h4>
+<p><em>Browser ESM</em></p>
 <p>The ECMAScript Module build is saved to <code>xlsx.mjs</code> and can be directly added to
 a page with a <code>script</code> tag using <code>type="module"</code>:</p>
 <div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">module</span>"<span class="pl-kos">&gt;</span>
-<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-s1">read</span><span class="pl-kos">,</span> <span class="pl-s1">writeFileXLSX</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-s1">read</span><span class="pl-kos">,</span> <span class="pl-s1">writeFileXLSX</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"https://cdn.sheetjs.com/xlsx-0.18.7/package/xlsx.mjs"</span><span class="pl-kos">;</span>
 
 <span class="pl-c">/* load the codepage support library for extended support with older formats  */</span>
-<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-s1">set_cptable</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs"</span><span class="pl-kos">;</span>
-<span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-s1">cptable</span> <span class="pl-k">from</span> <span class="pl-s">'https://cdn.sheetjs.com/xlsx-latest/package/dist/cpexcel.full.mjs'</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-s1">set_cptable</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"https://cdn.sheetjs.com/xlsx-0.18.7/package/xlsx.mjs"</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-s1">cptable</span> <span class="pl-k">from</span> <span class="pl-s">'https://cdn.sheetjs.com/xlsx-0.18.7/package/dist/cpexcel.full.mjs'</span><span class="pl-kos">;</span>
 <span class="pl-en">set_cptable</span><span class="pl-kos">(</span><span class="pl-s1">cptable</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 <span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
-<p>The NodeJS package also exposes the module with the <code>module</code> parameter, which is
-supported in Angular and other projects:</p>
+<p><em>Frameworks (Angular, VueJS, React) and Bundlers (webpack, etc)</em></p>
+<p>The NodeJS package is readily installed from the tarballs:</p>
+<div class="highlight highlight-source-shell"><pre>$ npm  install --save https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> npm</span>
+$ pnpm install --save https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> pnpm</span>
+$ yarn add     --save https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> yarn</span></pre></div>
+<p>Once installed, the library can be imported under the name <code>xlsx</code>:</p>
 <div class="highlight highlight-source-ts"><pre><span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-s1">read</span><span class="pl-kos">,</span> <span class="pl-s1">writeFileXLSX</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"xlsx"</span><span class="pl-kos">;</span>
 
 <span class="pl-c">/* load the codepage support library for extended support with older formats  */</span>
 <span class="pl-k">import</span> <span class="pl-kos">{</span> <span class="pl-s1">set_cptable</span> <span class="pl-kos">}</span> <span class="pl-k">from</span> <span class="pl-s">"xlsx"</span><span class="pl-kos">;</span>
 <span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-s1">cptable</span> <span class="pl-k">from</span> <span class="pl-s">'xlsx/dist/cpexcel.full.mjs'</span><span class="pl-kos">;</span>
 <span class="pl-en">set_cptable</span><span class="pl-kos">(</span><span class="pl-s1">cptable</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p><strong>Deno</strong></p>
+<h4>
+<a id="user-content-deno" class="anchor" href="#deno" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deno</h4>
 <p><code>xlsx.mjs</code> can be imported in Deno:</p>
-<div class="highlight highlight-source-ts"><pre><span class="pl-c">// <span class="pl-k">@deno</span>-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"</span>
-<span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-smi">XLSX</span> <span class="pl-k">from</span> <span class="pl-s">'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs'</span><span class="pl-kos">;</span>
+<div class="highlight highlight-source-ts"><pre><span class="pl-c">// <span class="pl-k">@deno</span>-types="https://cdn.sheetjs.com/xlsx-0.18.7/package/types/index.d.ts"</span>
+<span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-smi">XLSX</span> <span class="pl-k">from</span> <span class="pl-s">'https://cdn.sheetjs.com/xlsx-0.18.7/package/xlsx.mjs'</span><span class="pl-kos">;</span>
 
 <span class="pl-c">/* load the codepage support library for extended support with older formats  */</span>
-<span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-s1">cptable</span> <span class="pl-k">from</span> <span class="pl-s">'https://cdn.sheetjs.com/xlsx-latest/package/dist/cpexcel.full.mjs'</span><span class="pl-kos">;</span>
+<span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-s1">cptable</span> <span class="pl-k">from</span> <span class="pl-s">'https://cdn.sheetjs.com/xlsx-0.18.7/package/dist/cpexcel.full.mjs'</span><span class="pl-kos">;</span>
 <span class="pl-smi">XLSX</span><span class="pl-kos">.</span><span class="pl-en">set_cptable</span><span class="pl-kos">(</span><span class="pl-s1">cptable</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p><strong>NodeJS</strong></p>
+<h4>
+<a id="user-content-nodejs" class="anchor" href="#nodejs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NodeJS</h4>
 <p>Tarballs are available on <a href="https://cdn.sheetjs.com" rel="nofollow">https://cdn.sheetjs.com</a>.</p>
+<p>Each individual version can be referenced using a similar URL pattern.
+<a href="https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz" rel="nofollow">https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz</a> is the URL for <code>0.18.7</code></p>
 <p><a href="https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz" rel="nofollow">https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz</a> is a link to the latest
 version and will refresh on each release.</p>
-<p>Each individual version can be referenced using a similar URL pattern.
-<a href="https://cdn.sheetjs.com/xlsx-0.18.6/xlsx-0.18.6.tgz" rel="nofollow">https://cdn.sheetjs.com/xlsx-0.18.6/xlsx-0.18.6.tgz</a> is the URL for <code>0.18.6</code></p>
+<p><em>Installation</em></p>
+<p>Tarballs can be directly installed using a package manager:</p>
+<div class="highlight highlight-source-shell"><pre>$ npm  install https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> npm</span>
+$ pnpm install https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> pnpm</span>
+$ yarn add     https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> yarn</span></pre></div>
 <p>For general stability, "vendoring" modules is the recommended approach:</p>
 <ol>
 <li>
-<p>Download the tarball (<code>xlsx-&lt;version&gt;.tgz</code>) for the desired version.</p>
+<p>Download the tarball (<code>xlsx-0.18.7.tgz</code>) for the desired version. The current
+version is available at <a href="https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz" rel="nofollow">https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz</a></p>
 </li>
 <li>
 <p>Create a <code>vendor</code> subdirectory at the root of your project and move the
@@ -324,14 +362,16 @@ tarball to that folder.  Add it to your project repository.</p>
 <p>Install the tarball using a package manager:</p>
 </li>
 </ol>
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> note : replace $VERSION with the actual version (e.g. latest or 0.18.6)</span>
-$ npm  install --save file:vendor/xlsx-<span class="pl-smi">$VERSION</span>.tgz <span class="pl-c"><span class="pl-c">#</span> npm</span>
-$ pnpm install --save file:vendor/xlsx-<span class="pl-smi">$VERSION</span>.tgz <span class="pl-c"><span class="pl-c">#</span> pnpm</span>
-$ yarn add            file:vendor/xlsx-<span class="pl-smi">$VERSION</span>.tgz <span class="pl-c"><span class="pl-c">#</span> yarn</span></pre></div>
+<div class="highlight highlight-source-shell"><pre>$ npm  install --save file:vendor/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> npm</span>
+$ pnpm install --save file:vendor/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> pnpm</span>
+$ yarn add            file:vendor/xlsx-0.18.7.tgz <span class="pl-c"><span class="pl-c">#</span> yarn</span></pre></div>
 <p>The package will be installed and accessible as <code>xlsx</code>.</p>
-<p>By default, the module supports <code>require</code>:</p>
+<p><em>Usage</em></p>
+<p>By default, the module supports <code>require</code> and it will automatically add support
+for streams and filesystem access:</p>
 <div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-c1">XLSX</span> <span class="pl-c1">=</span> <span class="pl-en">require</span><span class="pl-kos">(</span><span class="pl-s">"xlsx"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p>The module also ships with <code>xlsx.mjs</code> for use with <code>import</code>:</p>
+<p>The module also ships with <code>xlsx.mjs</code> for use with <code>import</code>.  The <code>mjs</code> version
+does not automatically load native node modules:</p>
 <div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-c1">XLSX</span> <span class="pl-k">from</span> <span class="pl-s">'xlsx/xlsx.mjs'</span><span class="pl-kos">;</span>
 
 <span class="pl-c">/* load 'fs' for readFile and writeFile support */</span>
@@ -345,26 +385,14 @@ $ yarn add            file:vendor/xlsx-<span class="pl-smi">$VERSION</span>.tgz 
 <span class="pl-c">/* load the codepage support library for extended support with older formats  */</span>
 <span class="pl-k">import</span> <span class="pl-c1">*</span> <span class="pl-k">as</span> <span class="pl-s1">cpexcel</span> <span class="pl-k">from</span> <span class="pl-s">'xlsx/dist/cpexcel.full.mjs'</span><span class="pl-kos">;</span>
 <span class="pl-c1">XLSX</span><span class="pl-kos">.</span><span class="pl-en">set_cptable</span><span class="pl-kos">(</span><span class="pl-s1">cpexcel</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p><strong>Photoshop and InDesign</strong></p>
+<h4>
+<a id="user-content-photoshop-and-indesign" class="anchor" href="#photoshop-and-indesign" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Photoshop and InDesign</h4>
 <p><code>dist/xlsx.extendscript.js</code> is an ExtendScript build for Photoshop and InDesign.
-<a href="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.extendscript.js" rel="nofollow">https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.extendscript.js</a> is the
-latest build.  It can be directly referenced with a <code>#include</code> directive:</p>
+<a href="https://cdn.sheetjs.com/xlsx-0.18.7/package/dist/xlsx.extendscript.js" rel="nofollow">https://cdn.sheetjs.com/xlsx-0.18.7/package/dist/xlsx.extendscript.js</a> is the
+current version.  After downloading the script, it can be directly referenced
+with a <code>#include</code> directive:</p>
 <pre lang="extendscript"><code>#include "xlsx.extendscript.js"
 </code></pre>
-<details>
-  <summary><b>Internet Explorer and ECMAScript 3 Compatibility</b> (click to show)</summary>
-<p>For broad compatibility with JavaScript engines, the library is written using
-ECMAScript 3 language dialect as well as some ES5 features like <code>Array#forEach</code>.
-Older browsers require shims to provide missing functions.</p>
-<p>To use the shim, add the shim before the script tag that loads <code>xlsx.js</code>:</p>
-<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- add the shim first --&gt;</span>
-<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">shim.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>
-<span class="pl-c">&lt;!-- after the shim is referenced, add the library --&gt;</span>
-<span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">xlsx.full.min.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
-<p>The script also includes <code>IE_LoadFile</code> and <code>IE_SaveFile</code> for loading and saving
-files in Internet Explorer versions 6-9.  The <code>xlsx.extendscript.js</code> script
-bundles the shim in a format suitable for Photoshop and other Adobe products.</p>
-</details>
 <h3>
 <a id="user-content-usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h3>
 <p>Most scenarios involving spreadsheets and data can be broken into 5 parts:</p>
@@ -900,7 +928,7 @@ and process the whole thing at the end:</p>
   <span class="pl-k">const</span> <span class="pl-s1">out</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">Uint8Array</span><span class="pl-kos">(</span><span class="pl-s1">buffers</span><span class="pl-kos">.</span><span class="pl-en">reduce</span><span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">acc</span><span class="pl-kos">,</span> <span class="pl-s1">v</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">acc</span> <span class="pl-c1">+</span> <span class="pl-s1">v</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">,</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
   <span class="pl-k">let</span> <span class="pl-s1">off</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">;</span>
-  <span class="pl-k">for</span><span class="pl-kos">(</span><span class="pl-k">const</span> <span class="pl-s1">u8</span> <span class="pl-k">of</span> <span class="pl-s1">arr</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-k">for</span><span class="pl-kos">(</span><span class="pl-k">const</span> <span class="pl-s1">u8</span> <span class="pl-k">of</span> <span class="pl-s1">buffers</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
     <span class="pl-s1">out</span><span class="pl-kos">.</span><span class="pl-en">set</span><span class="pl-kos">(</span><span class="pl-s1">u8</span><span class="pl-kos">,</span> <span class="pl-s1">off</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
     <span class="pl-s1">off</span> <span class="pl-c1">+=</span> <span class="pl-s1">u8</span><span class="pl-kos">.</span><span class="pl-c1">length</span><span class="pl-kos">;</span>
   <span class="pl-kos">}</span>
@@ -910,7 +938,7 @@ and process the whole thing at the end:</p>
 
 <span class="pl-k">const</span> <span class="pl-s1">data</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-en">process_RS</span><span class="pl-kos">(</span><span class="pl-s1">stream</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 <span class="pl-c">/* data is Uint8Array */</span>
-<span class="pl-k">const</span> <span class="pl-s1">workbook</span> <span class="pl-c1">=</span> <span class="pl-c1">XLSX</span><span class="pl-kos">.</span><span class="pl-en">read</span><span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<span class="pl-k">const</span> <span class="pl-s1">workbook</span> <span class="pl-c1">=</span> <span class="pl-c1">XLSX</span><span class="pl-kos">.</span><span class="pl-en">read</span><span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">,</span> <span class="pl-kos">{</span><span class="pl-c1">type</span>: <span class="pl-s">'array'</span><span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </details>
 <p>More detailed examples are covered in the <a href="https://github.com/SheetJS/SheetJS/tree/master/demos/">included demos</a></p>
 <h3>
@@ -1673,7 +1701,7 @@ an apostrophe <code>'</code>, consistent with Excel's formula bar display.</p>
 <a id="user-content-interface" class="anchor" href="#interface" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interface</h2>
 <p><code>XLSX</code> is the exposed variable in the browser and the exported node variable</p>
 <p><code>XLSX.version</code> is the version of the library (added by the build script).</p>
-<p><code>XLSX.SSF</code> is an embedded version of the <a href="https://git.io/ssf" rel="nofollow">format library</a>.</p>
+<p><code>XLSX.SSF</code> is an embedded version of the <a href="https://github.com/SheetJS/ssf">format library</a>.</p>
 <h3>
 <a id="user-content-parsing-functions" class="anchor" href="#parsing-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parsing functions</h3>
 <p><code>XLSX.read(data, read_opts)</code> attempts to parse <code>data</code>.</p>
@@ -1684,7 +1712,7 @@ an apostrophe <code>'</code>, consistent with Excel's formula bar display.</p>
 <p><code>XLSX.write(wb, write_opts)</code> attempts to write the workbook <code>wb</code></p>
 <p><code>XLSX.writeFile(wb, filename, write_opts)</code> attempts to write <code>wb</code> to <code>filename</code>.
 In browser-based environments, it will attempt to force a client-side download.</p>
-<p><code>XLSX.writeFileAsync(wb, filename, o, cb)</code> attempts to write <code>wb</code> to <code>filename</code>.
+<p><code>XLSX.writeFileAsync(filename, wb, o, cb)</code> attempts to write <code>wb</code> to <code>filename</code>.
 If <code>o</code> is omitted, the writer will use the third argument as the callback.</p>
 <p><code>XLSX.stream</code> contains a set of streaming write functions.</p>
 <p>Write options are described in the <a href="#writing-options">Writing Options</a> section.</p>
@@ -2286,6 +2314,12 @@ workbook <code>Props</code> object normalizes the names:</p>
 <p><code>wb.Workbook</code> stores workbook-level attributes.</p>
 <h4>
 <a id="user-content-defined-names" class="anchor" href="#defined-names" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Defined Names</h4>
+<details>
+  <summary><b>Format Support</b> (click to show)</summary>
+<p><strong>Defined Names</strong>: XLSX/M, XLSB, BIFF8 XLS, XLML, SYLK</p>
+<p><strong>Unicode Defined Names</strong>: XLSX/M, XLSB, BIFF8 XLS, XLML</p>
+<p><strong>Defined Name Comment</strong>: XLSX/M, XLSB, BIFF8 XLS</p>
+</details>
 <p><code>wb.Workbook.Names</code> is an array of defined name objects which have the keys:</p>
 <details>
   <summary><b>Defined Name Properties</b> (click to show)</summary>
@@ -4533,7 +4567,7 @@ unexpected results if the array values are not unique!</li>
 <td align="center"><g-emoji class="g-emoji" alias="heavy_check_mark" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png">✔</g-emoji></td>
 </tr>
 <tr>
-<td align="left">Excel 2.0/2.1 (XLS BIFF2)</td>
+<td align="left">Excel 2.0/2.1 / Multiplan 4.x DOS (XLS BIFF2)</td>
 <td align="center"><g-emoji class="g-emoji" alias="heavy_check_mark" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png">✔</g-emoji></td>
 <td align="center"><g-emoji class="g-emoji" alias="heavy_check_mark" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png">✔</g-emoji></td>
 </tr>
@@ -4675,6 +4709,12 @@ range limits will be silently truncated:</p>
 <td align="right">1000000</td>
 </tr>
 <tr>
+<td align="left">Quattro Pro 9+ (QPW)</td>
+<td align="left">IV1000000</td>
+<td align="right">256</td>
+<td align="right">1000000</td>
+</tr>
+<tr>
 <td align="left">Excel 97-2004 (XLS BIFF8)</td>
 <td align="left">IV65536</td>
 <td align="right">256</td>
@@ -4739,6 +4779,10 @@ Excel deviates from the specification.</p>
 the concept of a workbook (<code>XLW</code> files) but also had single-sheet <code>XLS</code> format.
 The structure is largely similar to the Lotus 1-2-3 file formats.  BIFF5/8/12
 extended the format in various ways but largely stuck to the same record format.</p>
+<p>Multiplan 4 "Normal" files are identical in structure to BIFF2 and use the same
+cell value records.  There are some different record types for more advanced
+features like Print Settings.  The BIFF2 writer generates files that can be read
+in Multiplan 4 and the parser can extract values from "Normal" files.</p>
 <p>There is no official specification for any of these formats.  Excel 95 can write
 files in these formats, so record lengths and fields were determined by writing
 in all of the supported formats and comparing files.  Excel 2016 can generate
@@ -4849,18 +4893,10 @@ reader understands DBF Level 7 extensions like DATETIME.</p>
 <ul>
 <li><strong>Symbolic Link (SYLK)</strong></li>
 </ul>
-<p>There is no real documentation.  All knowledge was gathered by saving files in
-various versions of Excel to deduce the meaning of fields.  Notes:</p>
+<p><a href="https://oss.sheetjs.com/notes/sylk/" rel="nofollow">https://oss.sheetjs.com/notes/sylk/</a> is an informal specification based on our
+experimentation and previous documentation efforts.</p>
 <ul>
-<li>
-<p>Plain formulae are stored in the RC form.</p>
-</li>
-<li>
-<p>Column widths are rounded to integral characters.</p>
-</li>
-<li>
-<p><strong>Lotus Formatted Text (PRN)</strong></p>
-</li>
+<li><strong>Lotus Formatted Text (PRN)</strong></li>
 </ul>
 <p>There is no real documentation, and in fact Excel treats PRN as an output-only
 file format.  Nevertheless we can guess the column widths and reverse-engineer

@@ -1,0 +1,14 @@
+{
+	"private": true,
+	"alex": {
+		"allow": [
+			"chinese",
+			"special",
+			"simple",
+			"just",
+			"crash",
+			"wtf",
+			"holes"
+		]
+	}
+}
