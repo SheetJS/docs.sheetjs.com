@@ -1,3 +1,9 @@
+.PHONY: build
+build:
+	cd docz; pnpm build; cd ..
+	rm -rf docs
+	mv docz/build/ docs
+
 .PHONY: index
 index: readme ## Rebuild site
 	sed -i .bak 's/](d/](https:\/\/github.com\/SheetJS\/SheetJS\/tree\/master\/d/g' README.md
@@ -21,7 +27,7 @@ formats.png legend.png: %.png: misc/%.svg
 	node misc/coarsify.js misc/$*.svg misc/$*.svg.svg
 	npx svgexport misc/$*.svg.svg $@ 0.5x
 
-MDLINT=README.md
+MDLINT=README.md $(wildcard docz/*.md*) $(wildcard docz/docs/*.md*) $(wildcard docz/docs/*/*.md*)
 .PHONY: mdlint
 mdlint: $(MDLINT) ## Check markdown documents
 	npx alex $^

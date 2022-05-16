@@ -1,0 +1,41 @@
+<svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <polygon fill="#ffffff" points="0,0 0,1024 1024,1024 1024,0"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" x="64" y="384" height="256" width="256">
+    <defs>
+      <clipPath id="grid"><polygon points="0,0 0,1024 1024,1024 1024,780"/></clipPath>
+      <clipPath id="bars"><polygon points="0,0 1024,0 1024,780"/></clipPath>
+    </defs>
+    <polygon fill="#ffffff" points="0,0 0,1024 1024,1024 1024,0"/>
+    <polygon fill="#63deab" stroke="#ffffff" stroke-width="10" points="0,0 0,1024 1024,1024 1024,780"/>
+    <g clip-path="url(#bars)">
+      <rect x="288" y="160" width="192" height="1000" fill="#a2c5f0" stroke="#ffffff" stroke-width="10" />
+      <rect x="544" y="288" width="192" height="1000" fill="#ffbdbd" stroke="#ffffff" stroke-width="10" />
+      <rect x="800" y="64"  width="192" height="1000" fill="#a2c5f0" stroke="#ffffff" stroke-width="10" />
+    </g>
+    <g clip-path="url(#grid)">
+      <line x1="0" y1="128" x2="1024" y2="128" stroke="#ffffff" stroke-width="10" />
+      <line x1="0" y1="256" x2="1024" y2="256" stroke="#ffffff" stroke-width="10" />
+      <line x1="0" y1="384" x2="1024" y2="384" stroke="#ffffff" stroke-width="10" />
+      <line x1="0" y1="512" x2="1024" y2="512" stroke="#ffffff" stroke-width="10" />
+      <line x1="0" y1="640" x2="1024" y2="640" stroke="#ffffff" stroke-width="10" />
+      <line x1="0" y1="768" x2="1024" y2="768" stroke="#ffffff" stroke-width="10" />
+      <line x1="0" y1="896" x2="1024" y2="896" stroke="#ffffff" stroke-width="10" />
+      <line x1="256" y1="0" x2="256" y2="1024" stroke="#ffffff" stroke-width="10" />
+      <line x1="512" y1="0" x2="512" y2="1024" stroke="#ffffff" stroke-width="10" />
+      <line x1="768" y1="0" x2="768" y2="1024" stroke="#ffffff" stroke-width="10" />
+    </g>
+    <line x1="0" y1="0" x2="1024" y2="780" stroke="#ffffff" stroke-width="10" />
+  </svg>
+  <svg viewBox="-100 -100 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" x="384" y="384" width="256" height="256">
+    <path transform="translate(160,320) rotate(225)" d="M0,0v200a100,100,90,0,0,200,0a100,100,90,0,0,0,-200z" fill="transparent" stroke="#E4187A" stroke-width="16"/>
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="112 0 1024 1024" x="704" y="384" width="256" height="256">
+    <path d="M128,16h480l256,256v736h-736z" fill="transparent" stroke="#000000" stroke-width="16" />
+    <path d="M608,16l256,256h-256z" fill="transparent" stroke="#000000" stroke-width="16" stroke-linejoin="round" />
+    <rect x="220" y="348" width="552" height="552" fill="transparent" stroke="#000000" stroke-width="16"/>
+    <line x1="220" y1="486" x2="772" y2="486" stroke="#000000" stroke-width="8" />
+    <line x1="220" y1="624" x2="772" y2="624" stroke="#000000" stroke-width="8" />
+    <line x1="220" y1="762" x2="772" y2="762" stroke="#000000" stroke-width="8" />
+    <line x1="496" y1="348" x2="496" y2="900" stroke="#000000" stroke-width="8"/>
+  </svg>
+</svg>

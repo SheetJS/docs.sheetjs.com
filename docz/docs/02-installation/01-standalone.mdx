@@ -1,0 +1,112 @@
+---
+sidebar_position: 1
+sidebar_custom_props:
+  summary: Classic pages with simple <script> tags
+---
+
+import current from '/version.js';
+
+# Standalone Browser Scripts
+
+Each standalone release script is available at <https://cdn.sheetjs.com/>.
+
+<div>The current version is {current} and can be referenced as follows:</div>
+
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<!-- use version ${current} -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.full.min.js"></script>`}
+</code></pre>
+
+The `latest` tag references the latest version and updates with each release:
+
+```html
+<!-- use the latest version -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+```
+
+**For production use, scripts should be downloaded and added to a public folder
+alongside other scripts.**
+
+<details>
+  <summary><b>Download using Bower</b> (click to show)</summary>
+
+[Bower](https://bower.io/) plays nice with the CDN tarballs:
+
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npx bower install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+
+Bower will place the standalone scripts in `bower_components/js-xlsx/dist/`
+</details>
+
+<details>
+  <summary><b>Browser builds</b> (click to show)</summary>
+
+The complete single-file version is generated at `dist/xlsx.full.min.js`
+
+`dist/xlsx.core.min.js` omits codepage library (no support for XLS encodings)
+
+A slimmer build is generated at `dist/xlsx.mini.min.js`. Compared to full build:
+- codepage library skipped (no support for XLS encodings)
+- no support for XLSB / XLS / Lotus 1-2-3 / SpreadsheetML 2003 / Numbers
+- node stream utils removed
+
+These scripts are also available on the CDN:
+
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<!-- use xlsx.mini.min.js from version ${current} -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.mini.min.js"></script>`}
+</code></pre>
+
+</details>
+
+<details>
+  <summary><b>Internet Explorer and ECMAScript 3 Compatibility</b> (click to show)</summary>
+
+For broad compatibility with JavaScript engines, the library is written using
+ECMAScript 3 language dialect as well as some ES5 features like `Array#forEach`.
+Older browsers require shims to provide missing functions.
+
+To use the shim, add the shim before the script tag that loads `xlsx.js`:
+
+```html
+<!-- add the shim first -->
+<script type="text/javascript" src="shim.min.js"></script>
+<!-- after the shim is referenced, add the library -->
+<script type="text/javascript" src="xlsx.full.min.js"></script>
+```
+
+Due to SSL certificate compatibility issues, it is highly recommended to save
+the Standalone and Shim scripts from <https://cdn.sheetjs.com/> and add to a
+public directory in the site.
+
+The script also includes `IE_LoadFile` and `IE_SaveFile` for loading and saving
+files in Internet Explorer versions 6-9.  The `xlsx.extendscript.js` script
+bundles the shim in a format suitable for Photoshop and other Adobe products.
+
+</details>
+
+<details>
+  <summary><b>ECMAScript Module Imports in a SCRIPT TAG</b> (click to show)</summary>
+
+The ECMAScript Module build is saved to `xlsx.mjs` and can be directly added to
+a page with a `script` tag using `type="module"`:
+
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<script type="module">
+import { read, writeFileXLSX } from "https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs";
+</script>`}
+</code></pre>
+
+If XLS support is required, `cpexcel.full.js` must be manually imported:
+
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<script type="module">
+/* load the codepage support library for extended support with older formats  */
+import { set_cptable } from "https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs";
+import * as cptable from 'https://cdn.sheetjs.com/xlsx-${current}/package/dist/cpexcel.full.mjs';
+set_cptable(cptable);
+</script>`}
+</code></pre>
+
+</details>

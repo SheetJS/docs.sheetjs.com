@@ -5,6 +5,7 @@ js-xlsx
 xls
 xlsb
 xlsx
+docs.sheetjs.com
 
 # Excel-related terms
 A1-style
@@ -48,6 +49,7 @@ NPM
 Nuxt
 PhantomJS
 Photoshop
+ReactJS
 Redis
 RequireJS
 Rollup
@@ -58,6 +60,7 @@ VueJS
 WebKit
 WebSQL
 WK_
+axios
 iOS
 iWork
 nodejs
