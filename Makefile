@@ -3,6 +3,7 @@ build:
 	cd docz; pnpm build; cd ..
 	rm -rf docs
 	mv docz/build/ docs
+	cp CNAME docs
 
 .PHONY: index
 index: readme ## Rebuild site

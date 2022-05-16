@@ -50,7 +50,7 @@ more common use cases including plain JavaScript.
 4) Add an event handler for the `click` event to create a workbook and download:
 
 ```js
-document.getElementById("TableToExport").addEventListener('click', function() {
+document.getElementById("sheetjsexport").addEventListener('click', function() {
   /* Create worksheet from HTML DOM TABLE */
   var wb = XLSX.utils.table_to_book(document.getElementById("TableToExport"));
   /* Export to file (start a download) */
