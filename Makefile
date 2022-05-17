@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	cd docz; pnpm build; cd ..
+	cd docz; npx -y pnpm build; cd ..
 	rm -rf docs
 	mv docz/build/ docs
 	cp CNAME docs

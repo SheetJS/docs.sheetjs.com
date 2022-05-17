@@ -4,7 +4,12 @@ hide_table_of_contents: true
 title: Writing Files
 ---
 
+import current from '/version.js';
+
 # Writing Options
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 `XLSX.write(wb, write_opts)` attempts to write the workbook `wb`
 
@@ -43,8 +48,88 @@ The write functions accept an options argument:
 - Due to a bug in the program, some features like "Text to Columns" will crash
   Excel on worksheets where error conditions are ignored.  The writer will mark
   files to ignore the error by default.  Set `ignoreEC` to `false` to suppress.
-- Due to the size of the data, the NUMBERS data is not included by default. The
-  included `xlsx.zahl.js` and `xlsx.zahl.mjs` scripts include the data.
+
+<details open>
+  <summary><b>Exporting NUMBERS files</b> (click to show)</summary>
+
+The NUMBERS writer requires a fairly large base.  The supplementary `xlsx.zahl`
+scripts provide support.  `xlsx.zahl.js` is designed for standalone and NodeJS
+use, while `xlsx.zahl.mjs` is suitable for ESM.
+
+Adding NUMBERS export support involves two steps:
+
+1) Load the `xlsx.zahl` script
+
+2) Pass the payload into the `numbers` option to `write` or `writeFile`.
+
+<Tabs>
+  <TabItem value="browser" label="Browser">
+
+<div><a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.zahl.js`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/xlsx.zahl.js</a> is the URL for {current}</div>
+
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<meta charset="utf8">\n\
+<body>\n\
+<script src="https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.full.min.js"></script>\n\
+<script src="https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.zahl.js"></script>\n\
+<script>\n\
+var wb = XLSX.utils.book_new(); var ws = XLSX.utils.aoa_to_sheet([\n\
+  ["SheetJS", "<3","விரிதாள்"],\n\
+  [72,,"Arbeitsblätter"],\n\
+  [,62,"数据"],\n\
+  [true,false,],\n\
+]); XLSX.utils.book_append_sheet(wb, ws, "Sheet1");\n\
+XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression: true});\n\
+</script>\n\
+</body>`}</code></pre>
+
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
+
+After installing the package:
+
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+
+The scripts will be available at `xlsx/dist/xlsx.zahl` (CommonJS) and
+`xlsx/dist/xlsx.zahl.mjs` (ESM).
+
+```js
+var XLSX = require("xlsx");
+var XLSX_ZAHL_PAYLOAD = require("xlsx/dist/xlsx.zahl");
+var wb = XLSX.utils.book_new(); var ws = XLSX.utils.aoa_to_sheet([
+  ["SheetJS", "<3","விரிதாள்"],
+  [72,,"Arbeitsblätter"],
+  [,62,"数据"],
+  [true,false,],
+]); XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression: true});
+```
+
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+<div><a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.zahl.mjs`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/xlsx.zahl.mjs</a> is the URL for {current}</div>
+
+<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';\n\
+import XLSX_ZAHL_PAYLOAD from 'https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.zahl.mjs';\n\
+
+var wb = XLSX.utils.book_new(); var ws = XLSX.utils.aoa_to_sheet([\n\
+  ["SheetJS", "<3","விரிதாள்"],\n\
+  [72,,"Arbeitsblätter"],\n\
+  [,62,"数据"],\n\
+  [true,false,],\n\
+]); XLSX.utils.book_append_sheet(wb, ws, "Sheet1");\n\
+XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression: true});\n\
+`}</code></pre>
+
+  </TabItem>
+</Tabs>
+
+
+</details>
 
 ## Supported Output Formats
 

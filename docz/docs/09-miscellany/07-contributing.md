@@ -1,6 +1,5 @@
 ---
 sidebar_position: 7
-hide_table_of_contents: true
 ---
 
 # Contributing
@@ -32,81 +31,135 @@ Folders:
 
 After cloning the repo, running `make help` will display a list of commands.
 
-## Platform-Specific Details
+## Platform-Specific Setup
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 <Tabs>
-  <TabItem value="osx" label="OSX/Linux">
+  <TabItem value="wsl" label="Windows WSL">
 
-The `xlsx.js` file is constructed from the files in the `bits` subdirectory. The
-build script (run `make`) will concatenate the individual bits to produce the
-script.  Before submitting a contribution, ensure that running make will produce
-the `xlsx.js` file exactly.  The simplest way to test is to add the script:
+The OSX/Linux workflow works in WSL.  Initial setup is involved:
 
-```bash
-$ git add xlsx.js
-$ make clean
-$ make
-$ git diff xlsx.js
-```
-
-To produce the dist files, run `make dist`.  The dist files are updated in each
-version release and *should not be committed between versions*.
-
-  </TabItem>
-  <TabItem value="win" label="Windows">
-
-The included `make.cmd` script will build `xlsx.js` from the `bits` directory.
-Building is as simple as:
-
-```cmd
-> make
-```
-
-To prepare development environment:
-
-```cmd
-> make init
-```
-
-The full list of commands available in Windows are displayed in `make help`:
-
-```
-make init -- install deps and global modules
-make lint -- run eslint linter
-make test -- run mocha test suite
-make misc -- run smaller test suite
-make book -- rebuild README and summary
-make help -- display this message
-```
-
-As explained in [Test Files](./testing#test-files), on Windows the release ZIP file must
-be downloaded and extracted.  If Bash on Windows is available, it is possible
-to run the OSX/Linux workflow.  The following steps prepares the environment:
+1) Install mercurial and subversion.
 
 ```bash
 # Install support programs for the build and test commands
-sudo apt-get install make git subversion mercurial
+sudo add-apt-repository ppa:mercurial-ppa/releases
+sudo apt-get update
+sudo apt-get install mercurial subversion
+sudo add-apt-repository --remove ppa:mercurial-ppa/releases
+```
 
-# Install nodejs and NPM within the WSL
-wget -qO- https://deb.nodesource.com/setup_8.x | sudo bash
-sudo apt-get install nodejs
+2) Install NodeJS
 
+```bash
+# Install bootstrap NodeJS and NPM within the WSL
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# CLOSE AND REOPEN SHELL BEFORE CONTINUING
+
+# Switch to `n`-managed NodeJS
+sudo npm i -g n
+sudo n 16
+```
+
+3) follow <https://github.com/paul-nelson-baker/git-openssl-shellscript> to
+build and install a version of Git with OpenSSL:
+
+```bash
+# Git does not support OpenSSL out of the box, must do this
+curl -LO https://github.com/paul-nelson-baker/git-openssl-shellscript/raw/main/compile-git-with-openssl.sh
+chmod +x compile-git-with-openssl.sh
+./compile-git-with-openssl.sh
+```
+
+4) (For deno testing) Install deno:
+
+```bash
+curl -fsSL https://deno.land/install.sh | sh
+```
+
+(instructions continued in the OSX/Linux part)
+
+  </TabItem>
+  <TabItem value="osx" label="OSX/Linux">
+
+Initial setup:
+
+0) Ensure mercurial, subversion, and NodeJS are installed. The WSL instructions
+will have installed these dependencies, so WSL users can skip to step 1.
+
+On Linux:
+
+```bash
+sudo apt-get install mercurial subversion
+```
+
+On MacOS, install using [Homebrew](https://brew.sh/):
+
+```bash
+brew install mercurial subversion
+```
+
+NodeJS installers can be found at <https://nodejs.org/en/download/>
+
+1) Install NodeJS modules for building the scripts
+
+```bash
 # Install dev dependencies
-sudo npm install -g mocha voc blanket xlsjs
+npm install
+
+# Install global dependencies
+sudo npm install -g mocha@2.5.3 voc @sheetjs/uglify-js
+```
+
+2) Initialize the test files:
+
+```bash
+make init
+```
+
+This step may take a while as it will be downloading a number of test files.
+
+3) Run a short test, then run a build
+
+```bash
+# Short test
+make test_misc
+
+# Full Build
+cd modules; make; cd ..
+make dist
 ```
 
   </TabItem>
 </Tabs>
 
-### Tests
 
-The `test_misc` target (`make test_misc` on Linux/OSX / `make misc` on Windows)
-runs the targeted feature tests.  It should take 5-10 seconds to perform feature
-tests without testing against the entire test battery.  New features should be
-accompanied with tests for the relevant file formats and features.
+## Development
+
+The `xlsx.js` and `xlsx.mjs` files are constructed from the files in the `bits`
+subdirectory. The build script (run `make`) will concatenate the individual
+bits to produce the scripts.
+
+To produce the dist files, run `make dist`.  The dist files are updated in each
+version release and *should not be committed between versions*.
+
+**A note on Older Versions**
+
+Some of the dependencies are wildly out of date.  While SheetJS aims to run in
+older versions of NodeJS and browsers, some libraries have chosen to break
+backwards compatibility.  The specific versions are used because they are known
+to work and known to produce consistent results.
+
+
+## Tests
+
+The `test_misc` target runs the targeted feature tests.  It should take 5-10
+seconds to perform feature tests without testing against the full test battery.
+New features should be accompanied with tests for the relevant file formats.
 
 For tests involving the read side, an appropriate feature test would involve
 reading an existing file and checking the resulting workbook object.  If a
