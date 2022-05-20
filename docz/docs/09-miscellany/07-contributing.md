@@ -31,7 +31,7 @@ Folders:
 
 After cloning the repo, running `make help` will display a list of commands.
 
-## Platform-Specific Setup
+## OS-Specific Setup
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -73,12 +73,6 @@ build and install a version of Git with OpenSSL:
 curl -LO https://github.com/paul-nelson-baker/git-openssl-shellscript/raw/main/compile-git-with-openssl.sh
 chmod +x compile-git-with-openssl.sh
 ./compile-git-with-openssl.sh
-```
-
-4) (For deno testing) Install deno:
-
-```bash
-curl -fsSL https://deno.land/install.sh | sh
 ```
 
 (instructions continued in the OSX/Linux part)
@@ -132,6 +126,12 @@ make test_misc
 # Full Build
 cd modules; make; cd ..
 make dist
+```
+
+4) (For deno testing) Install deno:
+
+```bash
+curl -fsSL https://deno.land/install.sh | sh
 ```
 
   </TabItem>

@@ -18,11 +18,6 @@ you want to test.  Feature-specific tests are available with `make test_misc`
 ```bash
 $ make test_misc   # run core tests
 $ make test        # run full tests
-$ make test_xls    # only use the XLS test files
-$ make test_xlsx   # only use the XLSX test files
-$ make test_xlsb   # only use the XLSB test files
-$ make test_xml    # only use the XML test files
-$ make test_ods    # only use the ODS test files
 ```
 
 To enable all errors, set the environment variable `WTF=1`:
@@ -36,7 +31,6 @@ $ WTF=1 make test  # enable all error messages
 
 ```bash
 $ make lint        # eslint checks
-$ make flow        # make lint + Flow checking
 $ make tslint      # check TS definitions
 ```
 
@@ -50,22 +44,22 @@ Start a local server and navigate to that directory to run the tests.
 `make ctest` will generate the browser fixtures.  To add more files, edit the
 `tests/fixtures.lst` file and add the paths.
 
-To run the full in-browser tests, clone the repo for
-[`oss.sheetjs.com`](https://github.com/SheetJS/SheetJS.github.io) and replace
-the `xlsx.js` file (then open a browser window and go to `stress.html`):
-
-```bash
-$ cp xlsx.js ../SheetJS.github.io
-$ cd ../SheetJS.github.io
-$ simplehttpserver # or "python -mSimpleHTTPServer" or "serve"
-$ open -a Chromium.app http://localhost:8000/stress.html
-```
-
   </TabItem>
   <TabItem value="deno" label="Deno">
 
 `make test-deno` will run the full Deno test suite and `make test-deno_misc`
 will run the smaller feature-specific tests.
+
+  </TabItem>
+  <TabItem value="extendscript" label="Extendscript">
+
+`make dist` will build `xlsx.extendscript.js`.
+
+The script `estk.jsx` at the root of the project is configured to run in
+ExtendScript Toolkit.  It will read `sheetjs.xlsx` and attempt to write test
+files in a number of file formats.
+
+ExtendScript Toolkit 3.5 is available as a standalone download for Windows.
 
   </TabItem>
 </Tabs>

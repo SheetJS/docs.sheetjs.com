@@ -140,19 +140,6 @@ XLSX.writeFile(workbook, "out.xlsb");
 `XLSX.writeFile` techniques work for most modern browsers as well as older IE.
 For much older browsers, there are workarounds implemented by wrapper libraries.
 
-[`FileSaver.js`](https://github.com/eligrey/FileSaver.js/) implements `saveAs`.
-Note: `XLSX.writeFile` will automatically call `saveAs` if available.
-
-```js
-/* bookType can be any supported output type */
-var wopts = { bookType:"xlsx", bookSST:false, type:"array" };
-
-var wbout = XLSX.write(workbook,wopts);
-
-/* the saveAs call downloads a file on the local machine */
-saveAs(new Blob([wbout],{type:"application/octet-stream"}), "test.xlsx");
-```
-
 [`Downloadify`](https://github.com/dcneiner/downloadify) uses a Flash SWF button
 to generate local files, suitable for environments where ActiveX is unavailable:
 

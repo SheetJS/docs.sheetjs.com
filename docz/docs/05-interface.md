@@ -8,7 +8,7 @@ sidebar_position: 5
 
 `XLSX.version` is the version of the library (added by the build script).
 
-`XLSX.SSF` is an embedded version of the [format library](https://github.com/SheetJS/ssf).
+`XLSX.SSF` is an embedded version of the [format library](https://github.com/SheetJS/sheetjs/tree/master/packages/ssf).
 
 ## Parsing functions
 
