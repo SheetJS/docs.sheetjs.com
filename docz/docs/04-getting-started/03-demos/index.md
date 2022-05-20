@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 1
 hide_table_of_contents: true
 ---
 
@@ -32,7 +32,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Electron`](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
 - [`NW.js`](https://github.com/SheetJS/SheetJS/tree/master/demos/nwjs/)
 - [`Chrome / Chromium Extension`](https://github.com/SheetJS/SheetJS/tree/master/demos/chrome/)
-- [`Google Sheet export`](https://github.com/SheetJS/SheetJS/tree/master/demos/google-sheet/)
+- [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](https://github.com/SheetJS/SheetJS/tree/master/demos/extendscript/)
 - [`Headless Browsers`](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/)
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)
