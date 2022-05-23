@@ -622,6 +622,15 @@ There is no Active Directory or Office 365 metadata associated with authors in a
 
 ## Sheet Visibility
 
+<details>
+  <summary><b>Format Support</b> (click to show)</summary>
+
+**Hidden Sheets**: XLSX/M, XLSB, BIFF8/BIFF5 XLS, XLML
+
+**Very Hidden Sheets**: XLSX/M, XLSB, BIFF8/BIFF5 XLS, XLML
+
+</details>
+
 Excel enables hiding sheets in the lower tab bar.  The sheet data is stored in
 the file but the UI does not readily make it available.  Standard hidden sheets
 are revealed in the "Unhide" menu.  Excel also has "very hidden" sheets which
@@ -629,29 +638,77 @@ cannot be revealed in the menu.  It is only accessible in the VB Editor!
 
 The visibility setting is stored in the `Hidden` property of sheet props array.
 
-<details>
-  <summary><b>More details</b> (click to show)</summary>
+| Value | Definition  | VB Editor "Visible" Property |
+|:-----:|:------------|:-----------------------------|
+|   0   | Visible     | `-1 - xlSheetVisible`        |
+|   1   | Hidden      | ` 0 - xlSheetHidden`         |
+|   2   | Very Hidden | ` 2 - xlSheetVeryHidden`     |
 
-| Value | Definition  |
-|:-----:|:------------|
-|   0   | Visible     |
-|   1   | Hidden      |
-|   2   | Very Hidden |
+If the respective Sheet entry does not exist or if the `Hidden` property is not
+set, the worksheet is visible.
 
-With <https://rawgit.com/SheetJS/test_files/HEAD/sheet_visibility.xlsx>:
+**List all worksheets and their visibilities**
 
 ```js
-> wb.Workbook.Sheets.map(function(x) { return [x.name, x.Hidden] })
-[ [ 'Visible', 0 ], [ 'Hidden', 1 ], [ 'VeryHidden', 2 ] ]
+wb.Workbook.Sheets.map(function(x) { return [x.name, x.Hidden] })
+// [ [ 'Visible', 0 ], [ 'Hidden', 1 ], [ 'VeryHidden', 2 ] ]
 ```
+
+**Check if worksheet is visible**
 
 Non-Excel formats do not support the Very Hidden state.  The best way to test
 if a sheet is visible is to check if the `Hidden` property is logical truth:
 
 ```js
-> wb.Workbook.Sheets.map(function(x) { return [x.name, !x.Hidden] })
-[ [ 'Visible', true ], [ 'Hidden', false ], [ 'VeryHidden', false ] ]
+wb.Workbook.Sheets.map(function(x) { return [x.name, !x.Hidden] })
+// [ [ 'Visible', true ], [ 'Hidden', false ], [ 'VeryHidden', false ] ]
 ```
+
+<details>
+  <summary><b>Live Example</b> (click to show)</summary>
+
+
+[This test file](pathname:///files/sheet_visibility.xlsx) has three sheets:
+
+- "Visible" is visible
+- "Hidden" is hidden
+- "VeryHidden" is very hidden
+
+![Screenshot](pathname:///files/sheet_visibility.png)
+
+**Live demo**
+
+```jsx live
+function Visibility(props) {
+  const [sheets, setSheets] = React.useState([]);
+  const names = [ "Visible", "Hidden", "Very Hidden" ];
+
+  React.useEffect(async() => {
+    const f = await fetch("/files/sheet_visibility.xlsx");
+    const ab = await f.arrayBuffer();
+    const wb = XLSX.read(ab);
+
+    /* State will be set to the `Sheets` property array */
+    setSheets(wb.Workbook.Sheets);
+  }, []);
+
+  return (<table>
+    <thead><tr><th>Name</th><th>Value</th><th>Hidden</th></tr></thead>
+    <tbody>{sheets.map((x,i) => (<tr key={i}>
+
+      <td>{x.name}</td>
+
+      <td>{x.Hidden} - {names[x.Hidden]}</td>
+
+      <td>{!x.Hidden ? "No" : "Yes"}</td>
+
+    </tr>))}</tbody></table>);
+}
+
+```
+
+
+
 </details>
 
 ## VBA and Macros

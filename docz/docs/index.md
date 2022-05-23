@@ -151,7 +151,7 @@ function Numbers2HTML(props) {
 
     /* Generate HTML */
     setHTML(XLSX.utils.sheet_to_html(ws));
-  });
+  }, []);
 
   return (<div dangerouslySetInnerHTML={{__html: html}}/>);
 }

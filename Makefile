@@ -5,6 +5,10 @@ build:
 	mv docz/build/ docs
 	cp CNAME docs
 
+.PHONY: server
+serve:
+	cd docs; python -mSimpleHTTPServer; cd -
+
 .PHONY: index
 index: readme ## Rebuild site
 	sed -i .bak 's/](d/](https:\/\/github.com\/SheetJS\/SheetJS\/tree\/master\/d/g' README.md
