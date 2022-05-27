@@ -33,17 +33,21 @@ Cell objects are plain JS objects with keys and values following the convention:
 
 | Key | Description                                                            |
 | --- | ---------------------------------------------------------------------- |
-| `v` | raw value (see [Data Types](#data-types) section for more info)        |
-| `w` | formatted text (if applicable)                                         |
+|     | **Core Cell Properties** ([More Info](#data-types))                    |
+| `v` | raw value (number, string, Date object, boolean)                       |
 | `t` | type: `b` Boolean, `e` Error, `n` Number, `d` Date, `s` Text, `z` Stub |
+|     | **Number Formats** ([More Info](./features#number-formats))            |
+| `z` | number format string associated with the cell (if requested)           |
+| `w` | formatted text (if applicable)                                         |
+|     | **Formulae** ([More Info](./features/formulae))                        |
 | `f` | cell formula encoded as an A1-style string (if applicable)             |
 | `F` | range of enclosing array if formula is array formula (if applicable)   |
 | `D` | if true, array formula is dynamic (if applicable)                      |
+|     | **Other Cell Properties** ([More Info](./features))                    |
+| `l` | cell hyperlink and tooltip ([More Info](./features/hyperlinks))        |
+| `c` | cell comments ([More Info](./features#cell-comments)) |
 | `r` | rich text encoding (if applicable)                                     |
 | `h` | HTML rendering of the rich text (if applicable)                        |
-| `c` | comments associated with the cell                                      |
-| `z` | number format string associated with the cell (if requested)           |
-| `l` | cell hyperlink object (`.Target` holds link, `.Tooltip` is tooltip)    |
 | `s` | the style/theme of the cell (if applicable)                            |
 
 Built-in export utilities (such as the CSV exporter) will use the `w` text if it
