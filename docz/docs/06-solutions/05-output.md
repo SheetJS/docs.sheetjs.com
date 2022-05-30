@@ -296,10 +296,10 @@ data grid for previewing and modifying structured data in the web browser.  The
 <details>
   <summary><b>Previewing data in a React data grid</b> (click to show)</summary>
 
-[`react-data-grid`](https://npm.im/react-data-grid) is a data grid tailored for
-react.  It expects two properties: `rows` of data objects and `columns` which
-describe the columns.  For the purposes of massaging the data to fit the react
-data grid API it is easiest to start from an array of arrays.
+[`react-data-grid`](https://adazzle.github.io/react-data-grid) is a data grid
+built for React.  It uses two properties: `rows` of data objects and `columns`
+which describe the columns.  For the purposes of massaging the data to fit the
+`react-data-grid` API it is easiest to start from an array of arrays.
 
 This demo starts by fetching a remote file and using `XLSX.read` to extract:
 
@@ -336,8 +336,9 @@ export default function App() {
 <details>
   <summary><b>Previewing data in a VueJS data grid</b> (click to show)</summary>
 
-[`vue3-table-lite`](https://github.com/linmasahiro/vue3-table-lite) is a simple
-VueJS 3 data table.  It is featured [in the VueJS demo](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/modify/).
+[`vue3-table-lite`](https://linmasahiro.github.io/vue3-table-lite/dist/) is a
+simple VueJS 3 data table.  It is featured in the
+[VueJS demo](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/modify/).
 
 </details>
 

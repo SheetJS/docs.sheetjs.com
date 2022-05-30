@@ -338,7 +338,7 @@ request({url: url, encoding: null}, function(err, resp, body) {
 });
 ```
 
-[`axios`](https://npm.im/axios) works the same way in browser and in NodeJS:
+[`axios`](https://axios-http.com/) works the same way in browser and in NodeJS:
 
 ```js
 const XLSX = require("xlsx");

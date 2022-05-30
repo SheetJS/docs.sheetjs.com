@@ -33,7 +33,7 @@ The demo projects include small runnable examples and short explainers.
 - [`NW.js`](https://github.com/SheetJS/SheetJS/tree/master/demos/nwjs/)
 - [`Chrome / Chromium Extension`](https://github.com/SheetJS/SheetJS/tree/master/demos/chrome/)
 - [`Google Sheets API`](./gsheet)
-- [`ExtendScript for Adobe Apps`](https://github.com/SheetJS/SheetJS/tree/master/demos/extendscript/)
+- [`ExtendScript for Adobe Apps`](./extendscript)
 - [`Headless Browsers`](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/)
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)

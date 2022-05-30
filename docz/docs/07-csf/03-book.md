@@ -67,9 +67,9 @@ XLSX.write(wb, {Props:{Author:"SheetJS"}});
 <details>
   <summary><b>Format Support</b> (click to show)</summary>
 
-**Defined Names**: XLSX/M, XLSB, BIFF8 XLS, XLML, SYLK
+**Simple Defined Names**: XLSX/M, XLSB, BIFF8 XLS, XLML, ODS, SYLK
 
-**Unicode Defined Names**: XLSX/M, XLSB, BIFF8 XLS, XLML
+**Unicode Defined Names**: XLSX/M, XLSB, BIFF8 XLS, XLML, ODS
 
 **Defined Name Comment**: XLSX/M, XLSB, BIFF8 XLS
 

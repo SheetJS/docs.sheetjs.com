@@ -8,7 +8,7 @@ hide_table_of_contents: true
 ![License](https://img.shields.io/github/license/SheetJS/sheetjs)
 [![Build Status](https://img.shields.io/github/workflow/status/sheetjs/sheetjs/Tests:%20node.js)](https://github.com/SheetJS/sheetjs/actions)
 [![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/SheetJS/sheetjs)](https://snyk.io/test/github/SheetJS/sheetjs)
-[![npm Downloads](https://img.shields.io/npm/dm/xlsx.svg)](https://npmjs.org/package/xlsx)
+[![npm Downloads](https://img.shields.io/npm/dm/xlsx.svg)](https://cdn.sheetjs.com/)
 
 SheetJS Community Edition offers battle-tested open-source solutions for
 extracting useful data from almost any complex spreadsheet and generating new
@@ -67,7 +67,7 @@ document.getElementById("sheetjsexport").addEventListener('click', function() {
 function Table2XLSX(props) {
 
   /* Callback invoked when the button is clicked */
-  const xport = React.useCallback(() => {
+  const xport = React.useCallback(async () => {
       /* Create worksheet from HTML DOM TABLE */
       const table = document.getElementById("Table2XLSX");
       const wb = XLSX.utils.table_to_book(table);
