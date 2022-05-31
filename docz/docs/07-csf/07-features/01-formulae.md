@@ -325,9 +325,13 @@ For example, when the computer language and region is set to Spanish, Excel
 interprets `=CONTAR(A1:C3)` as if `CONTAR` is the `COUNT` function.  However,
 in the actual file, Excel stores `COUNT(A1:C3)`.
 
+Function arguments are separated with commas. For example, the Spanish Excel
+formula `=CONTAR(A1:C3;B4:D6)` is equivalent to the SheetJS formula string
+`COUNT(A1:A3,B4:D6)`
+
 [JSON Translation table](https://oss.sheetjs.com/notes/fmla/table.json).
 
-<details open><summary><b>Interactive Translator</b> (click to show)</summary>
+<details open><summary><b>Function Name Translator</b> (click to show)</summary>
 
 ```jsx live
 /* The live editor requires this function wrapper */

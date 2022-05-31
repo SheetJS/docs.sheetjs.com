@@ -5,7 +5,7 @@ build:
 	mv docz/build/ docs
 	cp CNAME docs
 
-.PHONY: server
+.PHONY: serve
 serve:
 	cd docs; python -mSimpleHTTPServer; cd -
 
