@@ -155,6 +155,9 @@ const config = {
       src: "https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js",
       async: true
     }
+  ],
+  plugins: [
+   require.resolve("@cmfcmf/docusaurus-search-local")
   ]
 };
 
