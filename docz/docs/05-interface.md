@@ -34,8 +34,18 @@ Write options are described in the [Writing Options](./api/write-options) sectio
 
 ## Utilities
 
-Utilities are available in the `XLSX.utils` object and are described in the
-[Utility Functions](./api/utilities) section:
+Utilities are available in the `XLSX.utils` object.
+
+The following are described in [A1 Utilities](./csf/general#a1-utilities)
+
+**Cell and cell address manipulation:**
+
+- `encode_row / decode_row` converts between 0-indexed rows and 1-indexed rows.
+- `encode_col / decode_col` converts between 0-indexed columns and column names.
+- `encode_cell / decode_cell` converts cell addresses.
+- `encode_range / decode_range` converts cell ranges.
+
+The following are described in the [Utility Functions](./api/utilities):
 
 **Constructing:**
 
@@ -60,11 +70,6 @@ Utilities are available in the `XLSX.utils` object and are described in the
 - `sheet_to_formulae` generates a list of the formulae (with value fallbacks).
 
 
-**Cell and cell address manipulation:**
+**Miscellaneous**
 
 - `format_cell` generates the text value for a cell (using number formats).
-- `encode_row / decode_row` converts between 0-indexed rows and 1-indexed rows.
-- `encode_col / decode_col` converts between 0-indexed columns and column names.
-- `encode_cell / decode_cell` converts cell addresses.
-- `encode_range / decode_range` converts cell ranges.
-

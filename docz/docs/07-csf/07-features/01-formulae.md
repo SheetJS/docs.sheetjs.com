@@ -104,50 +104,7 @@ The A1-style formula string is stored in the `f` field of the cell object.
 Spreadsheet software typically represent formulae with a leading `=` sign, but
 SheetJS formulae omit the `=`.
 
-<details><summary><b>What is A1-style?</b> (click to show)</summary>
-
-A1-style is the default in Excel.
-
-Columns are specified with letters, counting from `A` to `Z`, then `AA` to `ZZ`,
-then `AAA`.  Some sample values, along with SheetJS column indices, are listed:
-
-| Ordinal | A1 Name | SheetJS |
-|:--------|:--------|--------:|
-| First   | `A`     |     `0` |
-| Second  | `B`     |     `1` |
-| 26th    | `Z`     |    `25` |
-| 27th    | `AA`    |    `26` |
-| 702st   | `ZZ`    |   `701` |
-| 703rd   | `AAA`   |   `702` |
-| 16384th | `XFD`   | `16383` |
-
-Rows are specified with numbers, starting from `1` for the first row.  SheetJS
-APIs that take row indices start from `0` (ECMAScript convention).
-
-A cell address is the concatenation of column text and row number.  For example,
-the cell in the third column and fourth row is "C4".
-
-A cell range is represented as the top-left cell of the range, followed by `:`,
-followed by the bottom-right cell of the range. For example, the range `"C2:D4"`
-includes 6 cells marked with ▒ in the table below:
-
-<table><tbody>
-  <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
-  <tr><th>1</th><td></td><td></td><td></td><td></td><td></td></tr>
-  <tr><th>2</th><td></td><td></td><td>▒</td><td>▒</td><td></td></tr>
-  <tr><th>3</th><td></td><td></td><td>▒</td><td>▒</td><td></td></tr>
-  <tr><th>4</th><td></td><td></td><td>▒</td><td>▒</td><td></td></tr>
-  <tr><th>5</th><td></td><td></td><td></td><td></td><td></td></tr>
-</tbody></table>
-
-A column range is represented by the left-most column, followed by `:`, followed
-by the right-most column.  For example, the range `C:D` represents the third and
-fourth columns.
-
-A row range is represented by the top-most row, followed by `:`, followed by the
-bottom-most column.  For example, `2:4` represents the second/third/fourth rows.
-
-</details>
+["A1-Style"](../general#a1-style) describes A1 style in more detail.
 
 For example, consider [this test file](pathname:///files/concat.xlsx):
 

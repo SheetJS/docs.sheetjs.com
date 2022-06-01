@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Workbook Object
@@ -19,8 +19,7 @@ standard, XLS parsing stores core properties in both places.
 The various file formats use different internal names for file properties.  The
 workbook `Props` object normalizes the names:
 
-<details>
-  <summary><b>File Properties</b> (click to show)</summary>
+<details open><summary><b>File Properties</b> (click to hide)</summary>
 
 | JS Name       | Excel Description              |
 |:--------------|:-------------------------------|
