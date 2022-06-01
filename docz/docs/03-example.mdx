@@ -11,7 +11,7 @@ combined with other JS APIs to solve problems.
 The discussion focuses on the problem solving mindset.  API details are covered
 in other parts of the documentation.
 
-The goal of this example is to generate a XLSB workbook of US President names
+The goal of this example is to generate a XLSX workbook of US President names
 and birthdays.  [Click here](#live-demo) to jump to the live demo
 
 ## Acquire Data
@@ -145,7 +145,7 @@ In the browser, it will try to prompt the user to download the file.  In NodeJS,
 it will write to the local directory.
 
 ```js
-XLSX.writeFile(workbook, "Presidents.xlsb");
+XLSX.writeFile(workbook, "Presidents.xlsx");
 ```
 
 ![Final export](./img/final.png)
@@ -180,8 +180,8 @@ function Presidents() { return ( <button onClick={async () => {
   const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
   worksheet["!cols"] = [ { wch: max_width } ];
 
-  /* create an XLSX file and try to save to Presidents.xlsb */
-  XLSX.writeFile(workbook, "Presidents.xlsb");
+  /* create an XLSX file and try to save to Presidents.xlsx */
+  XLSX.writeFile(workbook, "Presidents.xlsx");
 }}><b>Click to Generate file!</b></button> ); }
 ```
 
@@ -228,8 +228,8 @@ hosted (no `file:///` access).
   const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
   worksheet["!cols"] = [ { wch: max_width } ];
 
-  /* create an XLSX file and try to save to Presidents.xlsb */
-  XLSX.writeFile(workbook, "Presidents.xlsb");
+  /* create an XLSX file and try to save to Presidents.xlsx */
+  XLSX.writeFile(workbook, "Presidents.xlsx");
 })();
 </script>
 <body>
@@ -274,8 +274,8 @@ const XLSX = require("xlsx");
   const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
   worksheet["!cols"] = [ { wch: max_width } ];
 
-  /* create an XLSX file and try to save to Presidents.xlsb */
-  XLSX.writeFile(workbook, "Presidents.xlsb");
+  /* create an XLSX file and try to save to Presidents.xlsx */
+  XLSX.writeFile(workbook, "Presidents.xlsx");
 })();
 ```
 
@@ -325,8 +325,8 @@ const axios = require("axios");
   const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
   worksheet["!cols"] = [ { wch: max_width } ];
 
-  /* create an XLSX file and try to save to Presidents.xlsb */
-  XLSX.writeFile(workbook, "Presidents.xlsb");
+  /* create an XLSX file and try to save to Presidents.xlsx */
+  XLSX.writeFile(workbook, "Presidents.xlsx");
 })();
 ```
 
@@ -367,8 +367,8 @@ XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
 const max_width = rows.reduce((w: number, r: any) => Math.max(w, r.name.length), 10);
 worksheet["!cols"] = [ { wch: max_width } ];
 
-/* create an XLSX file and try to save to Presidents.xlsb */
-XLSX.writeFile(workbook, "Presidents.xlsb");
+/* create an XLSX file and try to save to Presidents.xlsx */
+XLSX.writeFile(workbook, "Presidents.xlsx");
 ```
 
   </TabItem>
