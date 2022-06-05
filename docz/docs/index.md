@@ -9,6 +9,7 @@ hide_table_of_contents: true
 [![Build Status](https://img.shields.io/github/workflow/status/sheetjs/sheetjs/Tests:%20node.js)](https://github.com/SheetJS/sheetjs/actions)
 [![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/SheetJS/sheetjs)](https://snyk.io/test/github/SheetJS/sheetjs)
 [![npm Downloads](https://img.shields.io/npm/dm/xlsx.svg)](https://cdn.sheetjs.com/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/SheetJS/sheetjs?style=social)](https://github.com/SheetJS/sheetjs)
 
 SheetJS Community Edition offers battle-tested open-source solutions for
 extracting useful data from almost any complex spreadsheet and generating new

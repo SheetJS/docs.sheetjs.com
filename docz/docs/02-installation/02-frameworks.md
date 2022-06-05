@@ -39,10 +39,9 @@ Once installed, the library can be imported under the name `xlsx`:
 import { read, writeFileXLSX } from "xlsx";
 ```
 
-<details>
-  <summary><b>XLS Codepage support</b> (click to show)</summary>
+## XLS Support
 
-If XLS support is required, `cpexcel.full.js` must be manually imported:
+If XLS support is required, `cpexcel.full.mjs` must be manually imported:
 
 ```js
 /* load the codepage support library for extended support with older formats  */
@@ -50,5 +49,3 @@ import { set_cptable } from "xlsx";
 import * as cptable from 'xlsx/dist/cpexcel.full.mjs';
 set_cptable(cptable);
 ```
-
-</details>

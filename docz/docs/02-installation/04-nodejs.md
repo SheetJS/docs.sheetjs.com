@@ -13,12 +13,8 @@ import TabItem from '@theme/TabItem';
 
 Tarballs are available on <https://cdn.sheetjs.com>.
 
-<div>Each individual version can be referenced using a similar URL pattern.
-
+<div>Each individual version can be referenced using a similar URL pattern.<br/>
 <a href={`https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}>https://cdn.sheetjs.com/xlsx-{current}/xlsx-{current}.tgz</a> is the URL for {current}</div>
-
-<https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz> is a link to the latest
-version and will refresh on each release.
 
 ## Installation
 
@@ -76,12 +72,16 @@ The package will be installed and accessible as `xlsx`.
 
 ## Usage
 
+#### CommonJS `require`
+
 By default, the module supports `require` and it will automatically add support
 for streams and filesystem access:
 
 ```js
 var XLSX = require("xlsx");
 ```
+
+#### ESM `import`
 
 The module also ships with `xlsx.mjs` for use with `import`.  The `mjs` version
 does not automatically load native node modules, so they must be added manually:
@@ -101,4 +101,3 @@ XLSX.stream.set_readable(Readable);
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
 XLSX.set_cptable(cpexcel);
 ```
-

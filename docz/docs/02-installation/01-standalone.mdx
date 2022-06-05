@@ -24,34 +24,27 @@ The `latest` tag references the latest version and updates with each release:
 <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 ```
 
-**For production use, scripts should be downloaded and added to a public folder
-alongside other scripts.**
 
-<details>
-  <summary><b>Download using Bower</b> (click to show)</summary>
+## Browser Scripts
 
-[Bower](https://bower.io/) plays nice with the CDN tarballs:
+`xlsx.full.min.js` is the complete standalone script.  It includes support for
+reading and writing many spreadsheet formats.
 
-<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npx bower install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<!-- use xlsx.full.min.js from version ${current} -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.full.min.js"></script>`}
 </code></pre>
 
-Bower will place the standalone scripts in `bower_components/js-xlsx/dist/`
-</details>
-
-<details>
-  <summary><b>Browser builds</b> (click to show)</summary>
-
-The complete single-file version is generated at `dist/xlsx.full.min.js`
-
-`dist/xlsx.core.min.js` omits codepage library (no support for XLS encodings)
 
 A slimmer build is generated at `dist/xlsx.mini.min.js`. Compared to full build:
 - codepage library skipped (no support for XLS encodings)
 - no support for XLSB / XLS / Lotus 1-2-3 / SpreadsheetML 2003 / Numbers
 - node stream utils removed
 
-These scripts are also available on the CDN:
+<details><summary><b>How to integrate the mini build</b> (click to show)</summary>
+
+Replace references to `xlsx.full.min.js` with `xlsx.mini.min.js`.  Starting from
+scratch, a single script tag should be added at the top of the HTML page:
 
 <pre><code parentName="pre" {...{"className": "language-html"}}>{`\
 <!-- use xlsx.mini.min.js from version ${current} -->
@@ -60,14 +53,22 @@ These scripts are also available on the CDN:
 
 </details>
 
-<details>
-  <summary><b>Internet Explorer and ECMAScript 3 Compatibility</b> (click to show)</summary>
+### Internet Explorer and Older Browsers
 
 For broad compatibility with JavaScript engines, the library is written using
-ECMAScript 3 language dialect as well as some ES5 features like `Array#forEach`.
-Older browsers require shims to provide missing functions.
+ECMAScript 3 language dialect.  A "shim" script provides implementations of
+functions for older browsers and environments.
 
-To use the shim, add the shim before the script tag that loads `xlsx.js`:
+<div>Due to SSL compatibility issues, older versions of IE will not be able to
+use the CDN scripts directly.  They should be downloaded and saved to a public
+directory in the site:
+<ul>
+<li>Standalone: <a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.mini.min.js`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/xlsx.mini.min.js</a></li>
+<li>Shim: <a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/shim.min.js`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/shim.min.js</a></li>
+</ul>
+</div>
+
+Add a `script` reference to the shim before the script tag that loads `xlsx.js`:
 
 ```html
 <!-- add the shim first -->
@@ -76,18 +77,26 @@ To use the shim, add the shim before the script tag that loads `xlsx.js`:
 <script type="text/javascript" src="xlsx.full.min.js"></script>
 ```
 
-Due to SSL certificate compatibility issues, it is highly recommended to save
-the Standalone and Shim scripts from <https://cdn.sheetjs.com/> and add to a
-public directory in the site.
+### Web Workers
 
-The script also includes `IE_LoadFile` and `IE_SaveFile` for loading and saving
-files in Internet Explorer versions 6-9.  The `xlsx.extendscript.js` script
-bundles the shim in a format suitable for Photoshop and other Adobe products.
+The standalone scripts can be loaded using `importScripts` at the top of the
+worker scripts:
 
-</details>
+<pre><code parentName="pre" {...{"className": "language-js"}}>{`\
+importScripts("https://cdn.sheetjs.com/xlsx-${current}/package/dist/shim.min.js");
+importScripts("https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.full.min.js");`}
+</code></pre>
 
-<details>
-  <summary><b>ECMAScript Module Imports in a SCRIPT TAG</b> (click to show)</summary>
+
+## ECMAScript Module Imports in a SCRIPT TAG
+
+:::caution
+
+This section refers to imports using `script type="module"`.  For imports in
+modern projects using Webpack or React or Angular or Vue, the installation is
+described [in the next section](./frameworks).
+
+:::
 
 The ECMAScript Module build is saved to `xlsx.mjs` and can be directly added to
 a page with a `script` tag using `type="module"`:
@@ -98,7 +107,7 @@ import { read, writeFileXLSX } from "https://cdn.sheetjs.com/xlsx-${current}/pac
 </script>`}
 </code></pre>
 
-If XLS support is required, `cpexcel.full.js` must be manually imported:
+If XLS support is required, `cpexcel.full.mjs` must be manually imported:
 
 <pre><code parentName="pre" {...{"className": "language-html"}}>{`\
 <script type="module">
@@ -109,4 +118,40 @@ set_cptable(cptable);
 </script>`}
 </code></pre>
 
-</details>
+Dynamic imports with `import()` can be used in data export scenarios.  This
+example will download the library only when the export button is pressed:
+
+<pre><code parentName="pre" {...{"className": "language-html"}}>{`\
+<button id="xport">Export</button>
+<script type="module">
+xport.addEventListener("click", async() => {
+
+  /* dynamically import the library in the event listener */
+  // highlight-next-line
+  const XLSX = await import("https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs");
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([["a","b","c"],[1,2,3]]);
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, "SheetJSESMTest.xlsx");
+});
+</script>`}
+</code></pre>
+
+
+## Bower
+
+:::caution
+
+Bower is deprecated and the maintainers recommend using other tools.
+
+:::
+
+
+[Bower](https://bower.io/) plays nice with the CDN tarballs:
+
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npx bower install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+
+Bower will place the standalone scripts in `bower_components/js-xlsx/dist/`

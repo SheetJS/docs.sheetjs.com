@@ -17,15 +17,14 @@ Using the URL imports, `deno run` will automatically download scripts and types:
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';`}
 </code></pre>
 
-<details>
-  <summary><b>XLS Codepage support</b> (click to show)</summary>
+The `@deno-types` comment instructs Deno to use the type definitions.
 
-If XLS support is required, `cpexcel.full.js` must be manually imported:
+## XLS Support
+
+If XLS support is required, `cpexcel.full.mjs` must be manually imported:
 
 <pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
 /* load the codepage support library for extended support with older formats  */
 import * as cptable from 'https://cdn.sheetjs.com/xlsx-${current}/package/dist/cpexcel.full.mjs';
 XLSX.set_cptable(cptable);`}
 </code></pre>
-
-</details>
