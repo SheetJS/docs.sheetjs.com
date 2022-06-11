@@ -34,6 +34,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Chrome / Chromium Extension`](https://github.com/SheetJS/SheetJS/tree/master/demos/chrome/)
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
+- [`NetSuite SuiteScript`](./netsuite)
 - [`Excel JavaScript API`](./excel)
 - [`Headless Browsers`](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/)
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)

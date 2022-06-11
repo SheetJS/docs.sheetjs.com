@@ -4,9 +4,13 @@ sidebar_position: 1
 
 # Data Import
 
+import current from '/version.js';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 ## Parsing Workbooks
 
-#### API
+### API
 
 _Extract data from spreadsheet bytes_
 
@@ -25,18 +29,31 @@ var workbook = XLSX.readFile(filename, opts);
 ```
 
 The `readFile` method attempts to read a spreadsheet file at the supplied path.
-Browsers generally do not allow reading files in this way (it is deemed a
-security risk), and attempts to read files in this way will throw an error.
 
 The second `opts` argument is optional. ["Parsing Options"](../api/parse-options)
 covers the supported properties and behaviors.
+
+:::warning
+
+Browsers generally do not allow reading files by specifying filename (it is a
+security risk), and running `XLSX.readFile` in the browser will throw an error.
+
+Deno scripts must be invoked with `--allow-read` to read from the filesystem.
+
+
+:::
 
 #### Examples
 
 Here are a few common scenarios (click on each subtitle to see the code):
 
-<details>
-  <summary><b>Local file in a NodeJS server</b> (click to show)</summary>
+### Example: Local File
+
+`XLSX.readFile` supports reading local files in platforms like NodeJS. In other
+platforms like React Native, `XLSX.read` should be called with file data.
+
+<Tabs>
+  <TabItem value="nodejs" label="NodeJS">
 
 `readFile` uses `fs.readFileSync` under the hood:
 
@@ -58,24 +75,100 @@ const buf = readFileSync("test.xlsx");
 const workbook = read(buf);
 ```
 
-</details>
-
-<details>
-  <summary><b>Local file in a Deno application</b> (click to show)</summary>
+  </TabItem>
+  <TabItem value="deno" label="Deno">
 
 `readFile` uses `Deno.readFileSync` under the hood:
 
-```js
-// @deno-types="https://deno.land/x/sheetjs/types/index.d.ts"
-import * as XLSX from 'https://deno.land/x/sheetjs/xlsx.mjs'
+<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
+// @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';
 
-const workbook = XLSX.readFile("test.xlsx");
-```
+const workbook = XLSX.readFile("test.xlsx");`}</code></pre>
+
 
 Applications reading files must be invoked with the `--allow-read` flag.  The
 [`deno` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/) has more examples
 
-</details>
+  </TabItem>
+  <TabItem value="electron" label="Electron">
+
+`readFile` can be used in the renderer process:
+
+```js
+/* From the renderer process */
+var XLSX = require("xlsx");
+
+var workbook = XLSX.readFile(path);
+```
+
+Electron APIs have changed over time.  The [`electron` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
+shows a complete example and details the required version-specific settings.
+
+  </TabItem>
+  <TabItem value="reactnative" label="React Native">
+
+The [`react` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/react) includes a sample React Native app.
+
+Since React Native does not provide a way to read files from the filesystem, a
+third-party library must be used.  The following libraries have been tested:
+
+- [`react-native-file-access`](https://npm.im/react-native-file-access)
+
+The `base64` encoding returns strings compatible with the `base64` type:
+
+```js
+import XLSX from "xlsx";
+import { FileSystem } from "react-native-file-access";
+
+const b64 = await FileSystem.readFile(path, "base64");
+/* b64 is a base64 string */
+const workbook = XLSX.read(b64, {type: "base64"});
+```
+
+- [`react-native-fs`](https://npm.im/react-native-fs)
+
+The `ascii` encoding returns binary strings compatible with the `binary` type:
+
+```js
+import XLSX from "xlsx";
+import { readFile } from "react-native-fs";
+
+const bstr = await readFile(path, "ascii");
+/* bstr is a binary string */
+const workbook = XLSX.read(bstr, {type: "binary"});
+```
+
+  </TabItem>
+  <TabItem value="extendscript" label="Photoshop">
+
+`readFile` wraps the `File` logic in Photoshop and other ExtendScript targets.
+The specified path should be an absolute path:
+
+```js
+#include "xlsx.extendscript.js"
+
+/* Read test.xlsx from the Documents folder */
+var workbook = XLSX.readFile(Folder.myDocuments + "/test.xlsx");
+```
+
+For user-configurable paths, `openDialog` can show a file picker:
+
+```js
+#include "xlsx.extendscript.js"
+
+/* Ask user to select path */
+var thisFile = File.openDialog("Select a spreadsheet");
+var workbook = XLSX.readFile(thisFile.absoluteURI);
+```
+
+The [`extendscript` demo](../getting-started/demos/extendscript) includes a more complex example.
+
+  </TabItem>
+</Tabs>
+
+
+### Example: User Submissions
 
 <details>
   <summary><b>User-submitted file in a web page ("Drag-and-Drop")</b> (click to show)</summary>
@@ -169,6 +262,37 @@ The [`oldie` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/) 
 
 </details>
 
+
+<details>
+  <summary><b>NodeJS Server File Uploads</b> (click to show)</summary>
+
+`read` can accept a NodeJS buffer.  `readFile` can read files generated by a
+HTTP POST request body parser like [`formidable`](https://npm.im/formidable):
+
+```js
+const XLSX = require("xlsx");
+const http = require("http");
+const formidable = require("formidable");
+
+const server = http.createServer((req, res) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields, files) => {
+    /* grab the first file */
+    const f = Object.entries(files)[0][1];
+    const path = f.filepath;
+    const workbook = XLSX.readFile(path);
+
+    /* DO SOMETHING WITH workbook HERE */
+  });
+}).listen(process.env.PORT || 7262);
+```
+
+The [`server` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/server) has more advanced examples.
+
+</details>
+
+### Example: Remote File
+
 <details>
   <summary><b>Fetching a file in the web browser ("Ajax")</b> (click to show)</summary>
 
@@ -212,103 +336,6 @@ The [`xhr` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/) incl
 
 </details>
 
-<details>
-  <summary><b>Local file in a PhotoShop or InDesign plugin</b> (click to show)</summary>
-
-`readFile` wraps the `File` logic in Photoshop and other ExtendScript targets.
-The specified path should be an absolute path:
-
-```js
-#include "xlsx.extendscript.js"
-
-/* Read test.xlsx from the Documents folder */
-var workbook = XLSX.readFile(Folder.myDocuments + "/test.xlsx");
-```
-
-The [`extendscript` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/extendscript/) includes a more complex example.
-
-</details>
-
-<details>
-  <summary><b>Local file in an Electron app</b> (click to show)</summary>
-
-`readFile` can be used in the renderer process:
-
-```js
-/* From the renderer process */
-var XLSX = require("xlsx");
-
-var workbook = XLSX.readFile(path);
-```
-
-Electron APIs have changed over time.  The [`electron` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
-shows a complete example and details the required version-specific settings.
-
-</details>
-
-<details>
-  <summary><b>Local file in a mobile app with React Native</b> (click to show)</summary>
-
-The [`react` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/react) includes a sample React Native app.
-
-Since React Native does not provide a way to read files from the filesystem, a
-third-party library must be used.  The following libraries have been tested:
-
-- [`react-native-file-access`](https://npm.im/react-native-file-access)
-
-The `base64` encoding returns strings compatible with the `base64` type:
-
-```js
-import XLSX from "xlsx";
-import { FileSystem } from "react-native-file-access";
-
-const b64 = await FileSystem.readFile(path, "base64");
-/* b64 is a base64 string */
-const workbook = XLSX.read(b64, {type: "base64"});
-```
-
-- [`react-native-fs`](https://npm.im/react-native-fs)
-
-The `ascii` encoding returns binary strings compatible with the `binary` type:
-
-```js
-import XLSX from "xlsx";
-import { readFile } from "react-native-fs";
-
-const bstr = await readFile(path, "ascii");
-/* bstr is a binary string */
-const workbook = XLSX.read(bstr, {type: "binary"});
-```
-
-</details>
-
-<details>
-  <summary><b>NodeJS Server File Uploads</b> (click to show)</summary>
-
-`read` can accept a NodeJS buffer.  `readFile` can read files generated by a
-HTTP POST request body parser like [`formidable`](https://npm.im/formidable):
-
-```js
-const XLSX = require("xlsx");
-const http = require("http");
-const formidable = require("formidable");
-
-const server = http.createServer((req, res) => {
-  const form = new formidable.IncomingForm();
-  form.parse(req, (err, fields, files) => {
-    /* grab the first file */
-    const f = Object.entries(files)[0][1];
-    const path = f.filepath;
-    const workbook = XLSX.readFile(path);
-
-    /* DO SOMETHING WITH workbook HERE */
-  });
-}).listen(process.env.PORT || 7262);
-```
-
-The [`server` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/server) has more advanced examples.
-
-</details>
 
 <details>
   <summary><b>Download files in a NodeJS process</b> (click to show)</summary>
@@ -379,6 +406,8 @@ req.end();
 ```
 
 </details>
+
+### Example: Readable Streams
 
 <details>
   <summary><b>Readable Streams in NodeJS</b> (click to show)</summary>
