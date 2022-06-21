@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 8
 hide_table_of_contents: true
 ---
 
@@ -9,10 +9,9 @@ Some of our original research is documented at <https://oss.sheetjs.com/notes/>
 
 The specifications list is non-exhaustive.
 
-- ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"
-- Open Document Format for Office Applications Version 1.2 (29 September 2011)
-- Worksheet File Format (From Lotus) December 1984
-
+ - Worksheet File Format (From Lotus) December 1984
+ - Open Document Format for Office Applications Version 1.2 (29 September 2011)
+ - ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"
 
 ## Open Specifications Promise
 
@@ -44,3 +43,9 @@ to sue.  The documentation that falls under the promise are listed below.
  - `RTF`: Rich Text Format
 
 </details>
+
+
+## Other Resources
+
+- ISBN 1556155212 "Excel Software Development Kit Version 4"
+- ISBN 1556156324 "Excel Developer's Kit Version 5"

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 5
 ---
 
 # Contributing
@@ -91,7 +91,7 @@ On Linux:
 sudo apt-get install mercurial subversion
 ```
 
-On MacOS, install using [Homebrew](https://brew.sh/):
+On MacOS, install using [`brew`](https://brew.sh/):
 
 ```bash
 brew install mercurial subversion
@@ -128,7 +128,7 @@ cd modules; make; cd ..
 make dist
 ```
 
-4) (For deno testing) Install deno:
+4) (For Deno testing) Install Deno:
 
 ```bash
 curl -fsSL https://deno.land/install.sh | sh

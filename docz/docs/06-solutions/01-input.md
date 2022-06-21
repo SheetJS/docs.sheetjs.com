@@ -45,7 +45,9 @@ Deno scripts must be invoked with `--allow-read` to read from the filesystem.
 
 #### Examples
 
-Here are a few common scenarios (click on each subtitle to see the code):
+Here are a few common scenarios (click on each subtitle to see the code).
+
+The [demos](../getting-started/demos) cover special deployments in more detail.
 
 ### Example: Local File
 
@@ -63,16 +65,14 @@ var XLSX = require("xlsx");
 var workbook = XLSX.readFile("test.xlsx");
 ```
 
-For Node ESM, the `readFile` helper is not enabled. Instead, `fs.readFileSync`
-should be used to read the file data as a `Buffer` for use with `XLSX.read`:
+For Node ESM, `fs` must be loaded manually:
 
 ```js
-import { readFileSync } from "fs";
-import { read } from "xlsx/xlsx.mjs";
+import * as fs from "fs";
+import { readFile, set_fs } from "xlsx/xlsx.mjs";
+set_fs(fs);
 
-const buf = readFileSync("test.xlsx");
-/* buf is a Buffer */
-const workbook = read(buf);
+const workbook = readFile("test.xlsx");
 ```
 
   </TabItem>
@@ -108,17 +108,27 @@ shows a complete example and details the required version-specific settings.
   </TabItem>
   <TabItem value="reactnative" label="React Native">
 
+:::caution
+
+React Native does not provide a way to read files from the filesystem.  A
+separate third-party library must be used.
+
+Since React Native internals change between releases, libraries may only work
+with specific versions of React Native.  Project documentation should be
+consulted before picking a library.
+
+:::caution
+
 The [`react` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/react) includes a sample React Native app.
 
-Since React Native does not provide a way to read files from the filesystem, a
-third-party library must be used.  The following libraries have been tested:
+The following libraries have been tested:
 
 - [`react-native-file-access`](https://npm.im/react-native-file-access)
 
 The `base64` encoding returns strings compatible with the `base64` type:
 
 ```js
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import { FileSystem } from "react-native-file-access";
 
 const b64 = await FileSystem.readFile(path, "base64");
@@ -131,7 +141,7 @@ const workbook = XLSX.read(b64, {type: "base64"});
 The `ascii` encoding returns binary strings compatible with the `binary` type:
 
 ```js
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import { readFile } from "react-native-fs";
 
 const bstr = await readFile(path, "ascii");
@@ -293,8 +303,11 @@ The [`server` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/server)
 
 ### Example: Remote File
 
-<details>
-  <summary><b>Fetching a file in the web browser ("Ajax")</b> (click to show)</summary>
+This example focuses on fetching files ("Ajax" in browser parlance) using APIs
+like `XMLHttpRequest` and `fetch` as well as third-party libraries.
+
+<Tabs>
+  <TabItem value="browser" label="Browser">
 
 For modern websites targeting Chrome 42+, `fetch` is recommended:
 
@@ -334,11 +347,8 @@ The [`xhr` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/) incl
 
 <http://oss.sheetjs.com/sheetjs/ajax.html> shows fallback approaches for IE6+.
 
-</details>
-
-
-<details>
-  <summary><b>Download files in a NodeJS process</b> (click to show)</summary>
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
 
 Node 17.5 and 18.0 have native support for fetch:
 
@@ -380,10 +390,8 @@ const axios = require("axios");
 })();
 ```
 
-</details>
-
-<details>
-  <summary><b>Download files in an Electron app</b> (click to show)</summary>
+  </TabItem>
+  <TabItem value="electron" label="Electron">
 
 The `net` module in the main process can make HTTP/HTTPS requests to external
 resources.  Responses should be manually concatenated using `Buffer.concat`:
@@ -405,37 +413,39 @@ req.on("response", (res) => {
 req.end();
 ```
 
-</details>
+  </TabItem>
+</Tabs>
 
 ### Example: Readable Streams
 
-<details>
-  <summary><b>Readable Streams in NodeJS</b> (click to show)</summary>
+:::caution
 
-When dealing with Readable Streams, the easiest approach is to buffer the stream
-and process the whole thing at the end:
+The recommended approach is to buffer streams in memory and process once all of
+the data has been collected. A proper streaming parse is technically impossible.
 
-```js
-var fs = require("fs");
-var XLSX = require("xlsx");
+<details><summary><b>Technical details</b> (click to show)</summary>
 
-function process_RS(stream, cb) {
-  var buffers = [];
-  stream.on("data", function(data) { buffers.push(data); });
-  stream.on("end", function() {
-    var buffer = Buffer.concat(buffers);
-    var workbook = XLSX.read(buffer, {type:"buffer"});
+XLSX, XLSB, NUMBERS, and ODS files are ultimately ZIP files that contain binary
+and XML entries.  The ZIP file format stores the table of contents ("end of
+central directory" record) at the end of the file, so a proper parse of a ZIP
+file requires scanning from the end.  Streams do not provide random access into
+the data, so the only correct approach involves buffering the entire stream.
 
-    /* DO SOMETHING WITH workbook IN THE CALLBACK */
-    cb(workbook);
-  });
-}
-```
+XLS, XLR, QPW, and Works 4 for Mac files use the "Compound File Binary Format".
+It is a container format that can hold multiple "files" and "folders".  It also
+has a table of contents ("directory sectors") but these can be placed anywhere
+in the file!  The only correct approach involves buffering enough of the stream
+to find the full table of contents, but the added complexity has little benefit
+when testing against real-world files generated by various versions of Excel and
+other tools.
 
 </details>
 
-<details>
-  <summary><b>ReadableStream in the browser</b> (click to show)</summary>
+:::
+
+
+<Tabs>
+  <TabItem value="browser" label="Browser">
 
 When dealing with `ReadableStream`, the easiest approach is to buffer the stream
 and process the whole thing at the end:
@@ -470,7 +480,31 @@ const data = await process_RS(stream);
 const workbook = XLSX.read(data, {type: 'array'});
 ```
 
-</details>
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
+
+When dealing with Readable Streams, the easiest approach is to buffer the stream
+and process the whole thing at the end:
+
+```js
+var fs = require("fs");
+var XLSX = require("xlsx");
+
+function process_RS(stream, cb) {
+  var buffers = [];
+  stream.on("data", function(data) { buffers.push(data); });
+  stream.on("end", function() {
+    var buffer = Buffer.concat(buffers);
+    var workbook = XLSX.read(buffer, {type:"buffer"});
+
+    /* DO SOMETHING WITH workbook IN THE CALLBACK */
+    cb(workbook);
+  });
+}
+```
+
+  </TabItem>
+</Tabs>
 
 More detailed examples are covered in the [included demos](https://github.com/SheetJS/SheetJS/tree/master/demos/)
 
@@ -538,9 +572,9 @@ from a JSON Endpoint and Generate a Workbook"
 
 [`x-spreadsheet`](https://github.com/myliang/x-spreadsheet) is an interactive
 data grid for previewing and modifying structured data in the web browser.  The
-[`xspreadsheet` demo](https://github.com/sheetjs/sheetjs/tree/master/demos/xspreadsheet) includes a sample script with the
-`xtos` function for converting from x-spreadsheet data object to a workbook.
-<https://oss.sheetjs.com/sheetjs/x-spreadsheet> is a live demo.
+[demo](https://github.com/sheetjs/sheetjs/tree/master/demos/xspreadsheet)
+includes a sample script with the `xtos` function for converting from
+x-spreadsheet to a workbook.  Live Demo: <https://oss.sheetjs.com/sheetjs/x-spreadsheet>
 
 <details>
   <summary><b>Records from a database query (SQL or no-SQL)</b> (click to show)</summary>

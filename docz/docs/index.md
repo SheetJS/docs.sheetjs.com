@@ -61,7 +61,7 @@ document.getElementById("sheetjsexport").addEventListener('click', function() {
 
 </details>
 
-<details open><summary><b>Live Example</b> (click to show)</summary>
+<details open><summary><b>Live Example</b> (click to hide)</summary>
 
 ```jsx live
 /* The live editor requires this function wrapper */
@@ -133,7 +133,7 @@ support for CSS styling and rich text.
 
 </details>
 
-<details><summary><b>Live Example</b> (click to hide)</summary>
+<details><summary><b>Live Example</b> (click to show)</summary>
 
 ```jsx live
 /* The live editor requires this function wrapper */

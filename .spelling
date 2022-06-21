@@ -44,7 +44,9 @@ InDesign
 IndexedDB
 JavaScriptCore
 LocalStorage
+MacOS
 NestJS
+NetSuite
 NPM
 Nuxt
 PhantomJS
@@ -55,6 +57,7 @@ RequireJS
 Rollup
 SessionStorage
 SQLite
+SuiteScripts
 SystemJS
 VueJS
 WebKit
