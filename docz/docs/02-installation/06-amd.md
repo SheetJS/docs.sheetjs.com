@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 sidebar_custom_props:
-  summary: NetSuite, RequireJS and other module systems
+  summary: NetSuite, SAP UI5, RequireJS
 ---
 
 import current from '/version.js';
@@ -13,6 +13,15 @@ Each standalone release script is available at <https://cdn.sheetjs.com/>.
 `xlsx.full.min.js` supports AMD with name `xlsx` out of the box.
 
 <div><a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.full.min.js`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/xlsx.full.min.js</a> is the URL for {current}</div><br/>
+
+:::note
+
+When referencing by file name, AMD loaders typically omit the file extension.
+
+The actual file name is `xlsx.full.min.js`, but the examples will refer to the
+script as `xlsx.full.min`.
+
+:::
 
 ## NetSuite
 
@@ -27,6 +36,31 @@ define(['N/file', './xlsx.full.min'], function(file, XLSX) {
 
 As explained in the [NetSuite demo](../getting-started/demos/netsuite), module
 aliases are created in config files referenced via `@NAmdConfig` comments.
+
+## SAP UI5
+
+After downloading the script, it can be uploaded to the UI5 project and loaded
+in the `sap.ui.define` call:
+
+```js
+sap.ui.define([
+  /* ... other libraries ... */
+  "path/to/xlsx.full.min"
+], function(/* ... variables for the other libraries ... */, XLSX) {
+  // use XLSX here
+})
+```
+
+:::warning
+
+The [SAP Website has a note about including third-party JS libraries.](https://blogs.sap.com/2017/04/30/how-to-include-third-party-libraries-modules-in-sapui5/SAPUI5)
+It recommends copying and pasting JavaScript code.
+
+**Copy and pasting code does not work** for SheetJS scripts as they contain
+Unicode characters that may be mangled.  The standalone script should be
+downloaded and manually uploaded to the project.
+
+:::
 
 ## RequireJS
 

@@ -63,7 +63,7 @@ $ pnpm install --save file:vendor/xlsx-${current}.tgz`}
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save file:vendor/xlsx-0.18.7.tgz`}
+$ yarn add --save file:vendor/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>

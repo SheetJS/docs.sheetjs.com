@@ -156,7 +156,7 @@ var wb = XLSX.read(ab); // parse workbook
 
 **This is how it should work**.
 
-[There are outstanding bugs](https://github.com/OfficeDev/office-js/issues/2186)
+[There are outstanding bugs in Excel.](https://github.com/OfficeDev/office-js/issues/2186)
 
 For the purposes of this demo, a Base64-encoded file will be used.  The
 workaround involves fetching that Base64 file, getting the text, and parsing
