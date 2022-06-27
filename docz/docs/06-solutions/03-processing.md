@@ -62,9 +62,6 @@ rest of the worksheet structure.
 
 #### Examples
 
-<details>
-  <summary><b>Add a new worksheet to a workbook</b> (click to show)</summary>
-
 This example uses [`XLSX.utils.aoa_to_sheet`](../api/utilities#array-of-arrays-input).
 
 ```js
@@ -80,8 +77,6 @@ var ws = XLSX.utils.aoa_to_sheet(ws_data);
 /* Add the worksheet to the workbook */
 XLSX.utils.book_append_sheet(wb, ws, ws_name);
 ```
-
-</details>
 
 ## Modifying Cell Values
 
@@ -117,9 +112,6 @@ function and the optional `opts` argument in more detail.
 
 #### Examples
 
-<details>
-  <summary><b>Appending rows to a worksheet</b> (click to show)</summary>
-
 The special origin value `-1` instructs `sheet_add_aoa` to start in column A of
 the row after the last row in the range, appending the data:
 
@@ -129,8 +121,6 @@ XLSX.utils.sheet_add_aoa(worksheet, [
   ["second row after data", 2]
 ], { origin: -1 });
 ```
-
-</details>
 
 ## Modifying Other Worksheet / Workbook / Cell Properties
 

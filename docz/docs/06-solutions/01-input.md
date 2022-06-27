@@ -54,6 +54,9 @@ The [demos](../getting-started/demos) cover special deployments in more detail.
 `XLSX.readFile` supports reading local files in platforms like NodeJS. In other
 platforms like React Native, `XLSX.read` should be called with file data.
 
+In-browser processing where users drag-and-drop files or use a file element are
+covered in [the "User Submissions" example.](#example-user-submissions)
+
 <Tabs>
   <TabItem value="nodejs" label="NodeJS">
 
@@ -180,16 +183,33 @@ The [`extendscript` demo](../getting-started/demos/extendscript) includes a more
 
 ### Example: User Submissions
 
-<details>
-  <summary><b>User-submitted file in a web page ("Drag-and-Drop")</b> (click to show)</summary>
+This example focuses on user-submitted files through a drag-and-drop event, HTML
+file input element, or network request.
 
-For modern websites targeting Chrome 76+, `File#arrayBuffer` is recommended:
+<Tabs>
+  <TabItem value="browser" label="Browser">
+
+**For modern websites targeting Chrome 76+**, `File#arrayBuffer` is recommended:
+
+<Tabs>
+  <TabItem value="dnd" label="Drag and Drop">
+
+Assume `drop_dom_element` is the DOM element that will listen for changes:
+
+```html
+<div id="drop_dom_element">Drop files here</div>
+```
+
+The event property is `e.dataTransfer`.  The code snippet highlights the
+difference between the drag-and-drop example and the file input example:
+
 
 ```js
 // XLSX is a global from the standalone script
 
 async function handleDropAsync(e) {
   e.stopPropagation(); e.preventDefault();
+  // highlight-next-line
   const f = e.dataTransfer.files[0];
   /* f is a File */
   const data = await f.arrayBuffer();
@@ -201,11 +221,57 @@ async function handleDropAsync(e) {
 drop_dom_element.addEventListener("drop", handleDropAsync, false);
 ```
 
-For maximal compatibility, the `FileReader` API should be used:
+  </TabItem>
+  <TabItem value="file" label="HTML File Input Element">
+
+Starting with an HTML INPUT element with `type="file"`:
+
+```html
+<input type="file" id="input_dom_element">
+```
+
+The event property is `e.target`.  The code snippet highlights the difference
+between the drag-and-drop example and the file input example:
+
+```js
+// XLSX is a global from the standalone script
+
+async function handleFileAsync(e) {
+  // highlight-next-line
+  const file = e.target.files[0];
+  const data = await file.arrayBuffer();
+  /* data is an ArrayBuffer */
+  const workbook = XLSX.read(data);
+
+  /* DO SOMETHING WITH workbook HERE */
+}
+input_dom_element.addEventListener("change", handleFileAsync, false);
+```
+
+  </TabItem>
+</Tabs>
+
+<https://oss.sheetjs.com/sheetjs/> demonstrates the FileReader technique.
+
+
+**For maximal compatibility (IE10+)**, the `FileReader` approach is recommended:
+
+<Tabs>
+  <TabItem value="dnd" label="Drag and Drop">
+
+Assume `drop_dom_element` is the DOM element that will listen for changes:
+
+```html
+<div id="drop_dom_element">Drop files here</div>
+```
+
+The event property is `e.dataTransfer`.  The code snippet highlights the
+difference between the drag-and-drop example and the file input example:
 
 ```js
 function handleDrop(e) {
   e.stopPropagation(); e.preventDefault();
+  // highlight-next-line
   var f = e.dataTransfer.files[0];
   /* f is a File */
   var reader = new FileReader();
@@ -221,12 +287,8 @@ function handleDrop(e) {
 drop_dom_element.addEventListener("drop", handleDrop, false);
 ```
 
-<https://oss.sheetjs.com/sheetjs/> demonstrates the FileReader technique.
-
-</details>
-
-<details>
-  <summary><b>User-submitted file with an HTML INPUT element</b> (click to show)</summary>
+  </TabItem>
+  <TabItem value="file" label="HTML File Input Element">
 
 Starting with an HTML INPUT element with `type="file"`:
 
@@ -234,26 +296,12 @@ Starting with an HTML INPUT element with `type="file"`:
 <input type="file" id="input_dom_element">
 ```
 
-For modern websites targeting Chrome 76+, `Blob#arrayBuffer` is recommended:
-
-```js
-// XLSX is a global from the standalone script
-
-async function handleFileAsync(e) {
-  const file = e.target.files[0];
-  const data = await file.arrayBuffer();
-  /* data is an ArrayBuffer */
-  const workbook = XLSX.read(data);
-
-  /* DO SOMETHING WITH workbook HERE */
-}
-input_dom_element.addEventListener("change", handleFileAsync, false);
-```
-
-For broader support (including IE10+), the `FileReader` approach is recommended:
+The event property is `e.target`.  The code snippet highlights the difference
+between the drag-and-drop example and the file input example:
 
 ```js
 function handleFile(e) {
+  // highlight-next-line
   var file = e.target.files[0];
   var reader = new FileReader();
   reader.onload = function(e) {
@@ -268,13 +316,13 @@ function handleFile(e) {
 input_dom_element.addEventListener("change", handleFile, false);
 ```
 
+  </TabItem>
+</Tabs>
+
 The [`oldie` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/) shows an IE-compatible fallback scenario.
 
-</details>
-
-
-<details>
-  <summary><b>NodeJS Server File Uploads</b> (click to show)</summary>
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
 
 `read` can accept a NodeJS buffer.  `readFile` can read files generated by a
 HTTP POST request body parser like [`formidable`](https://npm.im/formidable):
@@ -299,7 +347,64 @@ const server = http.createServer((req, res) => {
 
 The [`server` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/server) has more advanced examples.
 
-</details>
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+[Drash](https://drash.land/drash/) is a framework for Deno's HTTP server.  In a
+`POST` request handler, the body parser can pull file data into a `Uint8Array`:
+
+<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
+// @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';
+/* load the codepage support library for extended support with older formats  */
+import * as cptable from 'https://cdn.sheetjs.com/xlsx-${current}/package/dist/cpexcel.full.mjs';
+XLSX.set_cptable(cptable);
+
+import * as Drash from "https://deno.land/x/drash@v2.5.4/mod.ts";
+
+class SheetResource extends Drash.Resource {
+  public paths = ["/"];
+
+  public POST(request: Drash.Request, response: Drash.Response) {
+    // highlight-next-line
+    const file = request.bodyParam<Drash.Types.BodyFile>("file");
+    if (!file) throw new Error("File is required!");
+    // highlight-next-line
+    var wb = XLSX.read(file.content, {type: "buffer"});
+    var html = XLSX.utils.sheet_to_html(wb.Sheets[wb.SheetNames[0]]);
+    return response.html(html);
+  }
+}
+
+const server = new Drash.Server({ hostname: "", port: 7262, protocol: "http",
+  resources: [
+    // highlight-next-line
+    SheetResource,
+  ],
+});
+
+server.run();`}</code></pre>
+
+:::note
+
+Deno must be run with the `--allow-net` flag to enable network requests:
+
+```bash
+$ deno run --allow-net test-server.ts
+```
+
+To test, submit a POST request to http://localhost:7262 including a file:
+
+```bash
+curl -X POST -F "file=@test.xlsx" http://localhost:7262/
+```
+
+:::
+
+
+  </TabItem>
+</Tabs>
+
 
 ### Example: Remote File
 
@@ -355,6 +460,7 @@ Node 17.5 and 18.0 have native support for fetch:
 ```js
 const XLSX = require("xlsx");
 
+const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
 const data = await (await fetch(url)).arrayBuffer();
 /* data is an ArrayBuffer */
 const workbook = XLSX.read(data);
@@ -368,6 +474,7 @@ For broader compatibility, third-party modules are recommended.
 var XLSX = require("xlsx");
 var request = require("request");
 
+var url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
 request({url: url, encoding: null}, function(err, resp, body) {
   var workbook = XLSX.read(body);
 
@@ -381,6 +488,7 @@ request({url: url, encoding: null}, function(err, resp, body) {
 const XLSX = require("xlsx");
 const axios = require("axios");
 
+const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
 (async() => {
   const res = await axios.get(url, {responseType: "arraybuffer"});
   /* res.data is a Buffer */
@@ -389,6 +497,34 @@ const axios = require("axios");
   /* DO SOMETHING WITH workbook HERE */
 })();
 ```
+
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+Deno has native support for fetch.
+
+<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
+// @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';
+/* load the codepage support library for extended support with older formats  */
+import * as cptable from 'https://cdn.sheetjs.com/xlsx-${current}/package/dist/cpexcel.full.mjs';
+XLSX.set_cptable(cptable);
+
+const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
+// highlight-next-line
+const data = await (await fetch(url)).arrayBuffer();
+/* data is an ArrayBuffer */
+const workbook = XLSX.read(data);`}</code></pre>
+
+:::note
+
+Deno must be run with the `--allow-net` flag to enable network requests:
+
+```
+$ deno run --allow-net test-fetch.ts
+```
+
+:::
 
   </TabItem>
   <TabItem value="electron" label="Electron">
@@ -400,6 +536,7 @@ resources.  Responses should be manually concatenated using `Buffer.concat`:
 const XLSX = require("xlsx");
 const { net } = require("electron");
 
+const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
 const req = net.request(url);
 req.on("response", (res) => {
   const bufs = []; // this array will collect all of the buffers

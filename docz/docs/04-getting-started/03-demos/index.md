@@ -35,6 +35,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
 - [`NetSuite SuiteScript`](./netsuite)
+- [`SalesForce Lightning Web Components`](./salesforce)
 - [`Excel JavaScript API`](./excel)
 - [`Headless Browsers`](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/)
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)

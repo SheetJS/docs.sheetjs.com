@@ -6,7 +6,7 @@ sidebar_custom_props:
 
 import current from '/version.js';
 
-# AMD
+# AMD (define)
 
 Each standalone release script is available at <https://cdn.sheetjs.com/>.
 
@@ -72,6 +72,8 @@ require(['./xlsx.full.min'], function(XLSX) {
 });
 ```
 
+#### Aliases
+
 The `requirejs.config` function can define aliases through the `paths` key:
 
 ```js
@@ -79,5 +81,13 @@ requirejs.config({
   paths: {
     xlsx: [ './xlsx.full.min' ]
   }
+});
+```
+
+Once that is set, app code can freely require `xlsx`:
+
+```js
+require(['xlsx'], function(XLSX) {
+  // ... use XLSX here
 });
 ```

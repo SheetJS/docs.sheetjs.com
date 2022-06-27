@@ -1,9 +1,23 @@
 # Spreadsheet Features
 
+import DocCardList from '@theme/DocCardList';
+import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
+
 Even for basic features like date storage, the official Excel formats store the
 same content in different ways.  The parsers are expected to convert from the
 underlying file format representation to the Common Spreadsheet Format.  Writers
 are expected to convert from CSF back to the underlying file format.
+
+The following topics are covered in sub-pages:
+
+<ul>{useCurrentSidebarCategory().items.map((item, index) => {
+  const listyle = (item.customProps?.icon) ? {
+    listStyleImage: `url("${item.customProps.icon}")`
+  } : {};
+  return (<li style={listyle} {...(item.customProps?.class ? {className: item.customProps.class}: {})}>
+    <a href={item.href}>{item.label}</a>{item.customProps?.summary && (" - " + item.customProps.summary)}
+  </li>);
+})}</ul>
 
 ## Row and Column Properties
 
@@ -133,12 +147,7 @@ The format can either be specified as a string or as an index into the format
 table.  Parsers are expected to populate `workbook.SSF` with the number format
 table.  Writers are expected to serialize the table.
 
-Custom tools should ensure that the local table has each used format string
-somewhere in the table.  Excel convention mandates that the custom formats start
-at index 164.  The following example creates a custom format from scratch:
-
-<details>
-  <summary><b>New worksheet with custom format</b> (click to show)</summary>
+The following example creates a custom format from scratch:
 
 ```js
 var wb = {
@@ -153,8 +162,6 @@ var wb = {
   }
 }
 ```
-
-</details>
 
 The rules are slightly different from how Excel displays custom number formats.
 In particular, literal characters must be wrapped in double quotes or preceded
@@ -371,32 +378,51 @@ supported in `XLSM`, `XLSB`, and `BIFF8 XLS` formats.  The supported format
 writers automatically insert the data blobs if it is present in the workbook and
 associate with the worksheet names.
 
-<details>
-	<summary><b>Custom Code Names</b> (click to show)</summary>
+The `vbaraw` property stores raw bytes. [SheetJS Pro](https://sheetjs.com/pro)
+offers a special component for extracting macro text from the VBA blob, editing
+the VBA project, and exporting new VBA blobs.
 
-The workbook code name is stored in `wb.Workbook.WBProps.CodeName`.  By default,
-Excel will write `ThisWorkbook` or a translated phrase like `DieseArbeitsmappe`.
+#### Round-tripping Macro Enabled Files
+
+In order to preserve macro when reading and writing files, the `bookVBA` option
+must be set to true when reading and when writing.  In addition, the output file
+format must support macros.  `XLSX` notably does not support macros, and `XLSM`
+should be used in its place:
+
+```js
+/* Reading data */
+var wb = XLSX.read(data, { bookVBA: true }); // read file and distill VBA blob
+var vbablob = wb.vbaraw;
+```
+
+#### Code Names
+
+By default, Excel will use `ThisWorkbook` or a translation `DieseArbeitsmappe`
+for the workbook.  Each worksheet will be identified using the default `Sheet#`
+naming pattern even if the worksheet names have changed.
+
+A custom workbook code name will be stored in `wb.Workbook.WBProps.CodeName`.
+For exports, assigning the property will override the default value.
+
 Worksheet and Chartsheet code names are in the worksheet properties object at
 `wb.Workbook.Sheets[i].CodeName`.  Macrosheets and Dialogsheets are ignored.
 
 The readers and writers preserve the code names, but they have to be manually
 set when adding a VBA blob to a different workbook.
 
-</details>
-
-<details>
-	<summary><b>Macrosheets</b> (click to show)</summary>
+#### Macrosheets
 
 Older versions of Excel also supported a non-VBA "macrosheet" sheet type that
 stored automation commands.  These are exposed in objects with the `!type`
 property set to `"macro"`.
 
-</details>
+Under the hood, Excel treats Macrosheets as normal worksheets with special
+interpretation of the function expressions.
 
-<details>
-	<summary><b>Detecting macros in workbooks</b> (click to show)</summary>
+#### Detecting Macros in Workbooks
 
-The `vbaraw` field will only be set if macros are present, so testing is simple:
+The `vbaraw` field will only be set if macros are present.  Macrosheets will be
+explicitly flagged.  Combining the two checks yields a simple function:
 
 ```js
 function wb_has_macro(wb/*:workbook*/)/*:boolean*/ {
@@ -405,6 +431,4 @@ function wb_has_macro(wb/*:workbook*/)/*:boolean*/ {
 	return sheets.some((ws) => !!ws && ws['!type']=='macro');
 }
 ```
-
-</details>
 
