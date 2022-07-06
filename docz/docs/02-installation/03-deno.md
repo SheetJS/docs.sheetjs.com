@@ -19,6 +19,17 @@ import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs'
 
 The `@deno-types` comment instructs Deno to use the type definitions.
 
+:::warning
+
+Older releases are technically available on [deno.land/x](https://deno.land/x/)
+but the Deno registry is out of date.
+
+[This is a known registry bug](https://github.com/denoland/dotland/issues/2072)
+
+<https://cdn.sheetjs.com/> is the authoritative source for SheetJS scripts.
+
+:::
+
 ## XLS Support
 
 If XLS support is required, `cpexcel.full.mjs` must be manually imported:

@@ -49,7 +49,7 @@ range limits will be silently truncated:
 |:------------------------------------------|:-----------|---------:|---------:|
 | Excel 2007+ XML Formats (XLSX/XLSM)       | XFD1048576 |    16384 |  1048576 |
 | Excel 2007+ Binary Format (XLSB BIFF12)   | XFD1048576 |    16384 |  1048576 |
-| Numbers 12.0 (NUMBERS)                    | ALL1000000 |     1000 |  1000000 |
+| Numbers 12.1 (NUMBERS)                    | ALL1000000 |     1000 |  1000000 |
 | Quattro Pro 9+ (QPW)                      | IV1000000  |      256 |  1000000 |
 | Excel 97-2004 (XLS BIFF8)                 | IV65536    |      256 |    65536 |
 | Excel 5.0/95 (XLS BIFF5)                  | IV16384    |      256 |    16384 |
@@ -172,7 +172,8 @@ XLR also includes a `WksSSWorkBook` stream similar to Lotus FM3/FMT files.
 
 iWork 2013 (Numbers 3.0 / Pages 5.0 / Keynote 6.0) switched from a proprietary
 XML-based format to the current file format based on the iWork Archive (IWA).
-This format has been used up through the current release (Numbers 11.2).
+This format has been used up through the current release (Numbers 12.1) as well
+as the iCloud.com web interface to Numbers.
 
 The parser focuses on extracting raw data from tables.  Numbers technically
 supports multiple tables in a logical worksheet, including custom titles.  This

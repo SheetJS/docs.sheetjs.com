@@ -7,7 +7,13 @@ hide_table_of_contents: true
 
 The demo projects include small runnable examples and short explainers.
 
-### Frameworks and APIs
+### JavaScript APIs
+
+- [`XMLHttpRequest and fetch`](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/)
+- [`Clipboard Data`](./clipboard)
+- [`Typed Arrays and Math`](https://github.com/SheetJS/SheetJS/tree/master/demos/array/)
+
+### Frameworks
 
 - [`Angular.JS`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular/)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
@@ -15,10 +21,6 @@ The demo projects include small runnable examples and short explainers.
 - [`Meteor`](https://github.com/SheetJS/SheetJS/tree/master/demos/meteor/)
 - [`React, React Native and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
 - [`VueJS, WeeX, and NuxtJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
-- [`XMLHttpRequest and fetch`](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/)
-- [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
-- [`Databases and Key/Value Stores`](https://github.com/SheetJS/SheetJS/tree/master/demos/database/)
-- [`Typed Arrays and Math`](https://github.com/SheetJS/SheetJS/tree/master/demos/array/)
 
 ### Front-End UI Components
 
@@ -28,6 +30,8 @@ The demo projects include small runnable examples and short explainers.
 - [`vue3-table-light`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/modify/)
 
 ### Platforms and Integrations
+
+- [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
 - [`Deno`](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/)
 - [`Electron`](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
 - [`NW.js`](https://github.com/SheetJS/SheetJS/tree/master/demos/nwjs/)
@@ -40,11 +44,12 @@ The demo projects include small runnable examples and short explainers.
 - [`Headless Browsers`](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/)
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
+- [`Databases and Key/Value Stores`](https://github.com/SheetJS/SheetJS/tree/master/demos/database/)
 - [`Legacy Internet Explorer`](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/)
 
 ### Bundlers and Tooling
+
 - [`browserify`](https://github.com/SheetJS/SheetJS/tree/master/demos/browserify/)
-- [`fusebox`](https://github.com/SheetJS/SheetJS/tree/master/demos/fusebox/)
 - [`parcel`](https://github.com/SheetJS/SheetJS/tree/master/demos/parcel/)
 - [`requirejs`](https://github.com/SheetJS/SheetJS/tree/master/demos/requirejs/)
 - [`rollup`](https://github.com/SheetJS/SheetJS/tree/master/demos/rollup/)

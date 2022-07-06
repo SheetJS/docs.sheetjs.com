@@ -641,6 +641,32 @@ function process_RS(stream, cb) {
 ```
 
   </TabItem>
+  <TabItem value="deno" label="Deno">
+
+In addition to the browser `ReadableStream` API, Deno has its own `Reader`
+[interface](https://doc.deno.land/deno/stable/~/Deno.Reader).
+
+For these streams, `std` provides a `readAll` method to collect data into a
+`Uint8Array`.  This example reads from a file using `Deno.open` and prints the
+worksheet names array:
+
+<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
+// @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';
+
+import { readAll } from "https://deno.land/std/streams/conversion.ts";
+
+/* Simple Deno.Reader from a file */
+const file = await Deno.open("test.xlsx", {read: true});
+
+/* \`content\` will be a Uint8Array holding the full contents of the stream */
+const content  = await readAll(file);
+
+/* Since this is a Uint8Array, \`XLSX.read\` "just works" */
+const wb = XLSX.read(content);
+console.log(wb.SheetNames);`}</code></pre>
+
+  </TabItem>
 </Tabs>
 
 More detailed examples are covered in the [included demos](https://github.com/SheetJS/SheetJS/tree/master/demos/)
