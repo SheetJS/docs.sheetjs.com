@@ -426,9 +426,9 @@ explicitly flagged.  Combining the two checks yields a simple function:
 
 ```js
 function wb_has_macro(wb/*:workbook*/)/*:boolean*/ {
-	if(!!wb.vbaraw) return true;
-	const sheets = wb.SheetNames.map((n) => wb.Sheets[n]);
-	return sheets.some((ws) => !!ws && ws['!type']=='macro');
+  if(!!wb.vbaraw) return true;
+  const sheets = wb.SheetNames.map((n) => wb.Sheets[n]);
+  return sheets.some((ws) => !!ws && ws['!type']=='macro');
 }
 ```
 

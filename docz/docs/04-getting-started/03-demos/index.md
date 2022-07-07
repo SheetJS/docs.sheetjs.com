@@ -41,7 +41,7 @@ The demo projects include small runnable examples and short explainers.
 - [`NetSuite SuiteScript`](./netsuite)
 - [`SalesForce Lightning Web Components`](./salesforce)
 - [`Excel JavaScript API`](./excel)
-- [`Headless Browsers`](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/)
+- [`Headless Automation`](./headless)
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
 - [`Databases and Key/Value Stores`](https://github.com/SheetJS/SheetJS/tree/master/demos/database/)

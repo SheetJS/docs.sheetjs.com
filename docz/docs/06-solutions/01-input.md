@@ -818,13 +818,17 @@ is missing or no options are specified, the default name `Sheet1` is used.
 
 #### Examples
 
+The [Headless Demo](../getting-started/demos/headless) includes examples of
+server-side spreadsheet generation from HTML TABLE elements using headless
+Chromium ("Puppeteer") and other browsers ("Playwright")
+
 Here are a few common scenarios (click on each subtitle to see the code):
 
 <details>
   <summary><b>HTML TABLE element in a webpage</b> (click to show)</summary>
 
 ```html
-<!-- include the standalone script and shim.  this uses the UNPKG CDN -->
+<!-- include the standalone script and shim -->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
@@ -892,95 +896,6 @@ chrome.runtime.onMessage.addListener(function(msg, sender, cb) {
   }
   /* pass back to the extension */
   return cb(workbook);
-});
-```
-
-</details>
-
-<details>
-  <summary><b>Server-Side HTML Tables with Headless Chrome</b> (click to show)</summary>
-
-The [`headless` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/) includes a complete demo to convert HTML
-files to XLSB workbooks.  The core idea is to add the script to the page, parse
-the table in the page context, generate a `base64` workbook and send it back
-for further processing:
-
-```js
-const XLSX = require("xlsx");
-const { readFileSync } = require("fs"), puppeteer = require("puppeteer");
-
-const url = `https://sheetjs.com/demos/table`;
-
-/* get the standalone build source (node_modules/xlsx/dist/xlsx.full.min.js) */
-const lib = readFileSync(require.resolve("xlsx/dist/xlsx.full.min.js"), "utf8");
-
-(async() => {
-  /* start browser and go to web page */
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto(url, {waitUntil: "networkidle2"});
-
-  /* inject library */
-  await page.addScriptTag({content: lib});
-
-  /* this function `s5s` will be called by the script below, receiving the Base64-encoded file */
-  await page.exposeFunction("s5s", async(b64) => {
-    const workbook = XLSX.read(b64, {type: "base64" });
-
-    /* DO SOMETHING WITH workbook HERE */
-  });
-
-  /* generate XLSB file in webpage context and send back result */
-  await page.addScriptTag({content: `
-    /* call table_to_book on first table */
-    var workbook = XLSX.utils.table_to_book(document.querySelector("TABLE"));
-
-    /* generate XLSX file */
-    var b64 = XLSX.write(workbook, {type: "base64", bookType: "xlsb"});
-
-    /* call "s5s" hook exposed from the node process */
-    window.s5s(b64);
-  `});
-
-  /* cleanup */
-  await browser.close();
-})();
-```
-
-</details>
-
-<details>
-  <summary><b>Server-Side HTML Tables with Headless WebKit</b> (click to show)</summary>
-
-The [`headless` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/) includes a complete demo to convert HTML
-files to XLSB workbooks using [PhantomJS](https://phantomjs.org/). The core idea
-is to add the script to the page, parse the table in the page context, generate
-a `binary` workbook and send it back for further processing:
-
-```js
-var XLSX = require('xlsx');
-var page = require('webpage').create();
-
-/* this code will be run in the page */
-var code = [ "function(){",
-  /* call table_to_book on first table */
-  "var wb = XLSX.utils.table_to_book(document.body.getElementsByTagName('table')[0]);",
-
-  /* generate XLSB file and return binary string */
-  "return XLSX.write(wb, {type: 'binary', bookType: 'xlsb'});",
-"}" ].join("");
-
-page.open('https://sheetjs.com/demos/table', function() {
-  /* Load the browser script from the UNPKG CDN */
-  page.includeJs("https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js", function() {
-    /* The code will return an XLSB file encoded as binary string */
-    var bin = page.evaluateJavaScript(code);
-
-    var workbook = XLSX.read(bin, {type: "binary"});
-    /* DO SOMETHING WITH workbook HERE */
-
-    phantom.exit();
-  });
 });
 ```
 

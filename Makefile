@@ -1,5 +1,6 @@
 .PHONY: build
 build:
+	cp formats.png docz/docs/img/formats.png
 	cd docz; npx -y pnpm build; cd ..
 	rm -rf docs
 	mv docz/build/ docs
@@ -7,7 +8,7 @@ build:
 
 .PHONY: serve
 serve:
-	cd docs; python -mSimpleHTTPServer; cd -
+	cd docs; python -mSimpleHTTPServer || python3 -mhttp.server; cd -
 
 .PHONY: index
 index: readme ## Rebuild site

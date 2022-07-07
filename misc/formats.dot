@@ -1,6 +1,6 @@
 digraph G {
 	graph [mindist=0.1];
-	node [fontname="Indie Flower"];
+	node [fontname="Indie Flower",fontsize=22];
 	csf [shape=doublecircle,label="Common\nSpreadsheet\nFormat\n(JS Object)"];
 	subgraph XL {
 		node  [style=filled,color="#00FF00"];
@@ -85,6 +85,7 @@ digraph G {
 		wksl -> csf
 		wksm -> csf
 		dif -> csf
+		rtf -> csf
 		csf -> rtf
 		prn -> csf
 		csf -> prn

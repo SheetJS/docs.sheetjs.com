@@ -245,28 +245,34 @@ The [`extendscript` demo](../getting-started/demos/extendscript) includes a more
   </TabItem>
   <TabItem value="headless" label="Headless">
 
-<details>
-  <summary><b>PhantomJS (Headless Webkit) File Generation</b> (click to show)</summary>
+The [`headless` demo](../getting-started/demos/headless) includes complete
+examples of converting HTML TABLE elements to XLSB workbooks using Puppeteer
+and other headless automation tools.
 
-The [`headless` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/headless/) includes a complete demo to convert HTML
-files to XLSB workbooks using [PhantomJS](https://phantomjs.org/). PhantomJS
-`fs.write` supports writing files from the main process but has a different
-interface from the NodeJS `fs` module:
+Headless browsers may not have access to the filesystem, so `XLSX.writeFile`
+may fail.  It is strongly recommended to generate the file bytes in the browser
+context, send the bytes to the automation context, and write from automation.
+
+Puppeteer and Playwright are NodeJS modules that support binary strings:
 
 ```js
-var XLSX = require('xlsx');
-var fs = require('fs');
+/* from the browser context */
+var bin = XLSX.write(workbook, { type:"binary", bookType: "xlsb" });
 
-/* generate a binary string */
-var bin = XLSX.write(workbook, { type:"binary", bookType: "xlsx" });
-/* write to file */
-fs.write("test.xlsx", bin, "wb");
+/* from the automation context */
+fs.writeFileSync("SheetJSansHead.xlsb", bin, { encoding: "binary" });
 ```
 
-Note: The section ["Processing HTML Tables"](./input#processing-html-tables) shows how
-to generate a workbook from HTML tables in a page in "Headless WebKit".
+PhantomJS `fs.write` supports writing files from the main process.  The mode
+`wb` supports binary strings:
 
-</details>
+```js
+/* from the browser context */
+var bin = XLSX.write(workbook, { type:"binary", bookType: "xlsb" });
+
+/* from the automation context */
+fs.write("SheetJSansHead.xlsb", bin, "wb");
+```
 
   </TabItem>
 </Tabs>

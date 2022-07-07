@@ -14,7 +14,7 @@ XLS (both '97-2004 and '95), and SpreadsheetML 2003.
 
 Not all Clipboard APIs offer access to all clipboard types.
 
-## Browser
+## Browser Reading (paste)
 
 Clipboard data can be read from a `paste` event, accessible from the event
 `clipboardData` property:
@@ -26,7 +26,7 @@ document.onpaste = function(e) {
   /* parse */
   var wb = XLSX.read(str, {type: "string"});
   /* DO SOMETHING WITH wb HERE */
-}
+};
 ```
 
 `getData` accepts one argument: the desired MIME type. Chrome 103 supports:
@@ -62,7 +62,7 @@ function Clipboard() {
       /* generate CSV for each "first worksheet" */
       var result = ws_arr.map(ws => XLSX.utils.sheet_to_csv(ws));
       setCSVs(result);
-    }
+    };
   }, []);
 
   return (
@@ -72,6 +72,68 @@ function Clipboard() {
       {csvs[2] && (<pre><b>Data from clipboard RTF  (text/rtf)</b><br/>{csvs[2]}</pre>)}
       {csvs.every(x => !x) && <b>Copy data in Excel, click here, and paste (Control+V)</b>}
     </>
-  )
+  );
+}
+```
+
+## Browser Writing (copy)
+
+Clipboard data can be written from a `copy` event, accessible from the event
+`clipboardData` property:
+
+```js
+document.oncopy = function(e) {
+  /* get HTML of first worksheet in workbook */
+  var str = XLSX.write(wb, {type: "string", bookType: "html"});
+  /* set HTML clipboard data */
+  e.clipboardData.setData('text/html', str);
+
+  /* prevent the browser from copying the normal data */
+  e.preventDefault();
+};
+```
+
+`setData` accepts two arguments: MIME type and new data. Chrome 103 supports:
+
+| MIME type    | Data format                |
+|:-------------|:---------------------------|
+| `text/plain` | TSV (tab separated values) |
+| `text/html`  | HTML                       |
+
+Browsers do not currently support assigning to the `text/rtf` clipboard type.
+
+### Live Demo
+
+This demo creates a simple workbook from the following HTML table:
+
+<table id="srcdata">
+  <tr><td>SheetJS</td><td>Clipboard</td><td>Demo</td></tr>
+  <tr><td>bookType</td><td>RTF</td></tr>
+  <tr><td>source</td><td>HTML Table</td></tr>
+</table>
+
+Create a new file in Excel then come back to this window.  Select the text
+below and copy (Control+C for Windows, Command+C for Mac).  Go back to the
+excel
+
+```jsx live
+function Clipboard() {
+  /* Set up copy handler */
+  React.useEffect(async() => {
+    document.oncopy = function(e) {
+      /* generate workbook from table */
+      var wb = XLSX.utils.table_to_book(document.getElementById("srcdata"));
+      /* get HTML of first worksheet in workbook */
+      var str = XLSX.write(wb, {type: "string", bookType: "html"});
+      /* set HTML clipboard data */
+      e.clipboardData.setData('text/html', str);
+      /* prevent the browser from copying the normal data */
+      e.preventDefault();
+    };
+  }, []);
+
+  return (
+    <b>Select this text, copy (Control+C), and paste in Excel</b>
+  );
 }
 ```

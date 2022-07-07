@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+hide_table_of_contents: true
 ---
 
 # File Formats
@@ -39,7 +40,7 @@ sidebar_position: 1
 | Works 6.x-9.x Spreadsheet (XLR)                              |   ✔   |       |
 | **Other Common Spreadsheet Output Formats**                  |:-----:|:-----:|
 | HTML Tables                                                  |   ✔   |   ✔   |
-| Rich Text Format tables (RTF)                                |       |   ✔   |
+| Rich Text Format tables (RTF)                                |   ✔   |   ✔   |
 | Ethercalc Record Format (ETH)                                |   ✔   |   ✔   |
 
 Features not supported by a given file format will not be written.  Formats with
