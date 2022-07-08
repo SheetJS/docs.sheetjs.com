@@ -732,56 +732,20 @@ the optional `opts` argument in more detail.
 ["Complete Example"](../example) contains a detailed example "Get Data
 from a JSON Endpoint and Generate a Workbook"
 
-
 [`x-spreadsheet`](https://github.com/myliang/x-spreadsheet) is an interactive
 data grid for previewing and modifying structured data in the web browser.  The
 [demo](https://github.com/sheetjs/sheetjs/tree/master/demos/xspreadsheet)
 includes a sample script with the `xtos` function for converting from
 x-spreadsheet to a workbook.  Live Demo: <https://oss.sheetjs.com/sheetjs/x-spreadsheet>
 
+["Typed Arrays and ML"](../getting-started/demos/ml) covers strategies for
+creating worksheets from ML library exports (datasets stored in Typed Arrays).
+
 <details>
   <summary><b>Records from a database query (SQL or no-SQL)</b> (click to show)</summary>
 
 The [`database` demo](https://github.com/sheetjs/sheetjs/tree/master/demos/database/) includes examples of working with
 databases and query results.
-
-</details>
-
-
-<details>
-  <summary><b>Numerical Computations with TensorFlow.js</b> (click to show)</summary>
-
-`@tensorflow/tfjs` and other libraries expect data in simple arrays, well-suited
-for worksheets where each column is a data vector.  That is the transpose of how
-most people use spreadsheets, where each row is a vector.
-
-When recovering data from `tfjs`, the returned data points are stored in a typed
-array.  An array of arrays can be constructed with loops. `Array#unshift` can
-prepend a title row before the conversion:
-
-```js
-const XLSX = require("xlsx");
-const tf = require('@tensorflow/tfjs');
-
-/* suppose xs and ys are vectors (1D tensors) -> tfarr will be a typed array */
-const tfdata = tf.stack([xs, ys]).transpose();
-const shape = tfdata.shape;
-const tfarr = tfdata.dataSync();
-
-/* construct the array of arrays */
-const aoa = [];
-for(let j = 0; j < shape[0]; ++j) {
-  aoa[j] = [];
-  for(let i = 0; i < shape[1]; ++i) aoa[j][i] = tfarr[j * shape[1] + i];
-}
-/* add headers to the top */
-aoa.unshift(["x", "y"]);
-
-/* generate worksheet */
-const worksheet = XLSX.utils.aoa_to_sheet(aoa);
-```
-
-The [`array` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/array/) shows a complete example.
 
 </details>
 

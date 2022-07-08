@@ -11,7 +11,7 @@ The demo projects include small runnable examples and short explainers.
 
 - [`XMLHttpRequest and fetch`](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/)
 - [`Clipboard Data`](./clipboard)
-- [`Typed Arrays and Math`](https://github.com/SheetJS/SheetJS/tree/master/demos/array/)
+- [`Typed Arrays for Machine Learning`](./ml)
 
 ### Frameworks
 

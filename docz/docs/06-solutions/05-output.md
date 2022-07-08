@@ -450,6 +450,9 @@ simple VueJS 3 data table.  It is featured in the
 
 ### Example: Data Loading
 
+["Typed Arrays and ML"](../getting-started/demos/ml) covers strategies for
+generating typed arrays and tensors from worksheet data.
+
 <details>
   <summary><b>Populating a database (SQL or no-SQL)</b> (click to show)</summary>
 
@@ -458,44 +461,7 @@ includes examples of working with databases and query results.
 
 </details>
 
-<details>
-  <summary><b>Numerical Computations with TensorFlow.js</b> (click to show)</summary>
 
-`@tensorflow/tfjs` and other libraries expect data in simple arrays, well-suited
-for worksheets where each column is a data vector.  That is the transpose of how
-most people use spreadsheets, where each row is a vector.
-
-A single `Array#map` can pull individual named rows from `sheet_to_json` export:
-
-```js
-const XLSX = require("xlsx");
-const tf = require('@tensorflow/tfjs');
-
-const key = "age"; // this is the field we want to pull
-const ages = XLSX.utils.sheet_to_json(worksheet).map(r => r[key]);
-const tf_data = tf.tensor1d(ages);
-```
-
-All fields can be processed at once using a transpose of the 2D tensor generated
-with the `sheet_to_json` export with `header: 1`. The first row, if it contains
-header labels, should be removed with a slice:
-
-```js
-const XLSX = require("xlsx");
-const tf = require('@tensorflow/tfjs');
-
-/* array of arrays of the data starting on the second row */
-const aoa = XLSX.utils.sheet_to_json(worksheet, {header: 1}).slice(1);
-/* dataset in the "correct orientation" */
-const tf_dataset = tf.tensor2d(aoa).transpose();
-/* pull out each dataset with a slice */
-const tf_field0 = tf_dataset.slice([0,0], [1,tensor.shape[1]]).flatten();
-const tf_field1 = tf_dataset.slice([1,0], [1,tensor.shape[1]]).flatten();
-```
-
-The [`array` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/array/) shows a complete example.
-
-</details>
 
 
 ## Generating HTML Tables
