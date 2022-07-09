@@ -178,6 +178,19 @@ var workbook = XLSX.readFile(thisFile.absoluteURI);
 The [`extendscript` demo](../getting-started/demos/extendscript) includes a more complex example.
 
   </TabItem>
+  <TabItem value="bun" label="Bun">
+
+[Bun `readFileSync`](https://github.com/Jarred-Sumner/bun/issues/256) currently
+returns a `Uint8Array`.  The result should be wrapped in a `Buffer`:
+
+```js
+import { readFileSync } from 'fs'
+import { read } from './xlsx.mjs'
+
+const workbook = read(Buffer.from(readFileSync(path)));
+```
+
+  </TabItem>
 </Tabs>
 
 
