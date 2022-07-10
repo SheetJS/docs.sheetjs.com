@@ -245,7 +245,7 @@ $ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
 
 Save the following script to `snippet.js` and run `node snippet.js`:
 
-```js
+```js title="snippet.js"
 const XLSX = require("xlsx");
 
 (async() => {
@@ -293,7 +293,7 @@ $ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
 
 The differences in the script are highlighted below.
 
-```js
+```js title="snippet.js"
 const XLSX = require("xlsx");
 // highlight-next-line
 const axios = require("axios");
@@ -338,7 +338,7 @@ const axios = require("axios");
 Save the following script to `snippet.ts` and run with
 `deno run --allow-net --allow-write snippet.ts`:
 
-```js
+```js title="snippet.ts"
 // @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 
@@ -372,4 +372,46 @@ XLSX.writeFile(workbook, "Presidents.xlsx");
 ```
 
   </TabItem>
+  <TabItem value="bun" label="Bun">
+
+Download <https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs> to `xlsx.mjs`
+
+Save the following script to `snippet.js` and run with `bun snippet.js`:
+
+```js title="snippet.js"
+import * as XLSX from './xlsx.mjs';
+import * as fs from 'fs';
+XLSX.set_fs(fs);
+
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter((row) => row.terms.some((term) => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map((row) => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = XLSX.utils.json_to_sheet(rows);
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+XLSX.writeFile(workbook, "Presidents.xlsx");
+```
+
+  </TabItem>
+
 </Tabs>

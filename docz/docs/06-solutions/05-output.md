@@ -278,6 +278,141 @@ fs.write("SheetJSansHead.xlsb", bin, "wb");
 </Tabs>
 
 
+### Example: Server Responses
+
+This example focuses on responses to network requests in a server-side platform
+like NodeJS. While files can be generated in the web browser, server-side file
+generation allows for exact audit trails and has better mobile user support.
+
+:::caution
+
+Production deployments should use a server framework like ExpressJS.  These
+snippets use low-level APIs for illustration purposes.
+
+:::
+
+The `Content-Type` header should be set to `application/vnd.ms-excel` for Excel
+exports including XLSX. The default `application/octet-stream` can be used, but
+iOS will not automatically suggest to open files in Numbers or Excel for iOS
+
+The `Content-Disposition` header instructs browsers to download the response
+into a file.  The header can also include the desired file name.
+
+<Tabs>
+  <TabItem value="nodejs" label="NodeJS">
+
+NodeJS `http.ServerResponse#end` can accept `Buffer` objects. `XLSX.write` with
+`buffer` type returns `Buffer` objects.
+
+```js
+/* generate Buffer */
+const buf = XLSX.write(wb, { type:"buffer", bookType:"xlsx" });
+
+/* prepare response headers */
+res.statusCode = 200;
+res.setHeader('Content-Disposition', 'attachment; filename="SheetJSNode.xlsx"');
+res.setHeader('Content-Type', 'application/vnd.ms-excel');
+res.end(buf);
+```
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+Install the library with
+
+```bash
+npm i https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+```
+
+Save the following script to `node.js` and run with `node node.js`:
+
+```js title="node.js"
+const http = require('http');
+const XLSX = require('xlsx');
+
+const hostname = '127.0.0.1';
+const port = 7262;
+
+/* fixed sample worksheet */
+const wb = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+  ["a","b","c"], [1,2,3]
+]), "Sheet1");
+
+const server = http.createServer((req, res) => {
+  const buf = XLSX.write(wb, { type:"buffer", bookType:"xlsx" });
+  res.statusCode = 200;
+  res.setHeader('Content-Disposition', 'attachment; filename="SheetJSNode.xlsx"');
+  res.setHeader('Content-Type', 'application/vnd.ms-excel');
+  res.end(buf);
+});
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
+```
+
+</details>
+
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+
+
+  </TabItem>
+  <TabItem value="bun" label="Bun">
+
+Bun responses are expected to be `Response` objects. `XLSX.write` with `buffer`
+type returns `Buffer` objects that can be used in the `Response` constructor.
+
+```js
+/* generate Buffer */
+const buf = XLSX.write(wb, { type:"buffer", bookType:"xlsx" });
+/* return Response */
+return new Response(buf, {
+  headers: {
+    "Content-Type": "application/vnd.ms-excel",
+    "Content-Disposition": 'attachment; filename="SheetJSBun.xlsx"'
+  }
+});
+```
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+Download [`xlsx.mjs`](https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs).
+Save the following script to `bun.js` and run with `bun bun.js`.   Open a web
+browser and access <http://localhost:7262> to download the exported workbook.
+
+```js title="bun.js"
+import * as XLSX from "./xlsx.mjs";
+
+/* fixed sample worksheet */
+const wb = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([
+  ["a","b","c"], [1,2,3]
+]), "Sheet1");
+
+export default {
+  port: 7262,
+  fetch(request) {
+    /* generate Buffer */
+    const buf = XLSX.write(wb, {type:"buffer", bookType:"xlsx"});
+    /* return Response */
+    return new Response(buf, {
+      headers: {
+        "Content-Type": "application/vnd.ms-excel",
+        "Content-Disposition": 'attachment; filename="SheetJSBun.xlsx"'
+      }
+    });
+  },
+};
+```
+
+</details>
+
+  </TabItem>  
+</Tabs>
+
+
 ### Example: Remote File
 
 This example focuses on uploading files ("Ajax" in browser parlance) using APIs

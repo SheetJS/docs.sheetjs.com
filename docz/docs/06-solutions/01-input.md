@@ -79,21 +79,6 @@ const workbook = readFile("test.xlsx");
 ```
 
   </TabItem>
-  <TabItem value="deno" label="Deno">
-
-`readFile` uses `Deno.readFileSync` under the hood:
-
-<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
-// @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
-import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';
-
-const workbook = XLSX.readFile("test.xlsx");`}</code></pre>
-
-
-Applications reading files must be invoked with the `--allow-read` flag.  The
-[`deno` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/) has more examples
-
-  </TabItem>
   <TabItem value="electron" label="Electron">
 
 `readFile` can be used in the renderer process:
@@ -176,6 +161,21 @@ var workbook = XLSX.readFile(thisFile.absoluteURI);
 ```
 
 The [`extendscript` demo](../getting-started/demos/extendscript) includes a more complex example.
+
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+`readFile` uses `Deno.readFileSync` under the hood:
+
+<pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
+// @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs';
+
+const workbook = XLSX.readFile("test.xlsx");`}</code></pre>
+
+
+Applications reading files must be invoked with the `--allow-read` flag.  The
+[`deno` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/) has more examples
 
   </TabItem>
   <TabItem value="bun" label="Bun">
