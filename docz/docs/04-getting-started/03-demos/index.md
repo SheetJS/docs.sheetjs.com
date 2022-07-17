@@ -50,7 +50,7 @@ The demo projects include small runnable examples and short explainers.
 ### Bundlers and Tooling
 
 - [`browserify`](https://github.com/SheetJS/SheetJS/tree/master/demos/browserify/)
-- [`parcel`](https://github.com/SheetJS/SheetJS/tree/master/demos/parcel/)
+- [`parcel`](./bundler#parcel)
 - [`requirejs`](https://github.com/SheetJS/SheetJS/tree/master/demos/requirejs/)
 - [`rollup`](https://github.com/SheetJS/SheetJS/tree/master/demos/rollup/)
 - [`systemjs`](https://github.com/SheetJS/SheetJS/tree/master/demos/systemjs/)

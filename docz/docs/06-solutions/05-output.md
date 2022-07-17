@@ -90,6 +90,48 @@ XLSX.writeFile(workbook, "out.xlsb");
 /* at this point, out.xlsb will have been downloaded */
 ```
 
+:::caution Web Workers
+
+None of the file writing APIs work from Web Workers.  To generate a file:
+
+1) use `XLSX.write` with type `array` to generate a `Uint8Array`:
+
+```js
+// in the web worker, generate the XLSX file as a Uint8Array
+const u8 = XLSX.write(workbook, { type: "array", bookType: "xlsx" });
+```
+
+2) send the data back to the main thread:
+
+```js
+// in the web worker, send the generated data back to the main thread
+postMessage({t: "export", v: u8 });
+```
+
+3) from the main thread, add an event listener to write to file:
+
+```js
+// in the main page
+worker.addEventListener('message', function(e) {
+  if(e && e.data && e.data.t == "export") {
+    e.stopPropagation();
+    e.preventDefault();
+    // data will be the Uint8Array from the worker
+    const data = e.data.v;
+
+    var blob = new Blob([data], {type:"application/octet-stream"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.download = "SheetJSXPort.xlsx";
+    a.href = url;
+    document.body.appendChild(a);
+    a.click();
+  }
+});
+```
+
+:::
+
 <details>
   <summary><b>SWF workaround for Windows 95+</b> (click to show)</summary>
 
