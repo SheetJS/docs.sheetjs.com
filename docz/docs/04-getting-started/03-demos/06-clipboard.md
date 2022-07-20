@@ -137,3 +137,39 @@ function Clipboard() {
   );
 }
 ```
+
+## Electron
+
+Electron [Clipboard API](https://www.electronjs.org/docs/latest/api/clipboard)
+supports HTML and RTF clipboards.
+
+There are special methods for specific clipboard types:
+
+| File Type | Read Clipboard Data  | Write Clipboard Data  |
+|:----------|:---------------------|:----------------------|
+| RTF       | `clipboard.readRTF`  | `clipboard.writeRTF`  |
+| TSV       | `clipboard.readText` | `clipboard.writeText` |
+| HTML      | `clipboard.readHTML` | `clipboard.writeHTML` |
+
+Each method operates on JS strings.
+
+:::caution Experimental Buffer Clipboard Support
+
+Electron additionally supports binary operations using `Buffer` objects.  This
+support is considered "experimental" and is not guaranteed to work on any
+platform.  Issues should be raised with the Electron project
+
+On the `macOS` platform, some versions of Excel store a packaged file with key
+`dyn.ah62d4qmxhk4d425try1g44pdsm11g55gsu1en5pcqzwc4y5tsz3gg3k`.  The package is
+a simple CFB file that can be parsed:
+
+```js
+const { clipboard } = require('electron')
+const XLSX = require("xlsx");
+const buf = clipboard.readBuffer('dyn.ah62d4qmxhk4d425try1g44pdsm11g55gsu1en5pcqzwc4y5tsz3gg3k');
+const cfb = XLSX.CFB.read(rtf, {type: "buffer"});
+const pkg = XLSX.CFB.find(cfb, "Package").content;
+const wb = XLSX.read(pkg);
+```
+
+:::

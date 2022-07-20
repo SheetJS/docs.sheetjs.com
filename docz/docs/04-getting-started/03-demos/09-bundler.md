@@ -10,15 +10,277 @@ import TabItem from '@theme/TabItem';
 SheetJS predates ECMAScript modules and bundler tools like Webpack. As best
 practices have evolved, stress testing SheetJS libraries have revealed bugs in
 the respective bundlers.  This demo collects various notes and provides basic
-examples. Issues should be reported to the respective bundler projects.
+examples.
+
+:::note
+
+Issues should be reported to the respective bundler projects.  Typically it is
+considered a bundler bug if the tool cannot properly handle JS libraries.
+
+:::
+
+
+## Bun
+
+`bun bun` is capable of optimizing imported libraries in `node_modules`.  In
+local testing, a bundled script can save tens of milliseconds per run.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Save the following script to `bun.js`:
+
+```js title="bun.js"
+// highlight-next-line
+import * as XLSX from 'xlsx/xlsx.mjs';
+// highlight-next-line
+import * as fs from 'fs';
+// highlight-next-line
+XLSX.set_fs(fs);
+
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter((row) => row.terms.some((term) => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map((row) => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = XLSX.utils.json_to_sheet(rows);
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+XLSX.writeFile(workbook, "Presidents.xlsx");
+```
+
+3) Bundle the script with `bun bun`:
+
+```bash
+bun bun bun.js
+```
+
+This procedure will generate `node_modules.bun`.
+
+4) Run the script
+
+```bash
+bun bun.js
+```
+
+</details>
+
+## ESBuild
+
+The `xlsx.mjs` source file are written in a subset of ES6 that ESBuild
+understands and is able to transpile down for older browsers.
+
+Both the `node` and `browser` platforms work out of the box.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+<Tabs>
+  <TabItem value="browser" label="Browser">
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Save the following to `esbrowser.js`:
+
+```js title="esbrowser.js"
+// highlight-next-line
+import { set_fs, utils, version, writeFile } from 'xlsx/xlsx.mjs';
+
+(async() => {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFile(workbook, "Presidents.xlsx");
+})();
+```
+
+3) Create a small HTML page that loads the script.  Save to `index.html`:
+
+```html title="index.html"
+<body><script src="esb.browser.js"></script></body>
+```
+
+4) Create bundle:
+
+```bash
+npx esbuild esbrowser.js --bundle --outfile=esb.browser.js
+```
+
+5) Start a local HTTP server, then go to http://localhost:8080/
+
+```bash
+npx http-server .
+```
+
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Save the following to `esbnode.js`:
+
+```js title="esbnode.js"
+// highlight-next-line
+import { set_fs, utils, version, writeFile } from 'xlsx/xlsx.mjs';
+// highlight-next-line
+import * as fs from 'fs';
+// highlight-next-line
+set_fs(fs);
+
+(async() => {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFile(workbook, "Presidents.xlsx");
+})();
+```
+
+3) Create bundle:
+
+```bash
+npx esbuild esbnode.js --bundle --platform=node --outfile=esb.node.js
+```
+
+4) Run the bundle:
+
+```bash
+node esb.node.js
+```
+
+  </TabItem>
+</Tabs>
+
+</details>
 
 ## Parcel
 
 Parcel Bundler should play nice with SheetJS out of the box.
 
+:::warning Parcel Bug
+
 Errors of the form `Could not statically evaluate fs call` stem from a 
 [parcel bug](https://github.com/parcel-bundler/parcel/pull/523). Upgrade to
 Parcel version 1.5.0 or later.
+
+:::
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 

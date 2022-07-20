@@ -50,6 +50,8 @@ The demo projects include small runnable examples and short explainers.
 ### Bundlers and Tooling
 
 - [`browserify`](https://github.com/SheetJS/SheetJS/tree/master/demos/browserify/)
+- [`bun`](./bundler#bun)
+- [`esbuild`](./bundler#esbuild)
 - [`parcel`](./bundler#parcel)
 - [`requirejs`](https://github.com/SheetJS/SheetJS/tree/master/demos/requirejs/)
 - [`rollup`](https://github.com/SheetJS/SheetJS/tree/master/demos/rollup/)
