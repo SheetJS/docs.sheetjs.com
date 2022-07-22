@@ -49,7 +49,7 @@ The demo projects include small runnable examples and short explainers.
 
 ### Bundlers and Tooling
 
-- [`browserify`](https://github.com/SheetJS/SheetJS/tree/master/demos/browserify/)
+- [`browserify`](./bundler#browserify)
 - [`bun`](./bundler#bun)
 - [`esbuild`](./bundler#esbuild)
 - [`parcel`](./bundler#parcel)

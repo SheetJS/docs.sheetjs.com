@@ -20,6 +20,72 @@ considered a bundler bug if the tool cannot properly handle JS libraries.
 :::
 
 
+## Browserify
+
+`browserify` is compatible with the library and should "just work" with the
+`require` form in a main page or in a web worker:
+
+```js
+var XLSX = require("xlsx");
+// ... use XLSX ...
+```
+
+[After installing the module](../../installation/nodejs), bundling is easy:
+
+```bash
+browserify app.js > browserify.js
+uglifyjs browserify.js > browserify.min.js
+```
+
+Web Worker scripts can be bundled using the same approach.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Download the following files:
+
+- [`app.js`](pathname:///browserify/app.js)
+- [`index.html`](pathname:///browserify/index.html)
+- [`xlsxworker.js`](pathname:///browserify/xlsxworker.js)
+
+3) Bundle the scripts:
+
+```bash
+npx browserify app.js > browserify.js
+npx browserify xlsxworker.js > worker.js
+```
+
+4) Spin up a local web server:
+
+```
+npx http-server 
+```
+
+5) Access the site <http://localhost:8080/> and use the file input element to
+select a spreadsheet.
+
+</details>
+
+
 ## Bun
 
 `bun bun` is capable of optimizing imported libraries in `node_modules`.  In
@@ -101,6 +167,7 @@ bun bun.js
 ```
 
 </details>
+
 
 ## ESBuild
 

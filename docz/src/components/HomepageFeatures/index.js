@@ -55,7 +55,7 @@ const FeatureList = [
       <div className={styles.buttons}>
         <Link
           className="button button--secondary button--lg"
-          to="/docs/getting-started/demos">
+          to="/docs/getting-started/demos/">
           Demo Projects
         </Link>
       </div>
