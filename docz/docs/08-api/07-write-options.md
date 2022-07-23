@@ -108,6 +108,30 @@ XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression:
 ```
 
   </TabItem>
+  <TabItem value="bun" label="Bun">
+
+After installing the package:
+
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+
+The scripts will be available at `xlsx/dist/xlsx.zahl` (CommonJS) and
+`xlsx/dist/xlsx.zahl.mjs` (ESM).
+
+```js
+import * as XLSX from "xlsx";
+import XLSX_ZAHL_PAYLOAD from "xlsx/dist/xlsx.zahl";
+var wb = XLSX.utils.book_new(); var ws = XLSX.utils.aoa_to_sheet([
+  ["SheetJS", "<3","விரிதாள்"],
+  [72,,"Arbeitsblätter"],
+  [,62,"数据"],
+  [true,false,],
+]); XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression: true});
+```
+
+  </TabItem>
   <TabItem value="deno" label="Deno">
 
 <div><a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/xlsx.zahl.mjs`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/xlsx.zahl.mjs</a> is the URL for {current}</div>

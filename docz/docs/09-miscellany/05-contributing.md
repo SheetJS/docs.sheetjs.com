@@ -134,6 +134,12 @@ make dist
 curl -fsSL https://deno.land/install.sh | sh
 ```
 
+5) (For Bun testing) Install Bun:
+
+```bash
+curl https://bun.sh/install | bash
+```
+
   </TabItem>
 </Tabs>
 

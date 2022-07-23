@@ -45,6 +45,12 @@ Start a local server and navigate to that directory to run the tests.
 `tests/fixtures.lst` file and add the paths.
 
   </TabItem>
+  <TabItem value="bun" label="Bun">
+
+`make test-bun` will run the full Bun test suite and `make test-bun_misc`
+will run the smaller feature-specific tests.
+
+  </TabItem>
   <TabItem value="deno" label="Deno">
 
 `make test-deno` will run the full Deno test suite and `make test-deno_misc`

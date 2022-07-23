@@ -193,6 +193,20 @@ writeFile(workbook, "out.xlsb");
 ```
 
   </TabItem>
+  <TabItem value="bun" label="Bun">
+
+As with Node ESM, `fs` must be loaded manually:
+
+```js
+import * as fs from "fs";
+import { writeFile, set_fs } from "xlsx/xlsx.mjs";
+set_fs(fs);
+
+/* output format determined by filename */
+writeFile(workbook, "out.xlsb");
+```
+
+  </TabItem>
   <TabItem value="deno" label="Deno">
 
 `writeFile` uses `Deno.writeFileSync` under the hood:
