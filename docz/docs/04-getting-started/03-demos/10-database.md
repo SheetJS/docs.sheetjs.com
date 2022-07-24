@@ -1,6 +1,6 @@
 ---
-sidebar_position: 9
-title: Databases
+sidebar_position: 10
+title: Databases and SQL
 ---
 
 import current from '/version.js';
@@ -15,6 +15,9 @@ database systems as well as browser APIs like WebSQL and `localStorage`
 This demo discusses general strategies and provides examples for a variety of
 database systems.  The examples are merely intended to demonstrate very basic
 functionality.
+
+Key-value stores, unstructured use of Document Databases, and other schema-less
+databases are covered in the [NoSQL demo](./nosql).
 
 
 ## Structured Tables
@@ -91,9 +94,9 @@ Document databases like MongoDB tend not to require schemas. Arrays of objects
 can be used directly without setting up a schema:
 
 ```js
-const aoa = XLSX.utils.sheet_to_json(ws);
+const aoo = XLSX.utils.sheet_to_json(ws);
 // highlight-next-line
-await db.collection('coll').insertMany(aoa, { ordered: true });
+await db.collection('coll').insertMany(aoo, { ordered: true });
 ```
 
 :::
@@ -203,19 +206,18 @@ function SheetJSQLWriter() {
         else values.push(`'${v.toString().replaceAll("'", "''")}'`);
       })
       if(fields.length) return `INSERT INTO \`${wsname}\` (${fields.join(", ")}) VALUES (${values.join(", ")})`;
-    })).filter(x => x).slice(0, 5);
+    })).filter(x => x).slice(0, 6);
   }
   const [url, setUrl] = React.useState("https://sheetjs.com/cd.xls");
   const set_url = React.useCallback((evt) => setUrl(evt.target.value));
   const [out, setOut] = React.useState("");
   const xport = React.useCallback(async() => {
-    console.log(url);
     const ab = await (await fetch(url)).arrayBuffer();
     const wb = XLSX.read(ab), wsname = wb.SheetNames[0];
     setOut(generate_sql(wb.Sheets[wsname], wsname).join("\n"));
   });
 
-  return ( <> {out && (<pre>{out}</pre>)}
+  return ( <> {out && (<><a href={url}>{url}</a><pre>{out}</pre></>)}
     <b>URL: </b><input type="text" value={url} onChange={set_url} size="50"/>
     <br/><button onClick={xport}><b>Fetch!</b></button>
   </> );
@@ -223,7 +225,7 @@ function SheetJSQLWriter() {
 ```
 
 
-## SQL
+## Databases
 
 ### SQLite
 
@@ -349,6 +351,9 @@ XLSX.writeFile(wb, "bun.xlsx");
 This information is included for legacy deployments.  Web SQL is deprecated.
 
 <https://caniuse.com/sql-storage> has up-to-date info on browser support.
+[Firefox](https://nolanlawson.com/2014/04/26/web-sql-database-in-memoriam/)
+never supported Web SQL. Safari 13 dropped support. As of the time of writing,
+the current Chrome version (103) supports WebSQL.
 
 ::::
 
@@ -358,37 +363,263 @@ work as-is in WebSQL.
 
 The public demo <http://sheetjs.com/sql> generates a database from workbook.
 
+Importing data from spreadsheets is straightforward using the `generate_sql`
+helper function from ["Building Schemas"](#building-schemas-from-worksheets):
 
-## Objects, K/V and "Schema-less" Databases
+```js
+const db = openDatabase('sheetql', '1.0', 'SheetJS WebSQL Test', 2097152);
+const stmts = generate_sql(ws, wsname);
+// NOTE: tx.executeSql and db.transaction use callbacks. This wraps in Promises
+for(var i = 0; i < stmts.length; ++i) await new Promise((res, rej) => {
+  db.transaction(tx => 
+    tx.executeSql(stmts[i], [], 
+      (tx, data) => res(data), // if the query is successful, return the data
+      (tx, err) => rej(err) // if the query fails, reject with the error
+  ));
+});
+```
 
-So-called "Schema-less" databases allow for arbitrary keys and values within the
-entries in the database.  K/V stores and Objects add additional restrictions.
+The result of a SQL SELECT statement is a `SQLResultSet`.  The `rows` property
+is a `SQLResultSetRowList`.  It is an "array-like" structure that has `length`
+and properies like `0`, `1`, etc.  However, this is not a real Array object.
+A real Array can be created using `Array.from`:
 
-There is no natural way to translate arbitrarily shaped schemas to worksheets
-in a workbook.  One common trick is to dedicate one worksheet to holding named
-keys.  For example, considering the JS object:
+```js
+const db = openDatabase('sheetql', '1.0', 'SheetJS WebSQL Test', 2097152);
+db.readTransaction(tx =>
+  tx.executeSQL("SELECT * FROM DatabaseTable", [], (tx, data) => {
+    // data.rows is "array-like", so `Array.from` can make it a real array
+    const aoo = Array.from(data.rows);
+    const ws = XLSX.utils.json_to_sheet(aoo);
+    // ... it is recommended to perform an export here OR wrap in a Promise
+  })
+);
+```
 
-```json
-{
-  "title": "SheetDB",
-  "metadata": {
-    "author": "SheetJS",
-    "code": 7262
-  },
-  "data": [
-    { "Name": "Barack Obama", "Index": 44 },
-    { "Name": "Donald Trump", "Index": 45 },
-  ]
+The following demo generates a database with hardcoded SQL statements. Queries
+can be changed in the Live Editor.  The WebSQL database can be inspected in the
+"WebSQL" section of the "Application" Tab of Developer Tools:
+
+![WebSQL DevTools](pathname:///files/websql.png)
+
+```jsx live
+function SheetQL() {
+  const [out, setOut] = React.useState("");
+  const queries = [
+    'DROP TABLE IF EXISTS Presidents',
+    'CREATE TABLE Presidents (Name TEXT, Idx REAL)',
+    'INSERT INTO Presidents  (Name, Idx) VALUES ("Barack Obama", 44)',
+    'INSERT INTO Presidents  (Name, Idx) VALUES ("Donald Trump", 45)',
+    'INSERT INTO Presidents  (Name, Idx) VALUES ("Joseph Biden", 46)'
+  ];
+  const xport = React.useCallback(async() => {
+    // prep database
+    const db = openDatabase('sheetql', '1.0', 'SheetJS WebSQL Test', 2097152);
+
+    for(var i = 0; i < queries.length; ++i) await new Promise((res, rej) => {
+      db.transaction((tx) => {
+        tx.executeSql(queries[i], [], (tx, data) => res(data), (tx, err) => rej(err));
+      });
+    });
+
+    // pull data and generate rows
+    db.readTransaction(tx => {
+      tx.executeSql("SELECT * FROM Presidents", [], (tx, data) => {
+        const aoo = Array.from(data.rows);
+        setOut("QUERY RESULT:\n" + aoo.map(r => JSON.stringify(r)).join("\n") + "\n")
+        const ws = XLSX.utils.json_to_sheet(aoo);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Presidents");
+        XLSX.writeFile(wb, "SheetQL.xlsx");
+      });
+    });
+  });
+  return ( <pre>{out}<button onClick={xport}><b>Fetch!</b></button></pre> );
 }
 ```
 
-A dedicated worksheet should store the one-off named values:
+### LocalStorage and SessionStorage
 
+The Storage API, encompassing `localStorage` and `sessionStorage`, describes
+simple key-value stores that only support string values and keys.
+
+Arrays of objects can be stored using `JSON.stringify` using row index as key:
+
+```js
+const aoo = XLSX.utils.sheet_to_json(ws);
+for(var i = 0; i < aoo.length; ++i) localStorage.setItem(i, JSON.stringify(aoo[i]));
 ```
-XXX|        A        |    B    |
----+-----------------+---------+
- 1 | Path            | Value   |
- 2 | title           | SheetDB |
- 3 | metadata.author | SheetJS |
- 4 | metadata.code   |    7262 |
+
+Recovering the array of objects is possible by using `JSON.parse`:
+
+```js
+const aoo = [];
+for(var i = 0; i < localStorage.length; ++i) aoo.push(JSON.parse(localStorage.getItem(i)));
+const ws = XLSX.utils.json_to_sheet(aoo);
 ```
+
+This example will fetch <https://sheetjs.com/cd.xls>, fill `localStorage` with
+rows, then generate a worksheet from the rows and write to a new file.
+
+:::caution
+
+This example is for illustration purposes. If array of objects is available, it
+is strongly recommended to convert that array to a worksheet directly.
+
+:::
+
+```jsx live
+function SheetJStorage() {
+  const [url, setUrl] = React.useState("https://sheetjs.com/cd.xls");
+  const set_url = React.useCallback((evt) => setUrl(evt.target.value));
+  const [out, setOut] = React.useState("");
+  const xport = React.useCallback(async() => {
+    // get first worksheet data as array of objects
+    const ab = await (await fetch(url)).arrayBuffer();
+    const wb = XLSX.read(ab), wsname = wb.SheetNames[0];
+    const aoo = XLSX.utils.sheet_to_json(wb.Sheets[wsname]);
+
+    // reset and populate localStorage
+    localStorage.clear();
+    for(var i = 0; i < aoo.length; ++i) localStorage.setItem(i, JSON.stringify(aoo[i]));
+
+    // create new array of objects from localStorage
+    const new_aoo = [];
+    for(var i = 0; i < localStorage.length; ++i) {
+      const row = JSON.parse(localStorage.getItem(i));
+      new_aoo.push(row);
+    }
+
+    setOut(`Number of rows in LocalStorage: ${localStorage.length}`);
+
+    // create and export workbook
+    const new_ws = XLSX.utils.json_to_sheet(new_aoo);
+    const new_wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(new_wb, new_ws, "Sheet1");
+    XLSX.writeFile(new_wb, "SheetJStorage.xlsx");
+  });
+
+  return ( <> {out && (<><a href={url}>{url}</a><pre>{out}</pre></>)}
+    <b>URL: </b><input type="text" value={url} onChange={set_url} size="50"/>
+    <br/><button onClick={xport}><b>Fetch!</b></button>
+  </> );
+}
+```
+
+
+### IndexedDB
+
+[`localForage`](https://localforage.github.io/localForage/) is a lightweight
+IndexedDB wrapper that presents an async Storage interface.
+
+Arrays of objects can be stored using `JSON.stringify` using row index as key:
+
+```js
+const aoo = XLSX.utils.sheet_to_json(ws);
+for(var i = 0; i < aoo.length; ++i) await localForage.setItem(i, JSON.stringify(aoo[i]));
+```
+
+Recovering the array of objects is possible by using `JSON.parse`:
+
+```js
+const aoo = [];
+for(var i = 0; i < localForage.length; ++i) aoo.push(JSON.parse(await localForage.getItem(i)));
+const wb = XLSX.utils.json_to_sheet(aoo);
+```
+
+
+
+### MongoDB Structured Collections
+
+:::warning MongoDB Relicense
+
+This demo was originally written when MongoDB was licensed under AGPLv3. It was
+relicensed in 2018 to the Server-Side Public License. This demo was tested with
+the "MongoDB Community Server" and may not work with the "Enterprise" Server.
+
+:::
+
+MongoDB is a popular document-oriented database engine.
+
+It is straightforward to treat collections as worksheets.  Each object maps to
+a row in the table.
+
+The official NodeJS connector is [`mongodb` on NPM](https://npm.im/mongodb).
+
+Worksheets can be generated from collections by using `Collection#find`.  A
+`projection` can suppress the object ID field:
+
+```js
+/* generate a worksheet from a collection */
+const aoo = await collection.find({}, {projection:{_id:0}}).toArray();
+const ws = utils.json_to_sheet(aoo);
+```
+
+Collections can be populated with data from a worksheet using `insertMany`:
+
+```js
+/* import data from a worksheet to a collection */
+const aoo = XLSX.utils.sheet_to_json(ws);
+await collection.insertMany(aoo, {ordered: true});
+```
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+:::caution
+
+When this demo was last tested, the `mongodb` module did not work with Node 18.
+It was verified in Node 16.16.0.
+
+:::
+
+1) Install the dependencies:
+
+```bash
+$ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz mongodb
+```
+
+2) Start a MongoDB server on localhost (follow official instructions)
+
+3) Save the following to `SheetJSMongoCRUD.mjs` (the key step is highlighted):
+
+```js title="SheetJSMongoCRUD.mjs"
+import { writeFile, set_fs, utils } from 'xlsx/xlsx.mjs';
+import * as fs from 'fs'; set_fs(fs);
+import { MongoClient } from 'mongodb';
+
+const url = 'mongodb://localhost:27017/sheetjs';
+const db_name = 'sheetjs';
+
+(async() => {
+/* Connect to mongodb server */
+const client = await MongoClient.connect(url, { useUnifiedTopology: true });
+
+/* Sample data table */
+const db = client.db(db_name);
+try { await db.collection('pres').drop(); } catch(e) {}
+const pres = db.collection('pres');
+await pres.insertMany([
+	{ name: "Barack Obama", idx: 44 },
+	{ name: "Donald Trump", idx: 45 },
+	{ name: "Joseph Biden", idx: 46 }
+], {ordered: true});
+
+// highlight-start
+/* Export database to XLSX */
+const wb = utils.book_new();
+const aoo = await pres.find({}, {projection:{_id:0}}).toArray();
+const ws = utils.json_to_sheet(aoo);
+utils.book_append_sheet(wb, ws, "Presidents");
+writeFile(wb, "SheetJSMongoCRUD.xlsx");
+// highlight-end
+
+/* Close connection */
+client.close();
+})();
+```
+
+4) Run `node SheetJSMongoCRUD.mjs` and open `SheetJSMongoCRUD.xlsx`
+
+</details>
+
+

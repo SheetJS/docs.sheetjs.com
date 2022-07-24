@@ -12,6 +12,9 @@ The demo projects include small runnable examples and short explainers.
 - [`XMLHttpRequest and fetch`](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/)
 - [`Clipboard Data`](./clipboard)
 - [`Typed Arrays for Machine Learning`](./ml)
+- [`LocalStorage and SessionStorage`](./database#localstorage-and-sessionstorage)
+- [`Web SQL Database`](./database#websql)
+- [`IndexedDB`](./database#indexeddb)
 
 ### Frameworks
 
