@@ -512,9 +512,27 @@ const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
 ```
 
   </TabItem>
+  <TabItem value="bun" label="Bun">
+
+Bun has native support for `fetch`.  Using the [NodeJS package](../installation/nodejs):
+
+```js
+import * as XLSX from 'xlsx/xlsx.mjs';
+/* load the codepage support library for extended support with older formats  */
+import * as cptable from 'xlsx/dist/cpexcel.full.mjs';
+XLSX.set_cptable(cptable);
+
+const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
+// highlight-next-line
+const data = await (await fetch(url)).arrayBuffer();
+/* data is an ArrayBuffer */
+const workbook = XLSX.read(data);
+```
+
+  </TabItem>
   <TabItem value="deno" label="Deno">
 
-Deno has native support for fetch.
+Deno has native support for `fetch`.
 
 <pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
 // @deno-types="https://cdn.sheetjs.com/xlsx-${current}/package/types/index.d.ts"
