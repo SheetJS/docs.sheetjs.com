@@ -121,7 +121,7 @@ function generate_sql(ws, wsname) {
   const types = {}, hdr = [];
 
   // loop across each row object
-  aoo.forEach(row => 
+  aoo.forEach(row =>
     // Object.entries returns a row of [key, value] pairs.  Loop across those
     Object.entries(row).forEach(([k,v]) => {
 
@@ -147,7 +147,7 @@ function generate_sql(ws, wsname) {
   // The final array consists of the CREATE TABLE query and a series of INSERTs
   return [
     // generate CREATE TABLE query and return batch
-    `CREATE TABLE \`${wsname}\` (${hdr.map(h => 
+    `CREATE TABLE \`${wsname}\` (${hdr.map(h =>
       // column name must be wrapped in backticks
       `\`${h}\` ${PG[types[h]]}`
     ).join(", ")});`
@@ -164,7 +164,7 @@ function generate_sql(ws, wsname) {
       fields.push(`\`${k}\``);
       // when the field type is numeric, `true` -> 1 and `false` -> 0
       if(types[k] == "n") values.push(typeof v == "boolean" ? (v ? 1 : 0) : v);
-      // otherwise, 
+      // otherwise,
       else values.push(`'${v.toString().replaceAll("'", "''")}'`);
     })
     if(fields.length) return `INSERT INTO \`${wsname}\` (${fields.join(", ")}) VALUES (${values.join(", ")})`;
@@ -371,8 +371,8 @@ const db = openDatabase('sheetql', '1.0', 'SheetJS WebSQL Test', 2097152);
 const stmts = generate_sql(ws, wsname);
 // NOTE: tx.executeSql and db.transaction use callbacks. This wraps in Promises
 for(var i = 0; i < stmts.length; ++i) await new Promise((res, rej) => {
-  db.transaction(tx => 
-    tx.executeSql(stmts[i], [], 
+  db.transaction(tx =>
+    tx.executeSql(stmts[i], [],
       (tx, data) => res(data), // if the query is successful, return the data
       (tx, err) => rej(err) // if the query fails, reject with the error
   ));
@@ -526,7 +526,6 @@ const aoo = [];
 for(var i = 0; i < localForage.length; ++i) aoo.push(JSON.parse(await localForage.getItem(i)));
 const wb = XLSX.utils.json_to_sheet(aoo);
 ```
-
 
 
 ### MongoDB Structured Collections

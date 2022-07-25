@@ -154,7 +154,7 @@ const { webkit } = require('playwright'); // import desired browser
 PhantomJS is a headless web browser powered by WebKit.  Standalone binaries are
 available at <https://phantomjs.org/download.html>
 
-:::warning 
+:::warning
 
 This information is provided for legacy deployments.  PhantomJS development has
 been suspended and there are known vulnerabilities, so new projects should use

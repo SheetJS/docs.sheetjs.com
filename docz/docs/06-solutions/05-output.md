@@ -465,7 +465,7 @@ export default {
 
 </details>
 
-  </TabItem>  
+  </TabItem>
 </Tabs>
 
 

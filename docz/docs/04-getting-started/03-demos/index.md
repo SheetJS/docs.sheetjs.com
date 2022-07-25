@@ -59,6 +59,7 @@ The demo projects include small runnable examples and short explainers.
 - [`parcel`](./bundler#parcel)
 - [`requirejs`](https://github.com/SheetJS/SheetJS/tree/master/demos/requirejs/)
 - [`rollup`](https://github.com/SheetJS/SheetJS/tree/master/demos/rollup/)
+- [`snowpack`](./bundler#snowpack)
 - [`systemjs`](https://github.com/SheetJS/SheetJS/tree/master/demos/systemjs/)
 - [`typescript`](https://github.com/SheetJS/SheetJS/tree/master/demos/typescript/)
 - [`webpack 2.x`](https://github.com/SheetJS/SheetJS/tree/master/demos/webpack/)
