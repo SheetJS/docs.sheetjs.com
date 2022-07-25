@@ -18,17 +18,17 @@ proper ECMAScript Module release which can be optimized with developer tools.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -38,6 +38,40 @@ Once installed, the library can be imported under the name `xlsx`:
 ```js
 import { read, writeFileXLSX } from "xlsx";
 ```
+
+:::warning
+
+Older releases are technically available on the public npm registry as `xlsx`,
+but the registry is out of date.  The latest version on that registry is 0.18.5
+
+This is a known registry bug
+
+<https://cdn.sheetjs.com/> is the authoritative source for SheetJS scripts.
+
+For existing projects, the easiest approach is to uninstall and reinstall:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm rm --save xlsx
+$ npm i --save file:vendor/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm rm xlsx
+$ pnpm install file:vendor/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn remove xlsx
+$ yarn add file:vendor/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+:::
 
 ## XLS Support
 

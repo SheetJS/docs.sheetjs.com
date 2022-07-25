@@ -48,7 +48,8 @@ The demo projects include small runnable examples and short explainers.
 - [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
 - [`sqlite3`](./database#sqlite)
-- [`Databases and Key/Value Stores`](https://github.com/SheetJS/SheetJS/tree/master/demos/database/)
+- [`Databases and Structured Data Stores`](./database)
+- [`NoSQL, K/V, and Unstructured Data Stores`](./nosql)
 - [`Legacy Internet Explorer`](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/)
 
 ### Bundlers and Tooling

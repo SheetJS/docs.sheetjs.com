@@ -46,17 +46,17 @@ Web Worker scripts can be bundled using the same approach.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -98,17 +98,17 @@ local testing, a bundled script can save tens of milliseconds per run.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -186,17 +186,17 @@ Both the `node` and `browser` platforms work out of the box.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -264,17 +264,17 @@ npx http-server .
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -405,17 +405,17 @@ document.getElementById("xport").onclick = async() => {
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -442,17 +442,17 @@ Snowpack works with no caveats.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>

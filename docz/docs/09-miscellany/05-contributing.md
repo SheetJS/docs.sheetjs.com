@@ -106,7 +106,7 @@ NodeJS installers can be found at <https://nodejs.org/en/download/>
 npm install
 
 # Install global dependencies
-sudo npm install -g mocha@2.5.3 voc @sheetjs/uglify-js
+sudo npm i -g mocha@2.5.3 voc @sheetjs/uglify-js
 ```
 
 2) Initialize the test files:

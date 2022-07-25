@@ -224,6 +224,42 @@ function SheetJSQLWriter() {
 }
 ```
 
+### DSV Interchange
+
+Many databases offer utilities for reading and writing CSV, pipe-separated
+documents, and other simple data files. They enable workflows where the library
+generates CSV data for the database to process or where the library parses CSV
+files created by the database.
+
+#### Worksheets to CSVs
+
+CSV data can be generated from worksheets using `XLSX.utils.sheet_to_csv`.
+
+```js
+// starting from a worksheet object
+const csv = XLSX.utils.sheet_to_json(ws);
+
+// whole workbook conversion
+const csv_arr = wb.SheetNames.map(n => XLSX.utils.sheet_to_json(wb.Sheets[n]));
+```
+
+#### CSVs to Worksheets
+
+`XLSX.read` can read strings with CSV data.  It will generate single-sheet
+workbooks with worksheet name `Sheet1`.
+
+Where supported, `XLSX.readFile` can read files.
+
+```js
+// starting from a CSV string
+const ws_str = XLSX.read(csv_str, {type: "string"}).Sheets.Sheet1;
+
+// starting from a CSV binary string (e.g. `FileReader#readAsBinaryString`)
+const ws_bstr = XLSX.read(csv_bstr, {type: "binary"}).Sheets.Sheet1;
+
+// starting from a CSV file in NodeJS or Bun or Deno
+const ws_file = XLSX.readFile("test.csv").Sheets.Sheet1;
+```
 
 ## Databases
 
