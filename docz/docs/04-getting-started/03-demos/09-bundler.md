@@ -205,7 +205,7 @@ $ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 
 ```js title="esbrowser.js"
 // highlight-next-line
-import { set_fs, utils, version, writeFile } from 'xlsx/xlsx.mjs';
+import { set_fs, utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 (async() => {
 /* fetch JSON data and parse */
@@ -234,7 +234,7 @@ const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
 worksheet["!cols"] = [ { wch: max_width } ];
 
 /* create an XLSX file and try to save to Presidents.xlsx */
-writeFile(workbook, "Presidents.xlsx");
+writeFileXLSX(workbook, "Presidents.xlsx");
 })();
 ```
 
@@ -364,7 +364,7 @@ This demo follows the [Presidents Example](../../example).
 <script type="module">
 // ESM-style import from "xlsx"
 // highlight-next-line
-import { utils, version, writeFile } from 'xlsx';
+import { utils, version, writeFileXLSX } from 'xlsx';
 
 document.getElementById("vers").innerText = version;
 document.getElementById("xport").onclick = async() => {
@@ -394,7 +394,7 @@ document.getElementById("xport").onclick = async() => {
   worksheet["!cols"] = [ { wch: max_width } ];
 
   /* create an XLSX file and try to save to Presidents.xlsx */
-  writeFile(workbook, "Presidents.xlsx");
+  writeFileXLSX(workbook, "Presidents.xlsx");
 };
 </script>
 <body>
@@ -461,7 +461,7 @@ $ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 
 ```js title="index.js"
 // highlight-next-line
-import { set_fs, utils, version, writeFile } from 'xlsx/xlsx.mjs';
+import { set_fs, utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */
@@ -490,7 +490,7 @@ const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
 worksheet["!cols"] = [ { wch: max_width } ];
 
 /* create an XLSX file and try to save to Presidents.xlsx */
-writeFile(workbook, "Presidents.xlsx");
+writeFileXLSX(workbook, "Presidents.xlsx");
 });
 ```
 
@@ -529,3 +529,99 @@ npx http-server build/
 Click on "Click here to export" to generate a file.
 
 </details>
+
+## Vite
+
+:::caution
+
+ViteJS adopted nascent `package.json` patterns. Version 0.18.10 implements the
+patterns required for ViteJS 3.0.3. These patterns are evolving and a future
+version of Vite may require more packaging changes.
+
+:::
+
+ViteJS 3.0.3 is known to work with SheetJS version 0.18.10.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Create a new ViteJS project:
+
+```
+npm create vite@latest
+cd sheetjs-vite # (project name)
+npm i
+```
+
+When prompted for **Project Name**, type **`sheetjs-vite`**
+
+When prompted for **Framework**, select **`vue`** then **`vue-ts`**
+
+2) Add the SheetJS dependency:
+
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+
+3) Replace `src\components\HelloWorld.vue` with:
+
+```html title="src\components\HelloWorld.vue"
+<script setup lang="ts">
+import { version, utils, writeFileXLSX } from 'xlsx';
+
+interface President {
+  terms: { "type": "prez" | "viceprez"; }[];
+  name: { first: string; last: string; }
+  bio: { birthday: string; }
+}
+
+async function xport() {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data: President[] = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFileXLSX(workbook, "Presidents.xlsx");
+}
+
+</script>
+
+<template>
+  <button type="button" @click="xport">Export with SheetJS version {{ version }}</button>
+</template>
+```
+
+4) Run `npm run dev` and test functionality by opening a web browser to
+http://localhost:5173/ and clicking the button
+
+5) Run `npx vite build` and verify the generated pages work by running a local
+web server in the `dist` folder:
+
+```
+npx http-server dist/
+```
+
+Access http://localhost:8080 in your web browser.
+
+</details>
+

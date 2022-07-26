@@ -62,4 +62,5 @@ The demo projects include small runnable examples and short explainers.
 - [`snowpack`](./bundler#snowpack)
 - [`systemjs`](https://github.com/SheetJS/SheetJS/tree/master/demos/systemjs/)
 - [`typescript`](https://github.com/SheetJS/SheetJS/tree/master/demos/typescript/)
+- [`vite`](./bundler#vite)
 - [`webpack 2.x`](https://github.com/SheetJS/SheetJS/tree/master/demos/webpack/)

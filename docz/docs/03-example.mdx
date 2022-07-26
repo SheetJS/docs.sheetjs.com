@@ -144,6 +144,15 @@ worksheet["!cols"] = [ { wch: max_width } ];
 In the browser, it will try to prompt the user to download the file.  In NodeJS,
 it will write to the local directory.
 
+:::note
+
+`XLSX.writeFileXLSX` only writes XLSX files and is recommended when the export
+will always be in the `.xlsx` format. `writeFileXLSX` is more amenable to tree
+shaking.  This example uses `XLSX.writeFile` since `writeFileXLSX` does not
+support other common export formats like `.xls` or `.xlsb` or `.csv`.
+
+:::
+
 ```js
 XLSX.writeFile(workbook, "Presidents.xlsx");
 ```
