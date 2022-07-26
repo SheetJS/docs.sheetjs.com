@@ -205,7 +205,7 @@ $ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 
 ```js title="esbrowser.js"
 // highlight-next-line
-import { set_fs, utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
+import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 (async() => {
 /* fetch JSON data and parse */
@@ -461,7 +461,7 @@ $ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 
 ```js title="index.js"
 // highlight-next-line
-import { set_fs, utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
+import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */

@@ -20,7 +20,7 @@ The demo projects include small runnable examples and short explainers.
 
 - [`Angular.JS`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular/)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
-- [`Knockout`](https://github.com/SheetJS/SheetJS/tree/master/demos/knockout/)
+- [`Knockout`](./legacy#knockout)
 - [`Meteor`](https://github.com/SheetJS/SheetJS/tree/master/demos/meteor/)
 - [`React, React Native and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
 - [`VueJS, WeeX, and NuxtJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
