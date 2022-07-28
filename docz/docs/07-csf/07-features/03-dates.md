@@ -62,6 +62,8 @@ The following table covers some common formats:
 | `A/P`    | Meridien ("A" or "P")        |
 | `AM/PM`  | Meridien ("AM" or "PM")      |
 
+:::note
+
 `m` and `mm` are context-dependent.  It is interpreted as "minutes" when the
 previous or next date token represents a time (hours or seconds):
 
@@ -70,6 +72,8 @@ yyyy-mm-dd hh:mm:ss
      ^^       ^^
     month    minutes
 ```
+
+:::
 
 </details>
 

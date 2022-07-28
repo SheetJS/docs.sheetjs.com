@@ -431,6 +431,36 @@ click the "Click to Export!" button to generate a file.
 
 </details>
 
+## RequireJS
+
+[Standalone scripts](../../installation/standalone) comply with AND `define`
+semantics, enabling use in RequireJS out of the box.
+
+To enable use of the alias `xlsx`, the RequireJS config should set an alias in
+the `paths` property:
+
+```js
+require.config({
+  baseUrl: ".",
+  name: "app",
+  paths: {
+    // highlight-next-line
+    xlsx: "xlsx.full.min"
+  }
+});
+// highlight-next-line
+require(["xlsx"], function(XLSX) {
+	/* use XLSX here */
+  console.log(XLSX.version);
+});
+```
+
+The [Live demo](pathname:///requirejs/requirejs.html) loads RequireJS from the
+CDN, uses it to load the standalone script from the SheetJS CDN, and uses the
+`XLSX` variable to create a button click handler that creates a workbook.
+
+The `r.js` optimizer also supports the standalone scripts.
+
 ## Snowpack
 
 Snowpack works with no caveats.

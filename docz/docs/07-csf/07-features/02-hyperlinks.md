@@ -33,7 +33,7 @@ extends this export with support for hyperlink styling.
 HTTP / HTTPS links can be used directly:
 
 ```js
-ws["A2"].l = { Target: "https://docs.sheetjs.com/#hyperlinks" };
+ws["A2"].l = { Target: "https://docs.sheetjs.com/docs/csf/features/hyperlinks" };
 ws["A3"].l = { Target: "http://localhost:7262/yes_localhost_works" };
 ```
 
@@ -60,8 +60,12 @@ ws["B3"].l = { Target: "SheetJS.xlsb" }; /* Link to SheetJS.xlsb */
 ws["B4"].l = { Target: "../SheetJS.xlsm" }; /* Link to ../SheetJS.xlsm */
 ```
 
+:::caution
+
 Relative Paths have undefined behavior in the SpreadsheetML 2003 format.  Excel
 2019 will treat a `..\` parent mark as two levels up.
+
+:::
 
 ## Internal Links
 

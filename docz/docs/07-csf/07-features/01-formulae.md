@@ -74,14 +74,14 @@ const workbook = XLSX.readFile("test.xlsx", { cellFormula: true });
   </TabItem>
   <TabItem value="bun" label="Bun">
 
-Typically file data will be available as a `Buffer` from a network request / API
+Typically file data will be available as a `Uint8Array` from a network request
 or stored in the filesystem.  `cellFormula: true` should be added to the second
 options argument to `read` or `readFile`:
 
 **`XLSX.read`**
 
 ```js
-/* using read in NodeJS, `cellFormula` is in the second argument */
+/* using read in Bun, `cellFormula` is in the second argument */
 const ab = await (await fetch("test.xlsx")).arrayBuffer();
 const workbook = XLSX.read(ab, { cellFormula: true });
 // ------------------------------^^^^^^^^^^^^^^^^^
@@ -90,7 +90,7 @@ const workbook = XLSX.read(ab, { cellFormula: true });
 **`XLSX.readFile`**
 
 ```js
-/* using readFile in NodeJS, add `cellFormula` to the second argument */
+/* using readFile in Bun, add `cellFormula` to the second argument */
 const workbook = XLSX.readFile("test.xlsx", { cellFormula: true });
 // -------------------------------------------^^^^^^^^^^^^^^^^^
 ```
@@ -208,9 +208,7 @@ function ExportSimpleFormula(props) {
     XLSX.writeFile(wb, "SheetJSFormula1.xlsx");
   });
 
-  return (<>
-    <button onClick={xport}><b>Export XLSX!</b></button>
-  </>);
+  return (<button onClick={xport}><b>Export XLSX!</b></button>);
 }
 ```
 
