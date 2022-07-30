@@ -167,7 +167,7 @@ a simple CFB file that can be parsed:
 const { clipboard } = require('electron')
 const XLSX = require("xlsx");
 const buf = clipboard.readBuffer('dyn.ah62d4qmxhk4d425try1g44pdsm11g55gsu1en5pcqzwc4y5tsz3gg3k');
-const cfb = XLSX.CFB.read(rtf, {type: "buffer"});
+const cfb = XLSX.CFB.read(buf, {type: "buffer"});
 const pkg = XLSX.CFB.find(cfb, "Package").content;
 const wb = XLSX.read(pkg);
 ```
