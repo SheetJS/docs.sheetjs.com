@@ -34,8 +34,8 @@ The demo projects include small runnable examples and short explainers.
 
 ### Platforms and Integrations
 
+- [`Command-Line Tools`](./cli)
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
-- [`Deno`](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/)
 - [`Electron`](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
 - [`NW.js`](https://github.com/SheetJS/SheetJS/tree/master/demos/nwjs/)
 - [`Chrome / Chromium Extension`](https://github.com/SheetJS/SheetJS/tree/master/demos/chrome/)

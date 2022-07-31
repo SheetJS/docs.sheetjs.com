@@ -173,9 +173,11 @@ import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs'
 
 const workbook = XLSX.readFile("test.xlsx");`}</code></pre>
 
+:::note
 
-Applications reading files must be invoked with the `--allow-read` flag.  The
-[`deno` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/) has more examples
+Applications reading files must be invoked with the `--allow-read` flag.
+
+:::
 
   </TabItem>
   <TabItem value="bun" label="Bun">

@@ -217,8 +217,11 @@ import * as XLSX from 'https://cdn.sheetjs.com/xlsx-${current}/package/xlsx.mjs'
 
 XLSX.writeFile(workbook, "test.xlsx");`}</code></pre>
 
-Applications writing files must be invoked with the `--allow-write` flag.  The
-[`deno` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/deno/) has more examples
+:::note
+
+Applications writing files must be invoked with the `--allow-write` flag.
+
+:::
 
   </TabItem>
   <TabItem value="electron" label="Electron">
@@ -832,31 +835,76 @@ Readable Stream.
 - `XLSX.stream.to_html` is the streaming version of `XLSX.utils.sheet_to_html`.
 - `XLSX.stream.to_json` is the streaming version of `XLSX.utils.sheet_to_json`.
 
-<details>
-  <summary><b>nodejs convert to CSV and write file</b> (click to show)</summary>
+<Tabs>
+  <TabItem value="nodejs" label="NodeJS">
+
+In a CommonJS context, NodeJS Streams immediately work with SheetJS.  This
+example reads a worksheet passed as an argument to the script, pulls the first
+worksheet, converts to CSV and writes to `out.csv`:
 
 ```js
-var output_file_name = "out.csv";
-var stream = XLSX.stream.to_csv(worksheet);
+const XLSX = require("xlsx");
+
+const workbook = XLSX.readFile(process.argv[2]);
+const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+// highlight-next-line
+const stream = XLSX.stream.to_csv(worksheet);
+
+const output_file_name = "out.csv";
+// highlight-next-line
 stream.pipe(fs.createWriteStream(output_file_name));
 ```
 
-</details>
-
-<details>
-  <summary><b>nodejs write JSON stream to screen</b> (click to show)</summary>
+`stream.to_json` uses Object-mode streams. A `Transform` stream can be used to
+generate a normal stream for streaming to a file or the screen:
 
 ```js
 /* to_json returns an object-mode stream */
+// highlight-next-line
 var stream = XLSX.stream.to_json(worksheet, {raw:true});
 
-/* the following stream converts JS objects to text via JSON.stringify */
+/* this Transform stream converts JS objects to text and prints to screen */
 var conv = new Transform({writableObjectMode:true});
 conv._transform = function(obj, e, cb){ cb(null, JSON.stringify(obj) + "\n"); };
+conv.pipe(process.stdout);
 
-stream.pipe(conv); conv.pipe(process.stdout);
+// highlight-next-line
+stream.pipe(conv);
 ```
 
-</details>
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+Deno does not support NodeJS streams in normal execution, so a wrapper is used.
+This demo converts a worksheet to CSV and prints each row to the screen:
+
+```ts
+// @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
+import {utils, stream, set_cptable} from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
+
+/* `Readable` will be compatible with how SheetJS uses `stream.Readable` */
+function NodeReadableCB(cb:(d:any)=>void) {
+	var rd = {
+		__done: false,
+		_read: function() {},
+		push: function(d: any) { if(!this.__done) cb(d); if(d == null) this.__done = true; },
+		resume: function pump() {for(var i = 0; i < 10000 && !this.__done; ++i) rd._read(); if(!rd.__done) setTimeout(pump, 0); }
+	};
+	return rd;
+}
+function NodeReadable(rd: any) { return function() { return rd; }; }
+/* The callback gets each CSV row.  It will be `null` when the stream is drained */
+const rt = NodeReadableCB((d: any) => { if(d != null) console.log(d); });
+const Readable = NodeReadable(rt);
+stream.set_readable(Readable);
+
+/* wire up and start the stream */
+const rd = stream.to_csv(worksheet);
+rd.resume();
+```
+
+  </TabItem>
+</Tabs>
+
 
 <https://github.com/sheetjs/sheetaki> pipes write streams to nodejs response.
