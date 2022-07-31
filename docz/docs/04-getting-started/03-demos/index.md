@@ -60,6 +60,7 @@ The demo projects include small runnable examples and short explainers.
 - [`requirejs`](https://github.com/SheetJS/SheetJS/tree/master/demos/requirejs/)
 - [`rollup`](https://github.com/SheetJS/SheetJS/tree/master/demos/rollup/)
 - [`snowpack`](./bundler#snowpack)
+- [`swc`](./bundler#swc)
 - [`systemjs`](https://github.com/SheetJS/SheetJS/tree/master/demos/systemjs/)
 - [`typescript`](https://github.com/SheetJS/SheetJS/tree/master/demos/typescript/)
 - [`vite`](./bundler#vite)

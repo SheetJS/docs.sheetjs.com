@@ -560,6 +560,123 @@ Click on "Click here to export" to generate a file.
 
 </details>
 
+## SWC
+
+SWC provides `spack` for bundling scripts.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Install the dependencies using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
+</code></pre>
+  </TabItem>
+</Tabs>
+
+:::note
+
+The `regenerator-runtime` dependency is used for transpiling `fetch` and is not
+required if the interface code does not use `fetch` or Promises.
+
+:::
+
+2) Save the following to `index.js`:
+
+```js title="index.js"
+import { utils, version, writeFileXLSX } from 'xlsx';
+
+document.getElementById("xport").addEventListener("click", async() => {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFileXLSX(workbook, "Presidents.xlsx");
+});
+```
+
+3) Create an `spack.config.js` config file:
+
+```js title="spack.config.js"
+const { config } = require('@swc/core/spack');
+
+module.exports = ({
+  entry: {
+    'web': __dirname + '/index.js',
+  },
+  output: {
+    path: __dirname + '/lib'
+  },
+  module: {},
+});
+```
+
+4) Build for production:
+
+```bash
+npx spack
+```
+
+This command will create the script `lib/web.js`
+
+5) Create a small HTML page that loads the generated script:
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body>
+    <h1>SheetJS Presidents Demo</h1>
+    <button id="xport">Click here to export</button>
+    <script src="lib/web.js"></script>
+  </body>
+</html>
+```
+
+6) Start a local HTTP server, then go to http://localhost:8080/
+
+```bash
+npx http-server build/
+```
+
+Click on "Click here to export" to generate a file.
+
+</details>
+
 ## Vite
 
 :::caution
