@@ -461,6 +461,100 @@ CDN, uses it to load the standalone script from the SheetJS CDN, and uses the
 
 The `r.js` optimizer also supports the standalone scripts.
 
+## Rollup
+
+Rollup requires `@rollup/plugin-node-resolve` to support NodeJS modules:
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Save the following to `index.js`:
+
+```js title="index.js"
+// highlight-next-line
+import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
+
+document.getElementById("xport").addEventListener("click", async() => {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFileXLSX(workbook, "Presidents.xlsx");
+});
+```
+
+3) Bundle the script:
+
+```bash
+npx rollup index.js --plugin @rollup/plugin-node-resolve --file bundle.js --format iife
+```
+
+4) Create a small HTML page that loads the script.  Save to `index.html`:
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body>
+    <h1>SheetJS Presidents Demo</h1>
+    <button id="xport">Click here to export</button>
+    <script type="module" src="./bundle.js"></script>
+  </body>
+</html>
+```
+
+
+5) Start a local HTTP server, then go to http://localhost:8080/
+
+```bash
+npx http-server .
+```
+
+Click on "Click here to export" to generate a file.
+
+</details>
+
 ## Snowpack
 
 Snowpack works with no caveats.
@@ -769,6 +863,99 @@ npx http-server dist/
 ```
 
 Access http://localhost:8080 in your web browser.
+
+</details>
+
+## WMR
+
+WMR follows the same structure as Snowpack
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Save the following to `index.js`:
+
+```js title="index.js"
+// highlight-next-line
+import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
+
+document.getElementById("xport").addEventListener("click", async() => {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFileXLSX(workbook, "Presidents.xlsx");
+});
+```
+
+3) Create a small HTML page that loads the script.  Save to `index.html`:
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body>
+    <h1>SheetJS Presidents Demo</h1>
+    <button id="xport">Click here to export</button>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
+```
+
+4) Build for production:
+
+```bash
+npx wmr build
+```
+
+5) Start a local HTTP server in `dist` folder and go to http://localhost:8080/
+
+```bash
+npx http-server dist/
+```
+
+Click on "Click here to export" to generate a file.
 
 </details>
 
