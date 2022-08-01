@@ -18,7 +18,7 @@ The demo projects include small runnable examples and short explainers.
 
 ### Frameworks
 
-- [`Angular.JS`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular/)
+- [`Angular.JS`](./legacy#angularjs)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
 - [`Knockout`](./legacy#knockout)
 - [`Meteor`](https://github.com/SheetJS/SheetJS/tree/master/demos/meteor/)
@@ -27,10 +27,11 @@ The demo projects include small runnable examples and short explainers.
 
 ### Front-End UI Components
 
-- [`canvas-datagrid`](https://github.com/SheetJS/SheetJS/tree/master/demos/datagrid/)
+- [`canvas-datagrid`](./grid#canvas-datagrid)
 - [`x-spreadsheet`](https://github.com/SheetJS/SheetJS/tree/master/demos/xspreadsheet/)
 - [`react-data-grid`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/modify/)
 - [`vue3-table-light`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/modify/)
+- [`angular-ui-grid`](./grid#angular-ui-grid)
 
 ### Platforms and Integrations
 

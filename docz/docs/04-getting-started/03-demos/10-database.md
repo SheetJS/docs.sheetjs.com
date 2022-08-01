@@ -563,6 +563,176 @@ for(var i = 0; i < localForage.length; ++i) aoo.push(JSON.parse(await localForag
 const wb = XLSX.utils.json_to_sheet(aoo);
 ```
 
+### Other SQL Databases
+
+The `generate_sql` function from ["Building Schemas from Worksheets"](#building-schemas-from-worksheets)
+can be adapted to generate SQL statements for a variety of databases, including:
+
+**PostgreSQL**
+
+The `pg` connector library was tested against the `generate_sql` output as-is. 
+
+The `rows` property of a query result is an array of objects that plays nice
+with `json_to_sheet`:
+
+```js
+const aoa = await connection.query(`SELECT * FROM DataTable`).rows;
+const worksheet = XLSX.utils.json_to_sheet(aoa);
+```
+
+**MySQL / MariaDB**
+
+The `mysql2` connector library was tested.  The differences are shown below,
+primarily stemming from the different quoting requirements and field types.
+
+<details><summary><b>Differences</b> (click to show)</summary>
+
+```js
+// highlight-start
+// define mapping between determined types and MySQL types
+const PG = { "n": "REAL", "s": "TEXT", "b": "TINYINT" };
+// highlight-end
+
+function generate_sql(ws, wsname) {
+
+  // generate an array of objects from the data
+  const aoo = XLSX.utils.sheet_to_json(ws);
+
+  // types will map column headers to types, while hdr holds headers in order
+  const types = {}, hdr = [];
+
+  // loop across each row object
+  aoo.forEach(row =>
+    // Object.entries returns a row of [key, value] pairs.  Loop across those
+    Object.entries(row).forEach(([k,v]) => {
+
+      // If this is first time seeing key, mark unknown and append header array
+      if(!types[k]) { types[k] = "?"; hdr.push(k); }
+
+      // skip null and undefined
+      if(v == null) return;
+
+      // check and resolve type
+      switch(typeof v) {
+        case "string": // strings are the broadest type
+          types[k] = "s"; break;
+        case "number": // if column is not string, number is the broadest type
+          if(types[k] != "s") types[k] = "n"; break;
+        case "boolean": // only mark boolean if column is unknown or boolean
+          if("?b".includes(types[k])) types[k] = "b"; break;
+        default: types[k] = "s"; break; // default to string type
+      }
+    })
+  );
+
+  // The final array consists of the CREATE TABLE query and a series of INSERTs
+  return [
+    // generate CREATE TABLE query and return batch
+    // highlight-next-line
+    `CREATE TABLE ${wsname} (${hdr.map(h =>
+      // highlight-next-line
+      `${h} ${PG[types[h]]}`
+    ).join(", ")});`
+  ].concat(aoo.map(row => { // generate INSERT query for each row
+    // entries will be an array of [key, value] pairs for the data in the row
+    const entries = Object.entries(row);
+    // fields will hold the column names and values will hold the values
+    const fields = [], values = [];
+    // check each key/value pair in the row
+    entries.forEach(([k,v]) => {
+      // skip null / undefined
+      if(v == null) return;
+      // highlight-next-line
+      fields.push(`${k}`);
+      // when the field type is numeric, `true` -> 1 and `false` -> 0
+      if(types[k] == "n") values.push(typeof v == "boolean" ? (v ? 1 : 0) : v);
+      // otherwise,
+      // highlight-next-line
+      else values.push(`"${v.toString().replaceAll('"', '""')}"`);
+    })
+    if(fields.length) return `INSERT INTO \`${wsname}\` (${fields.join(", ")}) VALUES (${values.join(", ")})`;
+  })).filter(x => x); // filter out skipped rows
+}
+```
+
+</details>
+
+The first property of a query result is an array of objects that plays nice
+with `json_to_sheet`:
+
+```js
+const aoa = await connection.query(`SELECT * FROM DataTable`)[0];
+const worksheet = XLSX.utils.json_to_sheet(aoa);
+```
+
+
+### Query Builders
+
+Query builders are designed to simplify query generation and normalize field
+types and other database minutiae.
+
+**Knex**
+
+The result of a `SELECT` statement is an array of objects:
+
+```js
+const aoo = await connection.select("*").from("DataTable");
+const worksheet = XLSX.utils.json_to_sheet(aoa);
+```
+
+Knex wraps primitive types when creating a table. `generate_sql` takes a `knex`
+connection object and uses the API:
+
+<details><summary><b>Generating a Table</b> (click to show)</summary>
+
+```js
+// define mapping between determined types and Knex types
+const PG = { "n": "float", "s": "text", "b": "boolean" };
+
+async function generate_sql(knex, ws, wsname) {
+
+  // generate an array of objects from the data
+  const aoo = XLSX.utils.sheet_to_json(ws);
+
+  // types will map column headers to types, while hdr holds headers in order
+  const types = {}, hdr = [];
+
+  // loop across each row object
+  aoo.forEach(row =>
+    // Object.entries returns a row of [key, value] pairs.  Loop across those
+    Object.entries(row).forEach(([k,v]) => {
+
+      // If this is first time seeing key, mark unknown and append header array
+      if(!types[k]) { types[k] = "?"; hdr.push(k); }
+
+      // skip null and undefined
+      if(v == null) return;
+
+      // check and resolve type
+      switch(typeof v) {
+        case "string": // strings are the broadest type
+          types[k] = "s"; break;
+        case "number": // if column is not string, number is the broadest type
+          if(types[k] != "s") types[k] = "n"; break;
+        case "boolean": // only mark boolean if column is unknown or boolean
+          if("?b".includes(types[k])) types[k] = "b"; break;
+        default: types[k] = "s"; break; // default to string type
+      }
+    })
+  );
+
+  await knex.schema.dropTableIfExists(wsname);
+  await knex.schema.createTable(wsname, (table) => { hdr.forEach(h => { table[PG[types[h]] || "text"](h); }); });
+  for(let i = 0; i < aoo.length; ++i) {
+    if(!aoo[i] || !Object.keys(aoo[i]).length) continue;
+    try { await knex.insert(aoo[i]).into(wsname); } catch(e) {}
+  }
+  return knex;
+}
+```
+
+</details>
+
 
 ### MongoDB Structured Collections
 

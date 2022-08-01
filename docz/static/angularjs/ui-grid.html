@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- SheetJS (C) 2013-present  SheetJS http://sheetjs.com -->
+<!-- vim: set ts=2: -->
+<html ng-app="app">
+<head>
+  <title>SheetJS + AngularJS + ui-grid</title>
+  <!-- Angular -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-touch.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
+
+  <!-- SheetJS library -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
+  <!-- ui-grid -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.11.0/ui-grid.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/4.11.0/ui-grid.css"/>
+<style>
+.grid1 {
+  width: 500px;
+  height: 400px;
+};
+</style>
+</head>
+<body>
+<pre>
+<b><a href="http://sheetjs.com">SheetJS + AngularJS demo</a></b>
+
+The core library can be used as-is in AngularJS applications.
+The <a href="https://docs.sheetjs.com">Community Edition README</a> details some common use cases.
+We also have some <a href="http://sheetjs.com/demos/">more public demos</a>
+
+This demo shows:
+- SheetJSExportService: a service for exporting data from a ui-grid
+- SheetJSImportDirective: a directive providing a file input button for import
+
+<a href="https://obamawhitehouse.archives.gov/sites/default/files/omb/budget/fy2014/assets/receipts.xls">Sample Spreadsheet</a>
+</pre>
+
+<div ng-controller="MainCtrl">
+  <input type="file" import-sheet-js="" opts="gridOptions" multiple="false"  />
+  <div id="grid1" ui-grid="gridOptions" ui-grid-selection ui-grid-exporter class="grid"></div>
+</div>
+
+<!-- SheetJS Service -->
+<script>
+function SheetJSExportService(uiGridExporterService) {
+
+function exportSheetJS(gridApi, wopts) {
+  var columns = uiGridExporterService.getColumnHeaders(gridApi.grid, 'all');
+  var data = uiGridExporterService.getData(gridApi.grid, 'all', 'all');
+
+  var fileName = gridApi.grid.options.filename || 'SheetJS';
+  fileName += wopts.bookType ? "." + wopts.bookType : '.xlsx';
+
+  var sheetName = gridApi.grid.options.sheetname || 'Sheet1';
+
+  var wb = XLSX.utils.book_new(), ws = uigrid_to_sheet(data, columns);
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  XLSX.writeFile(wb, fileName);
+}
+
+var service = {};
+service.exportXLSB = function exportXLSB(gridApi) { return exportSheetJS(gridApi, { bookType: 'xlsb', bookSST: true, type: 'array' }); };
+service.exportXLSX = function exportXLSX(gridApi) { return exportSheetJS(gridApi, { bookType: 'xlsx', bookSST: true, type: 'array' }); }
+
+return service;
+
+/* utilities */
+function uigrid_to_sheet(data, columns) {
+  var o = [], oo = [], i = 0, j = 0;
+
+  /* column headers */
+  for(j = 0; j < columns.length; ++j) oo.push(get_value(columns[j]));
+  o.push(oo);
+
+  /* table data */
+  for(i = 0; i < data.length; ++i) {
+    oo = [];
+    for(j = 0; j < data[i].length; ++j) oo.push(get_value(data[i][j]));
+    o.push(oo);
+  }
+  /* aoa_to_sheet converts an array of arrays into a worksheet object */
+  return XLSX.utils.aoa_to_sheet(o);
+}
+
+function get_value(col) {
+  if(!col) return col;
+  if(col.value) return col.value;
+  if(col.displayName) return col.displayName;
+  if(col.name) return col.name;
+  return null;
+}
+}
+
+function SheetJSImportDirective() {
+return {
+  scope: { opts: '=' },
+  link: function($scope, $elm) {
+    $elm.on('change', function(changeEvent) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        /* read workbook */
+        var ab = e.target.result;
+        var wb = XLSX.read(ab);
+
+        /* grab first sheet */
+        var wsname = wb.SheetNames[0];
+        var ws = wb.Sheets[wsname];
+
+        /* grab first row and generate column headers */
+        var aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:false});
+        var cols = [];
+        for(var i = 0; i < aoa[0].length; ++i) cols[i] = { field: aoa[0][i] };
+
+        /* generate rest of the data */
+        var data = [];
+        for(var r = 1; r < aoa.length; ++r) {
+          data[r-1] = {};
+          for(i = 0; i < aoa[r].length; ++i) {
+            if(aoa[r][i] == null) continue;
+            data[r-1][aoa[0][i]] = aoa[r][i];
+          }
+        }
+
+        /* update scope */
+        $scope.$apply(function() {
+          $scope.opts.columnDefs = cols;
+          $scope.opts.data = data;
+        });
+      };
+
+      reader.readAsArrayBuffer(changeEvent.target.files[0]);
+    });
+  }
+};
+}
+</script>
+
+<!-- App -->
+<script>
+var app = angular.module('app', ['ngAnimate', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.exporter']);
+
+/* Inject SheetJSExportService */
+app.factory('SheetJSExportService', SheetJSExportService);
+SheetJSExportService.inject = ['uiGridExporterService'];
+
+app.controller('MainCtrl', ['$scope', '$http','SheetJSExportService', function($scope, $http, SheetJSExportService) {
+  $scope.gridOptions = {
+    columnDefs: [
+      { field: 'name' },
+      { field: 'gender', visible: false},
+      { field: 'company' }
+    ],
+    enableGridMenu: true,
+    enableSelectAll: true,
+    exporterMenuPdf: false,
+    exporterMenuCsv: false,
+    showHeader: true,
+    onRegisterApi: function(gridApi){
+      $scope.gridApi = gridApi;
+    },
+    /* SheetJS Service setup */
+    filename: "SheetJSAngular",
+    sheetname: "ng-SheetJS",
+    gridMenuCustomItems: [
+      {
+        title: 'Export all data as XLSX',
+        action: function() { SheetJSExportService.exportXLSX($scope.gridApi); },
+        order: 200
+      },
+      {
+        title: 'Export all data as XLSB',
+        action: function() { SheetJSExportService.exportXLSB($scope.gridApi); },
+        order: 201
+      }
+    ]
+  };
+
+  $http.get('https://cdn.rawgit.com/angular-ui/ui-grid.info/gh-pages/data/100.json').success(function(data) { $scope.gridOptions.data = data; });
+
+}]);
+app.directive("importSheetJs", [SheetJSImportDirective]);
+
+</script>
+<script type="text/javascript">
+/* eslint no-use-before-define:0 */
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36810333-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>
