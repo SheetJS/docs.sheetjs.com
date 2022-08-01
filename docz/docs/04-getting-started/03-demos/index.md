@@ -39,7 +39,7 @@ The demo projects include small runnable examples and short explainers.
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
 - [`Electron`](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
 - [`NW.js`](https://github.com/SheetJS/SheetJS/tree/master/demos/nwjs/)
-- [`Chrome / Chromium Extension`](https://github.com/SheetJS/SheetJS/tree/master/demos/chrome/)
+- [`Chrome / Chromium Extension`](./chromium)
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
 - [`NetSuite SuiteScript`](./netsuite)
