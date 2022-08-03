@@ -38,7 +38,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Command-Line Tools`](./cli)
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
 - [`Electron`](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
-- [`NW.js`](https://github.com/SheetJS/SheetJS/tree/master/demos/nwjs/)
+- [`NW.js`](./desktop#nwjs)
 - [`Chrome / Chromium Extension`](./chromium)
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
