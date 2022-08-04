@@ -235,7 +235,7 @@ var XLSX = require("xlsx");
 XLSX.writeFile(workbook, "out.xlsb");
 ```
 
-Electron APIs have changed over time.  The [`electron` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
+Electron APIs have changed over time.  The [`electron` demo](../getting-started/demos/desktop#electron)
 shows a complete example and details the required version-specific settings.
 
   </TabItem>

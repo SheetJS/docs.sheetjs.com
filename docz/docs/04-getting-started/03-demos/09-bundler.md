@@ -433,7 +433,7 @@ click the "Click to Export!" button to generate a file.
 
 ## RequireJS
 
-[Standalone scripts](../../installation/standalone) comply with AND `define`
+[Standalone scripts](../../installation/standalone) comply with AMD `define`
 semantics, enabling use in RequireJS out of the box.
 
 To enable use of the alias `xlsx`, the RequireJS config should set an alias in
@@ -450,7 +450,7 @@ require.config({
 });
 // highlight-next-line
 require(["xlsx"], function(XLSX) {
-	/* use XLSX here */
+  /* use XLSX here */
   console.log(XLSX.version);
 });
 ```

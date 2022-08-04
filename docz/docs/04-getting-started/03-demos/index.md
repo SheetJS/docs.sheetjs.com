@@ -37,7 +37,7 @@ The demo projects include small runnable examples and short explainers.
 
 - [`Command-Line Tools`](./cli)
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
-- [`Electron`](https://github.com/SheetJS/SheetJS/tree/master/demos/electron/)
+- [`Electron`](./desktop#electron)
 - [`NW.js`](./desktop#nwjs)
 - [`Chrome / Chromium Extension`](./chromium)
 - [`Google Sheets API`](./gsheet)
@@ -63,7 +63,6 @@ The demo projects include small runnable examples and short explainers.
 - [`snowpack`](./bundler#snowpack)
 - [`swc`](./bundler#swc)
 - [`systemjs`](https://github.com/SheetJS/SheetJS/tree/master/demos/systemjs/)
-- [`typescript`](https://github.com/SheetJS/SheetJS/tree/master/demos/typescript/)
 - [`vite`](./bundler#vite)
 - [`webpack 2.x`](https://github.com/SheetJS/SheetJS/tree/master/demos/webpack/)
 - [`wmr`](./bundler#wmr)

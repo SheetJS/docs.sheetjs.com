@@ -126,3 +126,223 @@ input.addEventListener('change',function(e){
 
 input.click();
 ```
+
+## Electron
+
+The [NodeJS Module](../../installation/nodejs) can be imported from the main or
+the renderer thread.
+
+Electron presents a `fs` module.  The `require('xlsx')` call loads the CommonJS
+module, so `XLSX.readFile` and `XLSX.writeFile` work in the renderer thread.
+
+This demo was tested against Electron 19.0.5 on an Intel Mac (`darwin-x64`).
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+This demo includes a drag-and-drop box as well as a file input box, mirroring
+the [SheetJS Data Preview Live Demo](http://oss.sheetjs.com/sheetjs/)
+
+The core data in this demo is an editable HTML table.  The readers build up the
+table using `sheet_to_html` (with `editable:true` option) and the writers scrape
+the table using `table_to_book`.
+
+The demo project is wired for `electron-forge` to build the standalone binary.
+
+1) Download the demo files:
+
+- [`package.json`](pathname:///electron/package.json) : project structure
+- [`main.js`](pathname:///electron/main.js) : entrypoint
+- [`index.html`](pathname:///electron/index.html) : window page
+- [`index.js`](pathname:///electron/index.js) : script loaded in render context
+
+:::caution
+
+Right-click each link and select "Save Link As...".  Left-clicking a link will
+try to load the page in your browser.  The goal is to save the file contents.
+
+:::
+
+2) Run `npm install` to install dependencies.
+
+3) To verify the app works, run in the test environment:
+
+```bash
+npx -y electron .
+```
+
+The app will show and you should be able to verify reading and writing by using
+the relevant buttons to open files and clicking the export button.
+
+4) To build a standalone app, run the builder:
+
+```bash
+npm run make
+```
+
+This will generate the standalone app in the `out\sheetjs-electron-...` folder.
+For a recent Intel Mac, the path will be `out/sheetjs-electron-darwin-x64/`
+
+</details>
+
+### Writing Files
+
+[`XLSX.writeFile`](../../api/write-options) writes workbooks to the filesystem.
+`showSaveDialog` shows a Save As dialog and returns the selected file name:
+
+```js
+/* from the renderer thread */
+const electron = require('@electron/remote');
+
+/* this function will show the save dialog and try to write the workbook */
+async function exportFile(workbook) {
+  /* show Save As dialog */
+  const result = await electron.dialog.showSaveDialog({
+    title: 'Save file as',
+    filters: [{
+      name: "Spreadsheets",
+      extensions: ["xlsx", "xls", "xlsb", /* ... other formats ... */]
+    }]
+  });
+  /* write file */
+  // highlight-next-line
+  XLSX.writeFile(workbook, result.filePath);
+}
+```
+
+:::note
+
+In older versions of Electron, `showSaveDialog` returned the path directly:
+
+```js
+var dialog = require('electron').remote.dialog;
+
+function exportFile(workbook) {
+  var result = dialog.showSaveDialog();
+  XLSX.writeFile(workbook, result);
+}
+```
+
+:::
+
+### Reading Files
+
+Electron offers 3 different ways to read files, two of which use Web APIs.
+
+**File Input Element**
+
+File input elements automatically map to standard Web APIs.
+
+For example, assuming a file input element on the page:
+
+```html
+<input type="file" name="xlfile" id="xlf" /> 
+```
+
+The event handler would process the event as if it were a web event:
+
+```js
+async function handleFile(e) {
+  const file = e.target.files[0];
+  const data = await file.arrayBuffer();
+  /* data is an ArrayBuffer */
+  const workbook = XLSX.read(data);
+
+  /* DO SOMETHING WITH workbook HERE */
+}
+document.getElementById("xlf").addEventListener("change", handleFile, false);
+```
+
+**Drag and Drop**
+
+The [drag and drop snippet](../../solutions/input#example-user-submissions)
+applies to DIV elements on the page.
+
+For example, assuming a DIV on the page:
+
+```html
+<div id="drop">Drop a spreadsheet file here to see sheet data</div>
+```
+
+The event handler would process the event as if it were a web event:
+
+```js
+async function handleDrop(e) {
+  e.stopPropagation();
+  e.preventDefault();
+
+  const file = e.dataTransfer.files[0];
+  const data = await file.arrayBuffer();
+  /* data is an ArrayBuffer */
+  const workbook = XLSX.read(data);
+
+  /* DO SOMETHING WITH workbook HERE */
+}
+document.getElementById("drop").addEventListener("drop", handleDrop, false);
+```
+
+**Electron API**
+
+[`XLSX.readFile`](../../api/parse-options) reads workbooks from the filesystem.
+`showOpenDialog` shows a Save As dialog and returns the selected file name.
+Unlike the Web APIs, the `showOpenDialog` flow can be initiated by app code:
+
+```js
+/* from the renderer thread */
+const electron = require('@electron/remote');
+
+/* this function will show the open dialog and try to parse the workbook */
+async function importFile() {
+  /* show Save As dialog */
+  const result = await electron.dialog.showOpenDialog({
+    title: 'Select a file',
+    filters: [{
+      name: "Spreadsheets",
+      extensions: ["xlsx", "xls", "xlsb", /* ... other formats ... */]
+    }]
+  });
+  /* result.filePaths is an array of selected files */
+  if(result.filePaths.length == 0) throw new Error("No file was selected!");
+  // highlight-next-line
+  return XLSX.readFile(result.filePaths[0]);
+}
+```
+
+:::note
+
+In older versions of Electron, `showOpenDialog` returned the path directly:
+
+```js
+var dialog = require('electron').remote.dialog;
+
+function importFile(workbook) {
+  var result = dialog.showOpenDialog({ properties: ['openFile'] });
+  return XLSX.readFile(result[0]);
+}
+```
+
+:::
+
+### Electron Breaking Changes
+
+The first version of this demo used Electron 1.7.5.  The current demo includes
+the required changes for Electron 19.0.5.
+
+There are no Electron-specific workarounds in the library, but Electron broke
+backwards compatibility multiple times.  A summary of changes is noted below.
+
+:::caution
+
+Electron 6.x changed the `dialog` API. Methods like `showSaveDialog` originally
+returned an array of strings, but now returns a `Promise`.  This change was not
+documented. [Electron issue](https://github.com/electron/electron/issues/24438)
+
+Electron 9.0.0 and later require the preference `nodeIntegration: true` in order
+to `require('xlsx')` in the renderer process.
+
+Electron 12.0.0 and later also require `worldSafeExecuteJavascript: true` and
+`contextIsolation: true`.
+
+Electron 14+ must use `@electron/remote` instead of `remote`.  An `initialize`
+call is required to enable DevTools in the window.
+
+:::

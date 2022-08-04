@@ -80,8 +80,8 @@ function Table2XLSX(props) {
   return (<>
     <table id="Table2XLSX"><tbody>
       <tr><td colSpan="3">SheetJS Table Export</td></tr>
-      <tr><td>Author</td><td>ID</td><td>Note</td></tr>
-      <tr><td>SheetJS</td><td>7262</td><td>Hi!</td></tr>
+      <tr><td>Author</td><td>ID</td><td>你好!</td></tr>
+      <tr><td>SheetJS</td><td>7262</td><td>வணக்கம்!</td></tr>
       <tr><td colSpan="3">
         <a href="//sheetjs.com">Powered by SheetJS</a>
       </td></tr>
