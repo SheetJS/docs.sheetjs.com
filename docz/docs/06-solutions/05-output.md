@@ -489,7 +489,7 @@ is to adjust the server process or Lambda function to accept Base64 strings.
 
 :::
 
-A complete example using XHR is [included in the XHR demo](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/), along
+A complete example using XHR is [included in the XHR demo](../getting-started/demos/network), along
 with examples for fetch and wrapper libraries.  This example assumes the server
 can handle Base64-encoded files (see the demo for a basic nodejs server):
 

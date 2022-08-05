@@ -9,7 +9,7 @@ The demo projects include small runnable examples and short explainers.
 
 ### JavaScript APIs
 
-- [`XMLHttpRequest and fetch`](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/)
+- [`XMLHttpRequest and fetch`](./network)
 - [`Clipboard Data`](./clipboard)
 - [`Typed Arrays for Machine Learning`](./ml)
 - [`LocalStorage and SessionStorage`](./database#localstorage-and-sessionstorage)

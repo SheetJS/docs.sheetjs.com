@@ -463,7 +463,7 @@ req.onload = function(e) {
 req.send();
 ```
 
-The [`xhr` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/xhr/) includes a longer discussion and more examples.
+The [`xhr` demo](../getting-started/demos/network) includes a longer discussion and more examples.
 
 <http://oss.sheetjs.com/sheetjs/ajax.html> shows fallback approaches for IE6+.
 
