@@ -137,6 +137,41 @@ const bstr = await readFile(path, "ascii");
 const workbook = XLSX.read(bstr, {type: "binary"});
 ```
 
+- [`expo-file-system`](https://www.npmjs.com/package/expo-file-system)
+
+:::caution
+
+Some Expo APIs return URIs that cannot be read with `expo-file-system`.  This
+will manifest as an error:
+
+> Unsupported scheme for location '...'
+
+When using `DocumentPicker.getDocumentAsync`, enable `copyToCacheDirectory`:
+
+```js
+import * as DocumentPicker from 'expo-document-picker';
+
+const result = await DocumentPicker.getDocumentAsync({
+  // highlight-next-line
+  copyToCacheDirectory: true,
+  type: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+});
+const uri = result.uri;
+```
+
+:::
+
+Calling `FileSystem.readAsStringAsync` with `FileSystem.EncodingType.Base64`
+encoding returns a promise resolving to a string compatible with `base64` type:
+
+```js
+import * as XLSX from "xlsx";
+import * as FileSystem from 'expo-file-system';
+
+const b64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+const workbook = XLSX.read(b64, { type: "base64" });
+```
+
   </TabItem>
   <TabItem value="extendscript" label="Photoshop">
 

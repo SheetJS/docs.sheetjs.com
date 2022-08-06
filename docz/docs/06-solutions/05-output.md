@@ -258,7 +258,7 @@ The following libraries have been tested:
 
 - [`react-native-file-access`](https://npm.im/react-native-file-access)
 
-The `base64` encoding returns strings compatible with the `base64` type:
+The `base64` encoding accepts Base64 strings compatible with the `binary` type:
 
 ```js
 import * as XLSX from "xlsx";
@@ -282,6 +282,20 @@ const DDP = DocumentDirectoryPath + "/";
 const bstr = XLSX.write(workbook, {type:'binary', bookType:"xlsx"});
 /* bstr is a binary string */
 await writeFile(DDP + "sheetjs.xlsx", bstr, "ascii");
+```
+
+- [`expo-file-system`](https://www.npmjs.com/package/expo-file-system)
+
+The `FileSystem.EncodingType.Base64` encoding accepts Base64 strings:
+
+```js
+import * as XLSX from "xlsx";
+import * as FileSystem from 'expo-file-system';
+const DDP = FileSystem.documentDirectory;
+
+const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
+/* b64 is a base64 string */
+await FileSystem.writeAsStringAsync(DDP + "sheetjs.xlsx", b64, { encoding: FileSystem.EncodingType.Base64 });
 ```
 
   </TabItem>
