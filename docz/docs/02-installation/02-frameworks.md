@@ -18,17 +18,17 @@ proper ECMAScript Module release which can be optimized with developer tools.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -53,20 +53,20 @@ For existing projects, the easiest approach is to uninstall and reinstall:
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm rm --save xlsx
-$ npm i --save file:vendor/xlsx-${current}.tgz`}
+npm rm --save xlsx
+npm i --save file:vendor/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm rm xlsx
-$ pnpm install file:vendor/xlsx-${current}.tgz`}
+pnpm rm xlsx
+pnpm install file:vendor/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn remove xlsx
-$ yarn add file:vendor/xlsx-${current}.tgz`}
+yarn remove xlsx
+yarn add file:vendor/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>

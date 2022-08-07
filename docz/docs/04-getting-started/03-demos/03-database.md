@@ -284,7 +284,7 @@ runs a prepared statement and returns an array of JS objects.
 1) Install the dependencies:
 
 ```bash
-$ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz better-sqlite3
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz better-sqlite3
 ```
 
 2) Save the following to `node.mjs`:
@@ -334,7 +334,7 @@ Bun ships with a built-in high-performance module `bun:sqlite`.
 1) Install the dependencies:
 
 ```bash
-$ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
 ```
 
 2) Save the following to `bun.mjs`:
@@ -780,7 +780,7 @@ It was verified in Node 16.16.0.
 1) Install the dependencies:
 
 ```bash
-$ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz mongodb
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz mongodb
 ```
 
 2) Start a MongoDB server on localhost (follow official instructions)

@@ -440,7 +440,7 @@ server.run();`}</code></pre>
 Deno must be run with the `--allow-net` flag to enable network requests:
 
 ```bash
-$ deno run --allow-net test-server.ts
+deno run --allow-net test-server.ts
 ```
 
 To test, submit a POST request to http://localhost:7262 including a file:
@@ -589,7 +589,7 @@ const workbook = XLSX.read(data);`}</code></pre>
 Deno must be run with the `--allow-net` flag to enable network requests:
 
 ```
-$ deno run --allow-net test-fetch.ts
+deno run --allow-net test-fetch.ts
 ```
 
 :::

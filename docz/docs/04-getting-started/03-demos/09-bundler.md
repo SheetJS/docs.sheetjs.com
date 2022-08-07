@@ -46,17 +46,17 @@ Web Worker scripts can be bundled using the same approach.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -98,17 +98,17 @@ local testing, a bundled script can save tens of milliseconds per run.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -186,17 +186,17 @@ Both the `node` and `browser` platforms work out of the box.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -264,17 +264,17 @@ npx http-server .
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -405,17 +405,17 @@ document.getElementById("xport").onclick = async() => {
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -472,17 +472,17 @@ Rollup requires `@rollup/plugin-node-resolve` to support NodeJS modules:
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} rollup @rollup/plugin-node-resolve
 </code></pre>
   </TabItem>
 </Tabs>
@@ -566,17 +566,17 @@ Snowpack works with no caveats.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>
@@ -665,17 +665,17 @@ SWC provides `spack` for bundling scripts.
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`} regenerator-runtime @swc/cli @swc/core
 </code></pre>
   </TabItem>
 </Tabs>
@@ -888,7 +888,7 @@ a `require` implementation when loading [`main.js`](pathname:///systemjs/main.js
 1) Install the dependencies:
 
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz systemjs@0.19`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz systemjs@0.19`}
 </code></pre>
 
 2) Save the following script to `SheetJSystem.js`:
@@ -988,7 +988,7 @@ When prompted for **Framework**, select **`vue`** then **`vue-ts`**
 2) Add the SheetJS dependency:
 
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
 
 3) Replace `src\components\HelloWorld.vue` with:
@@ -1054,6 +1054,186 @@ Access http://localhost:8080 in your web browser.
 
 </details>
 
+## Webpack
+
+The ECMAScript Module build has no `require` or `import` statements and does
+not use `process` or any variable that Webpack could interpret as a NodeJS
+feature.  Various `package.json` fields have been added to appease various
+Webpack versions starting from the `2.x` series.
+
+:::note CommonJS and ESM
+
+Webpack bundled the CommonJS build in older versions of the library.  Version
+`0.18.1` changed the NodeJS module package so that Webpack uses the ESM build.
+
+The ESM build does not include the codepage support library for XLS reading.
+[As described in the installation instructions](../../installation/frameworks),
+the codepage dependency should be imported explicitly:
+
+```js
+import * as XLSX from 'xlsx';
+import * as cptable from 'xlsx/dist/cpexcel.full.mjs';
+set_cptable(cptable);
+```
+
+:::
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Install the tarball using a package manager:
+
+<Tabs>
+  <TabItem value="npm" label="npm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+  <TabItem value="yarn" label="Yarn" default>
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+</code></pre>
+  </TabItem>
+</Tabs>
+
+2) Save the following to `index.js`:
+
+```js title="index.js"
+// highlight-next-line
+import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
+
+document.getElementById("xport").addEventListener("click", async() => {
+/* fetch JSON data and parse */
+const url = "https://sheetjs.com/executive.json";
+const raw_data = await (await fetch(url)).json();
+
+/* filter for the Presidents */
+const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+/* flatten objects */
+const rows = prez.map(row => ({
+  name: row.name.first + " " + row.name.last,
+  birthday: row.bio.birthday
+}));
+
+/* generate worksheet and workbook */
+const worksheet = utils.json_to_sheet(rows);
+const workbook = utils.book_new();
+utils.book_append_sheet(workbook, worksheet, "Dates");
+
+/* fix headers */
+utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+/* calculate column width */
+const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+worksheet["!cols"] = [ { wch: max_width } ];
+
+/* create an XLSX file and try to save to Presidents.xlsx */
+writeFileXLSX(workbook, "Presidents.xlsx");
+});
+```
+
+3) Create a small `webpack.config.js` script that writes to `index.min.js`:
+
+```js title="webpack.config.js"
+module.exports = {
+  /* entry point index.js */
+  entry: './index.js',
+
+  /* write to index.min.js */
+  output: { path:__dirname, filename: './index.min.js' }
+}
+```
+
+4) Build for production.  The command depends on the version of webpack:
+
+<Tabs>
+  <TabItem value="23" label="2.x and 3.x">
+
+**Webpack 2.x**
+
+```bash
+npx webpack@2.x -p
+```
+
+**Webpack 3.x**
+
+```bash
+npx webpack@3.x -p
+```
+
+:::caution
+
+The minifier that ships with Webpack 2.x does not handle `async` functions. The
+unminified code generated by Webpack will work for the purposes of the demo. It
+is strongly recommended to upgrade to a newer version of Webpack.  If that is
+not feasible, the example should be replaced with a traditional Promise chain.
+
+:::
+
+  </TabItem>
+  <TabItem value="4+" label="4.x, 5.x and beyond" default>
+
+:::warning Pinning specific versions of webpack
+
+The webpack tooling is not designed for switching between versions. A specific
+version above 4.0 can be pinned by locally installing webpack and the CLI tool.
+
+:::
+
+**Webpack 4.x**
+
+```bash
+npm install --save webpack@4.x webpack-cli
+npx webpack --mode=production
+```
+
+**Webpack 5.x**
+
+```bash
+npm install --save webpack@5.x webpack-cli
+npx webpack --mode=production
+```
+
+**Webpack latest**
+
+```bash
+npm install --save webpack webpack-cli
+npx webpack --mode=production
+```
+
+  </TabItem>
+</Tabs>
+
+
+5) Create a small HTML page that loads the script.  Save to `index.html`:
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body>
+    <h1>SheetJS Presidents Demo</h1>
+    <button id="xport">Click here to export</button>
+    <script src="./index.min.js"></script>
+  </body>
+</html>
+```
+
+6) Start a local HTTP server and go to http://localhost:8080/
+
+```bash
+npx http-server .
+```
+
+Click on "Click here to export" to generate a file.
+
+</details>
+
 ## WMR
 
 WMR follows the same structure as Snowpack
@@ -1065,17 +1245,17 @@ WMR follows the same structure as Snowpack
 <Tabs>
   <TabItem value="npm" label="npm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+pnpm install https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
   <TabItem value="yarn" label="Yarn" default>
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
   </TabItem>
 </Tabs>

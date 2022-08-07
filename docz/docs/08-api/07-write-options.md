@@ -89,7 +89,7 @@ XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression:
 After installing the package:
 
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
 
 The scripts will be available at `xlsx/dist/xlsx.zahl` (CommonJS) and
@@ -113,7 +113,7 @@ XLSX.writeFile(wb, "textport.numbers", {numbers: XLSX_ZAHL_PAYLOAD, compression:
 After installing the package:
 
 <pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
-$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
+npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 </code></pre>
 
 The scripts will be available at `xlsx/dist/xlsx.zahl` (CommonJS) and

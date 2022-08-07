@@ -21,7 +21,6 @@ The demo projects include small runnable examples and short explainers.
 - [`Angular.JS`](./legacy#angularjs)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
 - [`Knockout`](./legacy#knockout)
-- [`Meteor`](https://github.com/SheetJS/SheetJS/tree/master/demos/meteor/)
 - [`React, React Native and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
 - [`VueJS, WeeX, and NuxtJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
 
@@ -62,7 +61,7 @@ The demo projects include small runnable examples and short explainers.
 - [`rollup`](./bundler#rollup)
 - [`snowpack`](./bundler#snowpack)
 - [`swc`](./bundler#swc)
-- [`systemjs`](https://github.com/SheetJS/SheetJS/tree/master/demos/systemjs/)
+- [`systemjs`](./bundler#systemjs)
 - [`vite`](./bundler#vite)
-- [`webpack 2.x`](https://github.com/SheetJS/SheetJS/tree/master/demos/webpack/)
+- [`webpack`](./bundler#webpack)
 - [`wmr`](./bundler#wmr)
