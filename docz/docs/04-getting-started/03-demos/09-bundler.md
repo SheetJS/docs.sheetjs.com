@@ -771,6 +771,194 @@ Click on "Click here to export" to generate a file.
 
 </details>
 
+## SystemJS
+
+With configuration, SystemJS supports both browser and NodeJS deployments.
+
+:::caution
+
+This demo was written against SystemJS 0.19, the most popular SystemJS version.
+used with Angular applications.  In the years since the release, Angular and
+other tools using SystemJS have switched to Webpack.
+
+:::
+
+<Tabs>
+  <TabItem value="browser" label="Browser">
+
+SystemJS fails by default because the library does not export anything in the
+web browser.  The `meta` configuration option can be used to expose `XLSX`:
+
+```js
+SystemJS.config({
+  meta: {
+    'xlsx': {
+      exports: 'XLSX' // <-- tell SystemJS to expose the XLSX variable
+    }
+  },
+  map: {
+    'xlsx': 'https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js',
+    'fs': '',     // <--|
+    'crypto': '', // <--| suppress native node modules
+    'stream': ''  // <--|
+  }
+});
+SystemJS.import('main.js'); // load `main.js`
+```
+
+The `main.js` script can freely `require("xlsx")`.
+
+:::caution Web Workers
+
+Web Workers can load the SystemJS library with `importScripts`, but the imported
+code cannot assign the original worker's `onmessage` callback.  The recommended
+approach is to expose a global from the required script,  For example, supposing
+the shared name is `_cb`, the primary worker script would call the callback:
+
+```js title="worker.js"
+/* main worker script */
+importScripts('system.js');
+
+SystemJS.config({ /* ... browser config ... */ });
+
+onmessage = function(evt) {
+  SystemJS.import('workermain.js').then(function() { _cb(evt); });
+};
+```
+
+The worker script would define and expose the function:
+
+```js title="workermain.js"
+/* Loaded with SystemJS import */
+var XLSX = require('xlsx');
+
+_cb = function(evt) { /* ... do work here ... */ };
+```
+
+:::
+
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
+
+:::caution
+
+While SystemJS works in NodeJS, the built-in `require` should be preferred.
+
+:::
+
+The NodeJS module entrypoint is `xlsx/xlsx.js` and should be mapped:
+
+```js
+SystemJS.config({
+  map: {
+    "xlsx": "./node_modules/xlsx/xlsx.js"
+  }
+});
+```
+
+The standalone scripts require a hint that the script assigns a global:
+
+```js
+SystemJS.config({
+  meta: {
+    "standalone": { format: "global" }
+  },
+  map: {
+    "standalone": "xlsx.full.min.js"
+  }
+});
+```
+  </TabItem>
+</Tabs>
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+<Tabs>
+  <TabItem value="browser" label="Browser">
+
+The [Live demo](pathname:///systemjs/systemjs.html) loads SystemJS from the
+CDN, uses it to load the standalone script from the SheetJS CDN and emulate
+a `require` implementation when loading [`main.js`](pathname:///systemjs/main.js)
+
+"View Source" works on the main HTML page and the `main.js` script.
+
+  </TabItem>
+  <TabItem value="nodejs" label="NodeJS">
+
+1) Install the dependencies:
+
+<pre><code parentName="pre" {...{"className": "language-bash"}}>{`\
+$ npm i --save https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz systemjs@0.19`}
+</code></pre>
+
+2) Save the following script to `SheetJSystem.js`:
+
+```js title="SheetJSystem.js"
+const SystemJS = require('systemjs');
+
+// highlight-start
+SystemJS.config({
+  map: {
+    'xlsx': 'node_modules/xlsx/xlsx.js',
+    'fs': '@node/fs',
+    'crypto': '@node/crypto',
+    'stream': '@node/stream'
+  }
+});
+// highlight-end
+
+SystemJS.import('xlsx').then(async function(XLSX) {
+
+  /* fetch JSON data and parse */
+  const url = "https://sheetjs.com/executive.json";
+  const raw_data = await (await fetch(url)).json();
+
+  /* filter for the Presidents */
+  const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+
+  /* flatten objects */
+  const rows = prez.map(row => ({
+    name: row.name.first + " " + row.name.last,
+    birthday: row.bio.birthday
+  }));
+
+  /* generate worksheet and workbook */
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+
+  /* fix headers */
+  XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+  /* calculate column width */
+  const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+  worksheet["!cols"] = [ { wch: max_width } ];
+
+  /* create an XLSX file and try to save to Presidents.xlsx */
+  XLSX.writeFile(workbook, "Presidents.xlsx");
+
+});
+```
+
+3) Run in NodeJS:
+
+```bash
+node SheetJSystem.js
+```
+
+If the demo worked, `Presidents.xlsx` will be created.
+
+:::note
+
+As it uses `fetch`, this demo requires Node 18.
+
+:::
+
+  </TabItem>
+</Tabs>
+
+</details>
+
 ## Vite
 
 :::caution
