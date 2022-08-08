@@ -51,7 +51,7 @@ document.getElementById('readBtn').addEventListener('click', handleReadBtn, fals
 /* read file with Web APIs */
 async function readFile(files) {
   const f = files[0];
-	const data = await f.arrayBuffer();
+  const data = await f.arrayBuffer();
   process_wb(XLSX.read(data));
 }
 

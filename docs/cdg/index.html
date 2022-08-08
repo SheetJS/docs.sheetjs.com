@@ -7,16 +7,16 @@
 <title>SheetJS + canvas-datagrid Live Demo</title>
 <style>
 #drop{
-	border:2px dashed #bbb;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
-	padding:25px;
-	text-align:center;
-	font:20pt bold,"Vollkorn";color:#bbb
+  border:2px dashed #bbb;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  padding:25px;
+  text-align:center;
+  font:20pt bold,"Vollkorn";color:#bbb
 }
 #b64data{
-	width:100%;
+  width:100%;
 }
 a { text-decoration: none }
 </style>
@@ -51,117 +51,117 @@ a { text-decoration: none }
 var cDg;
 
 var process_wb = (function() {
-	var XPORT = document.getElementById('xport');
-	var HTMLOUT = document.getElementById('htmlout');
+  var XPORT = document.getElementById('xport');
+  var HTMLOUT = document.getElementById('htmlout');
 
-	return function process_wb(wb) {
-		/* get data */
-		var ws = wb.Sheets[wb.SheetNames[0]];
-		var data = XLSX.utils.sheet_to_json(ws, {header:1});
+  return function process_wb(wb) {
+    /* get data */
+    var ws = wb.Sheets[wb.SheetNames[0]];
+    var data = XLSX.utils.sheet_to_json(ws, {header:1});
 
-		/* update canvas-datagrid */
-		if(!cDg) cDg = canvasDatagrid({ parentNode:HTMLOUT, data:data });
-		cDg.style.height = '100%';
-		cDg.style.width = '100%';
-		cDg.data = data;
-		XPORT.disabled = false;
+    /* update canvas-datagrid */
+    if(!cDg) cDg = canvasDatagrid({ parentNode:HTMLOUT, data:data });
+    cDg.style.height = '100%';
+    cDg.style.width = '100%';
+    cDg.data = data;
+    XPORT.disabled = false;
 
-		/* create schema (for A,B,C column headings) */
-		var range = XLSX.utils.decode_range(ws['!ref']);
-		for(var i = range.s.c; i <= range.e.c; ++i) cDg.schema[i - range.s.c].title = XLSX.utils.encode_col(i);
+    /* create schema (for A,B,C column headings) */
+    var range = XLSX.utils.decode_range(ws['!ref']);
+    for(var i = range.s.c; i <= range.e.c; ++i) cDg.schema[i - range.s.c].title = XLSX.utils.encode_col(i);
 
-		HTMLOUT.style.height = (window.innerHeight - 400) + "px";
-		HTMLOUT.style.width = (window.innerWidth - 50) + "px";
+    HTMLOUT.style.height = (window.innerHeight - 400) + "px";
+    HTMLOUT.style.width = (window.innerWidth - 50) + "px";
 
-		if(typeof console !== 'undefined') console.log("output", new Date());
-	};
+    if(typeof console !== 'undefined') console.log("output", new Date());
+  };
 })();
 
 var do_file = (function() {
-	return function do_file(files) {
-		var f = files[0];
-		var reader = new FileReader();
-		reader.onload = function(e) {
-			if(typeof console !== 'undefined') console.log("onload", new Date());
-			var data = e.target.result;
-			data = new Uint8Array(data);
-			process_wb(XLSX.read(data, {type: 'array'}));
-		};
-		reader.readAsArrayBuffer(f);
-	};
+  return function do_file(files) {
+    var f = files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      if(typeof console !== 'undefined') console.log("onload", new Date());
+      var data = e.target.result;
+      data = new Uint8Array(data);
+      process_wb(XLSX.read(data, {type: 'array'}));
+    };
+    reader.readAsArrayBuffer(f);
+  };
 })();
 
 (function() {
-	var drop = document.getElementById('drop');
-	if(!drop.addEventListener) return;
+  var drop = document.getElementById('drop');
+  if(!drop.addEventListener) return;
 
-	function handleDrop(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		do_file(e.dataTransfer.files);
-	}
+  function handleDrop(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    do_file(e.dataTransfer.files);
+  }
 
-	function handleDragover(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		e.dataTransfer.dropEffect = 'copy';
-	}
+  function handleDragover(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  }
 
-	drop.addEventListener('dragenter', handleDragover, false);
-	drop.addEventListener('dragover', handleDragover, false);
-	drop.addEventListener('drop', handleDrop, false);
+  drop.addEventListener('dragenter', handleDragover, false);
+  drop.addEventListener('dragover', handleDragover, false);
+  drop.addEventListener('drop', handleDrop, false);
 })();
 
 (function() {
-	var xlf = document.getElementById('xlf');
-	if(!xlf.addEventListener) return;
-	function handleFile(e) { do_file(e.target.files); }
-	xlf.addEventListener('change', handleFile, false);
+  var xlf = document.getElementById('xlf');
+  if(!xlf.addEventListener) return;
+  function handleFile(e) { do_file(e.target.files); }
+  xlf.addEventListener('change', handleFile, false);
 })();
 
 var export_xlsx = (function() {
-	function prep(arr) {
-		var out = [];
-		for(var i = 0; i < arr.length; ++i) {
-			if(!arr[i]) continue;
-			if(Array.isArray(arr[i])) { out[i] = arr[i]; continue };
-			var o = new Array();
-			Object.keys(arr[i]).forEach(function(k) { o[+k] = arr[i][k] });
-			out[i] = o;
-		}
-		return out;
-	}
+  function prep(arr) {
+    var out = [];
+    for(var i = 0; i < arr.length; ++i) {
+      if(!arr[i]) continue;
+      if(Array.isArray(arr[i])) { out[i] = arr[i]; continue };
+      var o = new Array();
+      Object.keys(arr[i]).forEach(function(k) { o[+k] = arr[i][k] });
+      out[i] = o;
+    }
+    return out;
+  }
 
-	return function export_xlsx() {
-		if(!cDg) return;
-		/* convert canvas-datagrid data to worksheet */
-		var new_ws = XLSX.utils.aoa_to_sheet(prep(cDg.data));
+  return function export_xlsx() {
+    if(!cDg) return;
+    /* convert canvas-datagrid data to worksheet */
+    var new_ws = XLSX.utils.aoa_to_sheet(prep(cDg.data));
 
-		/* build workbook */
-		var new_wb = XLSX.utils.book_new();
-		XLSX.utils.book_append_sheet(new_wb, new_ws, 'SheetJS');
+    /* build workbook */
+    var new_wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(new_wb, new_ws, 'SheetJS');
 
-		/* write file and trigger a download */
-		XLSX.writeFile(new_wb, 'SheetJSCanvasDataGridExport.xlsx', {bookSST:true});
-	};
+    /* write file and trigger a download */
+    XLSX.writeFile(new_wb, 'SheetJSCanvasDataGridExport.xlsx', {bookSST:true});
+  };
 })();
 
 (async() => {
-	const ab = await(await fetch("https://sheetjs.com/pres.numbers")).arrayBuffer();
-	process_wb(XLSX.read(ab));
+  const ab = await(await fetch("https://sheetjs.com/pres.numbers")).arrayBuffer();
+  process_wb(XLSX.read(ab));
 })();
 </script>
 <script type="text/javascript">
 /* eslint no-use-before-define:0 */
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-36810333-1']);
-	_gaq.push(['_trackPageview']);
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36810333-1']);
+  _gaq.push(['_trackPageview']);
 
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 </script>
 </body>
 </html>

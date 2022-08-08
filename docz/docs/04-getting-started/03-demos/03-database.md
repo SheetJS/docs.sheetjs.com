@@ -311,8 +311,8 @@ var result = sql.all();
 /* Loop across each name */
 result.forEach(function(row) {
   /* Get first 100K rows */
-	var aoo = db.prepare("SELECT * FROM '" + row.name + "' LIMIT 100000").all();
-	if(aoo.length > 0) {
+  var aoo = db.prepare("SELECT * FROM '" + row.name + "' LIMIT 100000").all();
+  if(aoo.length > 0) {
     /* Create Worksheet from the row objects */
     var ws = XLSX.utils.json_to_sheet(aoo, {dense: true});
     /* Add to Workbook */
@@ -361,8 +361,8 @@ var result = sql.all();
 /* Loop across each name */
 result.forEach(function(row) {
   /* Get first 100K rows */
-	var aoo = db.prepare("SELECT * FROM '" + row.name + "' LIMIT 100000").all();
-	if(aoo.length > 0) {
+  var aoo = db.prepare("SELECT * FROM '" + row.name + "' LIMIT 100000").all();
+  if(aoo.length > 0) {
     /* Create Worksheet from the row objects */
     var ws = XLSX.utils.json_to_sheet(aoo, {dense: true});
     /* Add to Workbook */
@@ -804,9 +804,9 @@ const db = client.db(db_name);
 try { await db.collection('pres').drop(); } catch(e) {}
 const pres = db.collection('pres');
 await pres.insertMany([
-	{ name: "Barack Obama", idx: 44 },
-	{ name: "Donald Trump", idx: 45 },
-	{ name: "Joseph Biden", idx: 46 }
+  { name: "Barack Obama", idx: 44 },
+  { name: "Donald Trump", idx: 45 },
+  { name: "Joseph Biden", idx: 46 }
 ], {ordered: true});
 
 // highlight-start

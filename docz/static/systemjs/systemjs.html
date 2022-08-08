@@ -7,16 +7,16 @@
 <title>SheetJS Live Demo</title>
 <style>
 #drop{
-	border:2px dashed #bbb;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
-	padding:25px;
-	text-align:center;
-	font:20pt bold,"Vollkorn";color:#bbb
+  border:2px dashed #bbb;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  padding:25px;
+  text-align:center;
+  font:20pt bold,"Vollkorn";color:#bbb
 }
 #b64data{
-	width:100%;
+  width:100%;
 }
 a { text-decoration: none }
 </style>
@@ -46,32 +46,32 @@ Output Format: <select name="format" onchange="setfmt()">
 <br />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.20.16/system.js"></script>
 <script>
-	SystemJS.config({
-		meta: {
-			'xlsx': {
-				exports: 'XLSX'
-			}
-		},
-		map: {
-			'xlsx': 'https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js',
-			'fs': '',
-			'crypto': '',
-			'stream': ''
-		}
-	});
+  SystemJS.config({
+    meta: {
+      'xlsx': {
+        exports: 'XLSX'
+      }
+    },
+    map: {
+      'xlsx': 'https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js',
+      'fs': '',
+      'crypto': '',
+      'stream': ''
+    }
+  });
   SystemJS.import('main.js');
 </script>
 <script type="text/javascript">
 /* eslint no-use-before-define:0 */
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-36810333-1']);
-	_gaq.push(['_trackPageview']);
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36810333-1']);
+  _gaq.push(['_trackPageview']);
 
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 </script>
 </body>
 </html>

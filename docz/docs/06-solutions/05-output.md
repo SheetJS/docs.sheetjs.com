@@ -898,13 +898,13 @@ import {utils, stream, set_cptable} from 'https://cdn.sheetjs.com/xlsx-latest/pa
 
 /* `Readable` will be compatible with how SheetJS uses `stream.Readable` */
 function NodeReadableCB(cb:(d:any)=>void) {
-	var rd = {
-		__done: false,
-		_read: function() {},
-		push: function(d: any) { if(!this.__done) cb(d); if(d == null) this.__done = true; },
-		resume: function pump() {for(var i = 0; i < 10000 && !this.__done; ++i) rd._read(); if(!rd.__done) setTimeout(pump, 0); }
-	};
-	return rd;
+  var rd = {
+    __done: false,
+    _read: function() {},
+    push: function(d: any) { if(!this.__done) cb(d); if(d == null) this.__done = true; },
+    resume: function pump() {for(var i = 0; i < 10000 && !this.__done; ++i) rd._read(); if(!rd.__done) setTimeout(pump, 0); }
+  };
+  return rd;
 }
 function NodeReadable(rd: any) { return function() { return rd; }; }
 /* The callback gets each CSV row.  It will be `null` when the stream is drained */

@@ -45,7 +45,7 @@ The demo projects include small runnable examples and short explainers.
 - [`SalesForce Lightning Web Components`](./salesforce)
 - [`Excel JavaScript API`](./excel)
 - [`Headless Automation`](./headless)
-- [`Other JavaScript Engines`](https://github.com/SheetJS/SheetJS/tree/master/demos/altjs/)
+- [`Other JavaScript Engines`](./engines)
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
 - [`Databases and Structured Data Stores`](./database)
 - [`NoSQL, K/V, and Unstructured Data Stores`](./nosql)

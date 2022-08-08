@@ -1,10 +1,7 @@
 ---
 sidebar_position: 1
+title: Addresses and Ranges
 ---
-
-# Addresses and Ranges
-
-The "Common Spreadsheet Format" (CSF) is the object model used by SheetJS.
 
 ## Cell Addresses
 
