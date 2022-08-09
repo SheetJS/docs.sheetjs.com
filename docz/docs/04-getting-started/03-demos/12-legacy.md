@@ -18,6 +18,159 @@ The ["Standalone Browser Scripts"](../../installation/standalone) section has
 instructions for obtaining or referencing the standalone scripts.  These are
 designed to be referenced with `<script>` tags.
 
+## Internet Explorer
+
+:::warning
+
+Internet Explorer is unmaintained and users should consider modern browsers.
+The SheetJS testing grid still includes IE and should work.
+
+:::
+
+The modern upload and download strategies are not available in older versions of
+IE, but there are approaches using older technologies like ActiveX and Flash.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+This demo includes all of the support files for the Flash and ActiveX methods.
+
+1) Download the standalone script and shim to a server that will host the demo:
+
+<ul>
+<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js`}>xlsx.full.min.js</a></li>
+<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js`}>shim.min.js</a></li>
+</ul>
+
+2) [Download the demo ZIP](pathname:///ie/SheetJSIESupport.zip) to the server.
+
+The ZIP includes the demo HTML file as well as the Downloadify support files.
+
+Extract the contents to the same folder as the scripts from step 1
+
+3) Start a HTTP server:
+
+```bash
+npx -y http-server .
+```
+
+4) Access the `index.html` from a machine with Internet Explorer.
+
+</details>
+
+<details><summary><b>Other Live Demos</b> (click to show)</summary>
+
+:::warning
+
+The hosted solutions may not work in older versions of Windows.  For testing,
+demo pages should be downloaded and hosted using a simple HTTP server.
+
+:::
+
+<http://oss.sheetjs.com/sheetjs/ajax.html> uses XMLHttpRequest to download test
+files and convert to CSV.
+
+<https://oss.sheetjs.com/sheetjs/> demonstrates reading files with `FileReader`.
+
+Older versions of IE do not support HTML5 File API but do support Base64.
+
+On OSX you can get the Base64 encoding with:
+
+```bash
+$ <target_file base64 | pbcopy
+```
+
+On Windows XP and up you can get the Base64 encoding using `certutil`:
+
+```cmd
+> certutil -encode target_file target_file.b64
+```
+
+(note: You have to open the file and remove the header and footer lines)
+
+</details>
+
+### Upload Strategies
+
+IE10 and IE11 support the standard HTML5 FileReader API:
+
+```js
+function handle_fr(e) {
+  var f = e.target.files[0];
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var wb = XLSX.read(e.target.result);
+    process_wb(wb); // DO SOMETHING WITH wb HERE
+  };
+  reader.readAsArrayBuffer(f);
+}
+input_dom_element.addEventListener('change', handle_fr, false);
+```
+
+`Blob#arrayBuffer` is not supported in IE!
+
+**ActiveX-based Upload**
+
+Through the `Scripting.FileSystemObject` object model, a script in the VBScript
+scripting language can read from an arbitrary path on the filesystem.  The shim
+includes a special `IE_LoadFile` function to read binary strings from file. This
+should be called from a file input `onchange` event:
+
+```js
+var input_dom_element = document.getElementById("file");
+function handle_ie() {
+  /* get data from selected file */
+  var path = input_dom_element.value;
+  var bstr = IE_LoadFile(path);
+  /* read workbook */
+  var wb = XLSX.read(bstr, {type: 'binary'});
+  /* DO SOMETHING WITH workbook HERE */
+}
+input_dom_element.attachEvent('onchange', handle_ie);
+```
+
+### Download Strategies
+
+As part of the File API implementation, IE10 and IE11 provide the `msSaveBlob`
+and `msSaveOrOpenBlob` functions to save blobs to the client computer.  This
+approach is embedded in `XLSX.writeFile` and no additional shims are necessary.
+
+**Flash-based Download**
+
+It is possible to write to the file system using a SWF.  `Downloadify` library
+implements one solution.  Since a genuine click is required, there is no way to
+force a download.  The safest data type is Base64:
+
+```js
+// highlight-next-line
+Downloadify.create(element_id, {
+  /* Downloadify boilerplate */
+  swf: 'downloadify.swf',
+  downloadImage: 'download.png',
+  width: 100, height: 30,
+  transparent: false, append: false,
+
+  // highlight-start
+  /* Key parameters */
+  filename: "test.xlsx",
+  dataType: 'base64',
+  data: function() { return XLSX.write(wb, { bookType: "xlsx", type: 'base64' }); }
+  // highlight-end
+// highlight-next-line
+});
+```
+
+**ActiveX-based Download**
+
+Through the `Scripting.FileSystemObject` object model, a script in the VBScript
+scripting language can write to an arbitrary path on the filesystem.  The shim
+includes a special `IE_SaveFile` function to write binary strings to file.  It
+attempts to write to the Downloads folder or Documents folder or Desktop.
+
+This approach can be triggered, but it requires the user to enable ActiveX.  It
+is embedded as a strategy in `writeFile` and used only if the shim script is
+included in the page and the relevant features are enabled on the target system.
+
+
 ## Frameworks
 
 ### AngularJS
