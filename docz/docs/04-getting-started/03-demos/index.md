@@ -35,6 +35,7 @@ The demo projects include small runnable examples and short explainers.
 ### Platforms and Integrations
 
 - [`Command-Line Tools`](./cli)
+- [`iOS / Android Mobile Applications`](./mobile)
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
 - [`Electron`](./desktop#electron)
 - [`NW.js`](./desktop#nwjs)
@@ -49,7 +50,7 @@ The demo projects include small runnable examples and short explainers.
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
 - [`Databases and Structured Data Stores`](./database)
 - [`NoSQL, K/V, and Unstructured Data Stores`](./nosql)
-- [`Legacy Internet Explorer`](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/)
+- [`Legacy Internet Explorer`](./legacy#internet-explorer)
 
 ### Bundlers and Tooling
 
