@@ -64,7 +64,7 @@ files. The APIs do not generally provide feedback on whether files were created.
 
 Here are a few common scenarios (click on each subtitle to see the code).
 
-The [demos](../getting-started/demos) cover special deployments in more detail.
+The [demos](../demos) cover special deployments in more detail.
 
 ### Example: Local File
 
@@ -235,7 +235,7 @@ var XLSX = require("xlsx");
 XLSX.writeFile(workbook, "out.xlsb");
 ```
 
-Electron APIs have changed over time.  The [`electron` demo](../getting-started/demos/desktop#electron)
+Electron APIs have changed over time.  The [`electron` demo](../demos/desktop#electron)
 shows a complete example and details the required version-specific settings.
 
   </TabItem>
@@ -313,12 +313,12 @@ var thisFile = File.saveDialog("Select an output file", "*.xlsx;*.xls");
 XLSX.writeFile(workbook, thisFile.absoluteURI);
 ```
 
-The [`extendscript` demo](../getting-started/demos/extendscript) includes a more complex example.
+The [`extendscript` demo](../demos/extendscript) includes a more complex example.
 
   </TabItem>
   <TabItem value="headless" label="Headless">
 
-The [`headless` demo](../getting-started/demos/headless) includes complete
+The [`headless` demo](../demos/headless) includes complete
 examples of converting HTML TABLE elements to XLSB workbooks using Puppeteer
 and other headless automation tools.
 
@@ -503,7 +503,7 @@ is to adjust the server process or Lambda function to accept Base64 strings.
 
 :::
 
-A complete example using XHR is [included in the XHR demo](../getting-started/demos/network), along
+A complete example using XHR is [included in the XHR demo](../demos/network), along
 with examples for fetch and wrapper libraries.  This example assumes the server
 can handle Base64-encoded files (see the demo for a basic nodejs server):
 
@@ -658,7 +658,7 @@ simple VueJS 3 data table.  It is featured in the
 
 ### Example: Data Loading
 
-["Typed Arrays and ML"](../getting-started/demos/ml) covers strategies for
+["Typed Arrays and ML"](../demos/ml) covers strategies for
 generating typed arrays and tensors from worksheet data.
 
 <details>

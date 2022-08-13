@@ -47,7 +47,7 @@ Deno scripts must be invoked with `--allow-read` to read from the filesystem.
 
 Here are a few common scenarios (click on each subtitle to see the code).
 
-The [demos](../getting-started/demos) cover special deployments in more detail.
+The [demos](../demos) cover special deployments in more detail.
 
 ### Example: Local File
 
@@ -90,7 +90,7 @@ var XLSX = require("xlsx");
 var workbook = XLSX.readFile(path);
 ```
 
-Electron APIs have changed over time.  The [`electron` demo](../getting-started/demos/desktop#electron)
+Electron APIs have changed over time.  The [`electron` demo](../demos/desktop#electron)
 shows a complete example and details the required version-specific settings.
 
   </TabItem>
@@ -195,7 +195,7 @@ var thisFile = File.openDialog("Select a spreadsheet");
 var workbook = XLSX.readFile(thisFile.absoluteURI);
 ```
 
-The [`extendscript` demo](../getting-started/demos/extendscript) includes a more complex example.
+The [`extendscript` demo](../demos/extendscript) includes a more complex example.
 
   </TabItem>
   <TabItem value="deno" label="Deno">
@@ -498,7 +498,7 @@ req.onload = function(e) {
 req.send();
 ```
 
-The [`xhr` demo](../getting-started/demos/network) includes a longer discussion and more examples.
+The [`xhr` demo](../demos/network) includes a longer discussion and more examples.
 
 <http://oss.sheetjs.com/sheetjs/ajax.html> shows fallback approaches for IE6+.
 
@@ -551,7 +551,7 @@ const url = "http://oss.sheetjs.com/test_files/formula_stress_test.xlsx";
   </TabItem>
   <TabItem value="bun" label="Bun">
 
-Bun has native support for `fetch`.  Using the [NodeJS package](../installation/nodejs):
+Bun has native support for `fetch`.  Using the [NodeJS package](../getting-started/installation/nodejs):
 
 ```js
 import * as XLSX from 'xlsx/xlsx.mjs';
@@ -797,8 +797,8 @@ the optional `opts` argument in more detail.
 
 #### Examples
 
-["Complete Example"](../example) contains a detailed example "Get Data
-from a JSON Endpoint and Generate a Workbook"
+["Complete Example"](../getting-started/example) contains a detailed example
+"Get Data from a JSON Endpoint and Generate a Workbook"
 
 [`x-spreadsheet`](https://github.com/myliang/x-spreadsheet) is an interactive
 data grid for previewing and modifying structured data in the web browser.  The
@@ -806,7 +806,7 @@ data grid for previewing and modifying structured data in the web browser.  The
 includes a sample script with the `xtos` function for converting from
 x-spreadsheet to a workbook.  Live Demo: <https://oss.sheetjs.com/sheetjs/x-spreadsheet>
 
-["Typed Arrays and ML"](../getting-started/demos/ml) covers strategies for
+["Typed Arrays and ML"](../demos/ml) covers strategies for
 creating worksheets from ML library exports (datasets stored in Typed Arrays).
 
 <details>
@@ -850,7 +850,7 @@ is missing or no options are specified, the default name `Sheet1` is used.
 
 #### Examples
 
-The [Headless Demo](../getting-started/demos/headless) includes examples of
+The [Headless Demo](../demos/headless) includes examples of
 server-side spreadsheet generation from HTML TABLE elements using headless
 Chromium ("Puppeteer") and other browsers ("Playwright")
 
