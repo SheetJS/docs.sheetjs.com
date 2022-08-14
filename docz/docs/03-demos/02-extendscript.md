@@ -167,7 +167,7 @@ and place in the scripts directory.  For CS6 Windows 10 the path is typically
 3) File > File Info ... and confirm there is an Author. If not, set to `SheetJS`
 
 4) File > Scripts > write and use the popup to select the Documents folder.
-   Enter `SheetJSPSTest.xlsx` and hit "Save"
+   Enter `SheetJSPSTest.xlsx` and press "Save"
 
 4) An alert will confirm that the file was created:
 

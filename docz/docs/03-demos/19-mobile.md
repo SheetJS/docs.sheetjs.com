@@ -132,7 +132,7 @@ selecting the terminal and entering the key sequence `CTRL + C`
 3) From the project folder, install the library:
 
 ```bash
-npm install --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
 ```
 
 4) To confirm the library was loaded, change the title to show the version.  The
@@ -373,5 +373,371 @@ id,name,role
   The first item in the list will change:
 
 ![NativeScript Step 7](pathname:///mobile/nativescript7.png)
+
+</details>
+
+## Quasar
+
+:::note
+
+This demo was tested on an Intel Mac on 2022 August 14. Quasar version `2.7.7`.
+The iOS simulator runs iOS 15.5 on an iPhone SE 3rd generation.
+
+:::
+
+This demo will focus on VueJS and Cordova with the Quasar Vite starter project.
+
+### Integration Details
+
+The complete solution uses `cordova-plugin-file` for file operations.  It can
+be installed like any other Cordova plugin:
+
+```bash
+cd src-cordova
+cordova plugin add cordova-plugin-file
+cd ..
+```
+
+#### Reading data
+
+The `q-file` component presents an API reminiscent of File Input elements:
+
+```html
+<q-file label="Load File" filled label-color="orange" @input="updateFile"/>
+```
+
+When binding to the `input` element, the callback receives an `Event` object:
+
+```ts
+import { read } from 'xlsx';
+
+// assuming `todos` is a standard VueJS `ref`
+async function updateFile(v) { try {
+  // `v.target.files[0]` is the desired file object
+  const files = (v.target as HTMLInputElement).files;
+  if(!files || files.length == 0) return;
+
+  // read first file
+  const wb = read(await files[0].arrayBuffer());
+
+  // get data of first worksheet as an array of objects
+  const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+
+  // update state
+  todos.value = data.map(row => ({id: row.Index, content: row.Name}));
+
+} catch(e) { console.log(e); } }
+```
+
+#### Writing data
+
+The API is shaped like the File and Directory Entries API.  For clarity, since
+the code is a "pyramid of doom", the error handlers are omitted:
+
+```ts
+import { write } from 'xlsx';
+
+// on iOS and android, `XLSX.write` with type "buffer" returns a `Uint8Array`
+const u8: Uint8Array = write(wb, {bookType: "xlsx", type: "buffer"});
+// Request filesystem access for persistent storage
+window.requestFileSystem(window.PERSISTENT, 0, function(fs) {
+  // Request a handle to "SheetJSQuasar.xlsx", making a new file if necessary
+  fs.root.getFile("SheetJSQuasar.xlsx", {create: true}, entry => {
+    // Request a FileWriter for writing data
+    entry.createWriter(writer => {
+      // The FileWriter API needs an actual Blob
+      const data = new Blob([u8], {type: "application/vnd.ms-excel"});
+      // This callback is called if the write is successful
+      writer.onwriteend = () => {
+        // TODO: show a dialog
+      };
+      // writer.onerror will be invoked if there is an error in writing
+
+      // write the data
+      writer.write(data);
+    });
+  });
+});
+```
+
+### Demo
+
+The demo builds off of the Vite example.  Familiarity with VueJS and TypeScript
+is assumed.
+
+<details open><summary><b>Complete Example</b> (click to show)</summary>
+
+0) Ensure all of the dependencies are installed.  Install the CLI globally:
+
+```bash
+npm i -g @quasar/cli cordova
+```
+
+(you may need to run `sudo npm i -g` if there are permission issues)
+
+1) Create a new app:
+
+```bash
+npm init quasar
+```
+
+When prompted:
+
+- "What would you like to build?": `App with Quasar CLI`
+- "Project folder": `SheetJSQuasar`
+- "Pick Quasar version": `Quasar v2 (Vue 3 | latest and greatest)`
+- "Pick script type": `Typescript`
+- "Pick Quasar App CLI variant": `Quasar App CLI with Vite`
+- "Package name": (just press enter, it will use the default `sheetjsquasar`
+- "Project product name": `SheetJSQuasar`
+- "Project description": `SheetJS + Quasar`
+- "Author": (just press enter, it will use your git config settings)
+- "Pick a Vue component style": `Composition API`
+- "Pick your CSS preprocessor": `None`
+- "Check the features needed for your project": Deselect everything
+- "Install project dependencies": `No`
+
+2) Install dependencies:
+
+```bash
+cd SheetJSQuasar
+npm i
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+```
+
+3) Set up Cordova:
+
+```bash
+quasar mode add cordova
+```
+
+When prompted, enter the app id `org.sheetjs.quasar`.
+
+It will create a new `src-cordova` folder. Continue in that folder:
+
+```bash
+cd src-cordova
+cordova platform add ios
+cordova plugin add cordova-plugin-wkwebview-engine
+cordova plugin add cordova-plugin-file
+```
+
+:::note
+
+If there is an error `Could not load API for iOS project`, it needs to be reset:
+
+```bash
+cordova platform rm ios
+cordova platform add ios
+cordova plugin add cordova-plugin-file
+```
+
+:::
+
+Return to the project directory:
+
+```bash
+cd ..
+```
+
+4) Start the dev server:
+
+```bash
+quasar dev -m ios
+```
+
+:::caution
+
+If the app is blank, delete the app and close the simulator, then restart dev
+
+:::
+
+![Quasar Step 4](pathname:///mobile/quasar4.png)
+
+
+5) Add the Dialog plugin to `quasar.config.js`:
+
+```js title="quasar.config.js"
+      // Quasar plugins
+      // highlight-next-line
+      plugins: ['Dialog']
+```
+
+6) In the template section of `src/pages/IndexPage.vue`, add a Save button and
+   a Load file picker component at the bottom of the page:
+
+```html title="src/pages/IndexPage.vue"
+    <!-- highlight-start -->
+    <q-btn-group>
+      <q-file label="Load File" filled label-color="orange" @input="updateFile"/>
+      <q-btn label="Save File" @click="saveFile" />
+    </q-btn-group>
+    <!-- highlight-end -->
+  </q-page>
+</template>
+```
+
+This uses two functions that should be added to the component script:
+
+```ts title="src/pages/IndexPage.vue"
+    const meta = ref<Meta>({
+      totalCount: 1200
+    });
+// highlight-start
+    function saveFile() {
+    }
+    async function updateFile(v) {
+    }
+    return { todos, meta, saveFile, updateFile };
+// highlight-end
+  }
+});
+
+```
+
+The app should now show two buttons at the bottom:
+
+![Quasar Step 6](pathname:///mobile/quasar6.png)
+
+:::caution
+
+If the app is blank or not refreshing, delete the app and close the simulator,
+then restart the dev process.
+
+:::
+
+7) Wire up the `updateFile` function:
+
+```ts title="src/pages/IndexPage.vue"
+import { defineComponent, ref } from 'vue';
+// highlight-start
+import { read, write, utils } from 'xlsx';
+import { useQuasar } from 'quasar';
+// highlight-end
+
+export default defineComponent({
+// ...
+// highlight-start
+    const $q = useQuasar();
+    function dialogerr(e) { $q.dialog({title: "Error!", message: e.message || String(e)}); }
+// highlight-end
+    function saveFile() {
+    }
+    async function updateFile(v) {
+// highlight-start
+      try {
+        const files = (v.target as HTMLInputElement).files;
+        if(!files || files.length == 0) return;
+
+        const wb = read(await files[0].arrayBuffer());
+
+        const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+        todos.value = data.map(row => ({id: row.Index, content: row.Name}));
+      } catch(e) { dialogerr(e); }
+// highlight-end
+    }
+```
+
+To test that reading works:
+
+- Download <https://sheetjs.com/pres.numbers>
+- In the simulator, click the Home icon to return to the home screen
+- Click on the "Files" icon
+- Click and drag `pres.numbers` from a Finder window into the simulator.
+
+![Quasar Step 7 save file](pathname:///mobile/quasar7a.png)
+
+- Make sure "On My iPhone" is highlighted and select "Save"
+- Click the Home icon again then select the SheetJSQuasar app
+- Click the "Load" button, then select "Choose File" and select `pres`:
+
+![Quasar Step 7 load file](pathname:///mobile/quasar7b.png)
+
+Once selected, the screen should refresh with new contents:
+
+![Quasar Step 7 new data](pathname:///mobile/quasar7c.png)
+
+8) Wire up the `saveFile` function:
+
+```js
+    function saveFile() {
+// highlight-start
+      /* generate workbook from state */
+      const ws = utils.json_to_sheet(todos.value);
+      const wb = utils.book_new();
+      utils.book_append_sheet(wb, ws, "SheetJSQuasar");
+      const u8: Uint8Array = write(wb, {bookType: "xlsx", type: "buffer"});
+
+      /* save to file */
+      window.requestFileSystem(window.PERSISTENT, 0, function(fs) {
+        try {
+          fs.root.getFile("SheetJSQuasar.xlsx", {create: true}, entry => {
+            const msg = `File stored at ${$q.cordova.file.documentsDirectory} ${entry.fullPath}`;
+            entry.createWriter(writer => {
+              try {
+                const data = new Blob([u8], {type: "application/vnd.ms-excel"});
+                writer.onwriteend = () => {
+                  try {
+                    $q.dialog({title: "Success!", message: msg});
+                  } catch(e) { dialogerr(e); }
+                };
+                writer.onerror = dialogerr;
+                writer.write(data);
+              } catch(e) { dialogerr(e); }
+            }, dialogerr);
+          }, dialogerr);
+        } catch(e) { dialogerr(e) }
+      }, dialogerr);
+// highlight-end
+    }
+```
+
+The page should revert to the old contents.
+
+To test that writing works:
+
+- Click "Save File".  You will see a popup with a location:
+
+![Quasar Step 8](pathname:///mobile/quasar8.png)
+
+- Find the file and verify the contents are correct.  Run in a new terminal:
+
+```bash
+find ~/Library/Developer/CoreSimulator -name SheetJSQuasar.xlsx |
+  while read x; do echo "$x"; npx xlsx-cli "$x"; done
+```
+
+Since the contents reverted, you should see
+
+```
+SheetJSQuasar
+id,content
+1,ct1
+2,ct2
+3,ct3
+4,ct4
+5,ct5
+```
+
+- Use "Load File" to select `pres.numbers` again.  Wait for the app to refresh.
+
+- Click "Save File", then re-run the command:
+
+```bash
+find ~/Library/Developer/CoreSimulator -name SheetJSQuasar.xlsx |
+  while read x; do echo "$x"; npx xlsx-cli "$x"; done
+```
+
+The contents from `pres.numbers` should show up now, with a new header row:
+
+```
+SheetJSQuasar
+id,content
+42,Bill Clinton
+43,GeorgeW Bush
+44,Barack Obama
+45,Donald Trump
+46,Joseph Biden
+```
 
 </details>

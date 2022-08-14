@@ -115,17 +115,17 @@ npx create-nuxt-app SheetJSNuxt
 
 When prompted, enter the following options:
 
-- `Project name`: hit Enter (use default SheetJSNuxt)
-- `Programming language`: hit Down Arrow (`TypeScript` selected) and hit Enter
-- `Package manager`: select `Npm` and hit Enter
-- `UI framework`: select `None` and hit Enter
-- `Nuxt.js modules`: scroll to `Content`, select with Space, then hit Enter
-- `Linting tools`: hit Enter (do not select any Linting tools)
-- `Testing framework`: select `None` and hit Enter
-- `Rendering mode`: select `Universal (SSR / SSG)` and hit Enter
-- `Deployment target`: select `Static (Static/Jamstack hosting)` and hit Enter
-- `Development tools`: hit Enter (do not select any Development tools)
-- `What is your GitHub username?`: hit Enter
+- `Project name`: press Enter (use default SheetJSNuxt)
+- `Programming language`: press Down Arrow (`TypeScript` selected) then Enter
+- `Package manager`: select `Npm` and press Enter
+- `UI framework`: select `None` and press Enter
+- `Nuxt.js modules`: scroll to `Content`, select with Space, then press Enter
+- `Linting tools`: press Enter (do not select any Linting tools)
+- `Testing framework`: select `None` and press Enter
+- `Rendering mode`: select `Universal (SSR / SSG)` and press Enter
+- `Deployment target`: select `Static (Static/Jamstack hosting)` and press Enter
+- `Development tools`: press Enter (do not select any Development tools)
+- `What is your GitHub username?`: press Enter
 - `Version control system`: select `None`
 
 The project will be configured and modules will be installed.
@@ -179,7 +179,7 @@ export default {
 ```
 
 The browser should refresh to show the contents of the spreadsheet.  If it does
-not, hit Refresh manually or open a new browser window.
+not, click Refresh manually or open a new browser window.
 
 ![Nuxt Demo end of step 5](pathname:///nuxt/nuxt5.png)
 
@@ -198,7 +198,7 @@ The page should automatically refresh with the new content:
 
 ![Nuxt Demo end of step 6](pathname:///nuxt/nuxt6.png)
 
-7) Stop the dev server (hit `CTRL+C` in the terminal window) and run
+7) Stop the dev server (press `CTRL+C` in the terminal window) and run
 
 ```bash
 npm run generate

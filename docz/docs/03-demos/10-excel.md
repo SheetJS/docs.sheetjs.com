@@ -239,7 +239,7 @@ async function extern() {
 After making the change, save the files.  Close the terminal window and the
 Excel window (do not save the Excel file).  Re-run `npm start`.
 
-Enter the formula `=SHEETJS.EXTERN()` in cell D1 and hit Enter.  Excel should
+Enter the formula `=SHEETJS.EXTERN()` in cell D1 and press Enter.  Excel should
 pull in the data and generate a dynamic array:
 
 ![`SHEETJS.VERSION` output](pathname:///files/xlcfextern1.png)

@@ -22,7 +22,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
 - [`Knockout`](./legacy#knockout)
 - [`React, React Native and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
-- [`VueJS, WeeX, and NuxtJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
+- [`VueJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
 
 ### Front-End UI Components
 
