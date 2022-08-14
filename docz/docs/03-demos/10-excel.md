@@ -82,7 +82,7 @@ running `npm start` again.
 
 The library can be installed like any other NodeJS module:
 
-```powershell
+```bash
 npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
 ```
 

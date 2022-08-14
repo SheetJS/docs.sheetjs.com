@@ -43,7 +43,7 @@ For example, with `fetch`:
 
 ```js
 const res = await fetch("https://sheetjs.com/pres.numbers");
-const ab = res.arrayBuffer(); // recover data as ArrayBuffer
+const ab = await res.arrayBuffer(); // recover data as ArrayBuffer
 
 const wb = XLSX.read(ab);
 ```

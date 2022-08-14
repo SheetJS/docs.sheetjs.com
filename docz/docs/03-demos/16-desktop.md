@@ -346,3 +346,207 @@ Electron 14+ must use `@electron/remote` instead of `remote`.  An `initialize`
 call is required to enable DevTools in the window.
 
 :::
+
+## Tauri
+
+The [NodeJS Module](../getting-started/installation/nodejs) can be imported
+from frontend code.
+
+This demo was tested against Tauri 1.0.5 on 2022 August 13.
+
+:::note
+
+Tauri currently does not provide NodeJS-esque `fs` wrapper functions.  The raw
+`@tauri-apps/api` methods used in the examples are not expected to change.
+
+:::
+
+`http` and `dialog` must be explicitly allowed in `tauri.conf.json`:
+
+```json title="tauri.conf.json"
+    "allowlist": {
+      "all": true,
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["https://**"]
+      },
+      "dialog": {
+        "all": true
+      }
+```
+
+The "Complete Example" creates an app that looks like the screenshot:
+
+![SheetJS Tauri MacOS screenshot](pathname:///tauri/macos.png)
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) [Read Tauri "Getting Started" guide and install dependencies.](https://tauri.app/v1/guides/getting-started/prerequisites)
+
+1) Create a new Tauri app:
+
+```bash
+npm create tauri-app
+```
+
+When prompted:
+
+- App Name: `SheetJSTauri`
+- Window Title: `SheetJS + Tauri`
+- UI recipe: `create-vite`
+- Add "@tauri-apps/api": `Y`
+- Vite template: `vue-ts`
+
+2) Enter the directory:
+
+```bash
+cd SheetJSTauri
+```
+
+Open `package.json` with a text editor and add the highlighted lines:
+
+```json title="package.json"
+{
+  "name": "SheetJSTauri",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+// highlight-next-line
+    "@tauri-apps/api": "^1.0.2",
+    "vue": "^3.2.37",
+// highlight-next-line
+    "xlsx": "https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz"
+  },
+  "devDependencies": {
+// highlight-next-line
+    "@tauri-apps/cli": "^1.0.5",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.7",
+    "vue-tsc": "^0.39.5"
+  }
+}
+```
+
+3) Install dependencies:
+
+```bash
+npm install --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+```
+
+4) Enable operations by adding the highlighted lines to `tauri.conf.json`:
+
+```json title="src-tauri/tauri.conf.json"
+  "tauri": {
+    "allowlist": {
+// highlight-start
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["https://**"]
+      },
+      "dialog": {
+        "all": true
+      },
+// highlight-end
+      "all": true
+    }
+```
+
+In the same file, look for the `"identifier"` key and replace the value with `com.sheetjs.tauri`:
+
+```json title="src-tauri/tauri.conf.json"
+        "icons/icon.ico"
+      ],
+      // highlight-next-line
+      "identifier": "com.sheetjs.tauri",
+      "longDescription": "",
+```
+
+
+5) Download [`App.vue`](pathname:///tauri/App.vue) and replace `src/App.vue`
+   with the downloaded script.
+
+6) Build the app with
+
+```bash
+npm run tauri build
+```
+
+At the end, it will print the path to the generated program. Run the program!
+
+</details>
+
+### Reading Files
+
+There are two steps to reading files: obtaining a path and reading binary data:
+
+```js
+import { read } from 'xlsx';
+import { open } from '@tauri-apps/api/dialog';
+import { readBinaryFile } from '@tauri-apps/api/fs';
+
+const filters = [
+  {name: "Excel Binary Workbook", extensions: ["xlsb"]},
+  {name: "Excel Workbook", extensions: ["xlsx"]},
+  {name: "Excel 97-2004 Workbook", extensions: ["xls"]},
+  // ... other desired formats ...
+];
+
+async function openFile() {
+  /* show open file dialog */
+  const selected = await open({
+    title: "Open Spreadsheet",
+    multiple: false,
+    directory: false,
+    filters
+  });
+
+  /* read data into a Uint8Array */
+  const d = await readBinaryFile(selected);
+
+  /* parse with SheetJS */
+  const wb = read(d);
+  return wb;
+}
+```
+
+### Writing Files
+
+There are two steps to writing files: obtaining a path and writing binary data:
+
+```js
+import { read } from 'xlsx';
+import { save } from '@tauri-apps/api/dialog';
+import { writeBinaryFile } from '@tauri-apps/api/fs';
+
+const filters = [
+  {name: "Excel Binary Workbook", extensions: ["xlsb"]},
+  {name: "Excel Workbook", extensions: ["xlsx"]},
+  {name: "Excel 97-2004 Workbook", extensions: ["xls"]},
+  // ... other desired formats ...
+];
+
+async function saveFile() {
+  /* show save file dialog */
+  const selected = await save({
+    title: "Save to Spreadsheet",
+    filters
+  });
+
+  /* Generate workbook */
+  const bookType = selected.slice(selected.lastIndexOf(".") + 1);
+  const d = write(wb, {type: "buffer", bookType});
+
+  /* save data to file */
+  await writeBinaryFile(selected, d);
+}
+```

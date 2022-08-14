@@ -40,6 +40,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Content Management and Static Sites`](./content)
 - [`Electron`](./desktop#electron)
 - [`NW.js`](./desktop#nwjs)
+- [`Tauri`](./desktop#tauri)
 - [`Chrome / Chromium Extension`](./chromium)
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
