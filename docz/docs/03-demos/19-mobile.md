@@ -3,6 +3,9 @@ sidebar_position: 19
 title: iOS and Android Apps
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Many mobile app frameworks mix JavaScript / CSS / HTML5 concepts with native
 extensions and libraries to create a hybrid development experience.  Developers
 well-versed in web technologies can now build actual mobile applications that
@@ -35,6 +38,629 @@ Other platforms, including React Native, do not.  When the platform does not
 provide, usually there are third-party modules to provide needed functionality.
 
 :::
+
+macOS is required for the iOS demos.  The Android demos were tested on macOS.
+
+## React Native
+
+:::note
+
+This demo was tested on an Intel Mac on 2022 August 14 with RN `0.67.2`.
+
+The iOS simulator runs iOS 15.5 on an iPhone 13.
+
+The Android simulator runs Android 12 (S) Platform 31 on a Pixel 5.
+
+:::
+
+:::warning
+
+React Native does not provide a native file picker or a method for reading and
+writing data from documents on the devices. A third-party library must be used.
+
+Since React Native internals change between releases, libraries may only work
+with specific versions of React Native.  Project documentation should be
+consulted before picking a library.
+
+:::
+
+The following table lists tested file plugins.  "OS" lists tested platforms
+("A" for Android and "I" for iOS).  "Copy" indicates whether an explicit copy
+is needed (file picker copies to cache directory and file plugin reads cache).
+
+| Filesystem Plugin          | File Picker Plugin             |  OS  | Copy |
+|:---------------------------|:-------------------------------|:----:|:-----|
+| `react-native-file-access` | `react-native-document-picker` | `AI` |      |
+| `react-native-blob-util`   | `react-native-document-picker` | `AI` | YES  |
+| `rn-fetch-blob`            | `react-native-document-picker` | `AI` | YES  |
+| `react-native-fs`          | `react-native-document-picker` | `AI` | YES  |
+| `expo-file-system`         | `expo-document-picker`         | ` I` | YES  |
+
+### RN File Picker
+
+The following libraries have been tested:
+
+#### `react-native-document-picker`
+
+<details open><summary><b>Selecting a file</b> (click to show)</summary>
+
+When a copy is not needed:
+
+```js
+import { pickSingle } from 'react-native-document-picker';
+
+const f = await pickSingle({allowMultiSelection: false, mode: "open" });
+const path = f.uri; // this path can be read by RN file plugins
+```
+
+When a copy is needed:
+
+```js
+import { pickSingle } from 'react-native-document-picker';
+
+const f = await pickSingle({allowMultiSelection: false, copyTo: "cachesDirectory", mode: "open" });
+const path = f.fileCopyUri; // this path can be read by RN file plugins
+```
+
+</details>
+
+#### `expo-document-picker`
+
+<details><summary><b>Selecting a file</b> (click to show)</summary>
+
+When using `DocumentPicker.getDocumentAsync`, enable `copyToCacheDirectory`:
+
+```js
+import * as DocumentPicker from 'expo-document-picker';
+
+const result = await DocumentPicker.getDocumentAsync({
+  // highlight-next-line
+  copyToCacheDirectory: true,
+  type: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+});
+const path = result.uri;
+```
+
+</details>
+
+
+### RN File Plugins
+
+The following libraries have been tested:
+
+#### `react-native-blob-util` and `rn-fetch-blob`
+
+:::note Historical Context
+
+The `react-native-fetch-blob` project was archived in 2019. At the time, there
+were a number of project forks.  The maintainers blessed the `rn-fetch-blob`
+fork as the spiritual successor.
+
+`react-native-blob-util` is an active fork of `rn-fetch-blob`
+
+On the day that this demo was tested (2022 August 14), both `rn-fetch-blob` and
+`react-native-blob-util` worked with the tested iOS and Android SDK versions.
+The APIs are identical for the purposes of working with files.
+
+:::
+
+The `ascii` type returns an array of numbers corresponding to the raw bytes.
+A `Uint8Array` from the data is compatible with the `buffer` type.
+
+<details open><summary><b>Reading and Writing snippets</b> (click to show)</summary>
+
+The snippets use `rn-fetch-blob`.  To use `react-native-blob-util`, change the
+`import` statements to load the module.
+
+_Reading Data_
+
+```js
+import * as XLSX from "xlsx";
+import RNFetchBlob from 'rn-fetch-blob'; // or react-native-blob-util
+const { readFile } = RNFetchBlob.fs;
+
+const res = await readFile(path, 'ascii');
+const wb = XLSX.read(new Uint8Array(res), {type:'buffer'});
+```
+
+:::caution
+
+On iOS, URIs from `react-native-document-picker` must be massaged:
+
+```js
+import { pickSingle } from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob'; // or react-native-blob-util
+const { readFile, dirs: { DocumentDir } } = RNFetchBlob.fs;
+
+const f = await pickSingle({
+// highlight-start
+  // Instruct the document picker to copy file to Documents directory
+  copyTo: "documentDirectory",
+// highlight-end
+  allowMultiSelection: false, mode: "open" });
+// highlight-start
+// `f.uri` is the original path and `f.fileCopyUri` is the path to the copy
+let path = f.fileCopyUri;
+// iOS workaround
+if (Platform.OS === 'ios') path = path.replace(/^.*\/Documents\//, DDP + "/");
+// highlight-end
+
+const res = await readFile(path, 'ascii');
+```
+
+:::
+
+_Writing Data_
+
+```js
+import * as XLSX from "xlsx";
+import RNFetchBlob from 'rn-fetch-blob'; // or react-native-blob-util
+const { writeFile, readFile, dirs:{ DocumentDir } } = RNFetchBlob.fs;
+
+const wbout = XLSX.write(wb, {type:'buffer', bookType:"xlsx"});
+const file = DocumentDir + "/sheetjsw.xlsx";
+const res = await writeFile(file, Array.from(wbout), 'ascii');
+```
+
+
+</details>
+
+#### `react-native-file-access`
+
+The `base64` encoding returns strings compatible with the `base64` type:
+
+<details open><summary><b>Reading and Writing snippets</b> (click to show)</summary>
+
+_Reading Data_
+
+```js
+import * as XLSX from "xlsx";
+import { FileSystem } from "react-native-file-access";
+
+const b64 = await FileSystem.readFile(path, "base64");
+/* b64 is a base64 string */
+const workbook = XLSX.read(b64, {type: "base64"});
+```
+
+_Writing Data_
+
+```js
+import * as XLSX from "xlsx";
+import { Dirs, FileSystem } from "react-native-file-access";
+const DDP = Dirs.DocumentDir + "/";
+
+const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
+/* b64 is a base64 string */
+await FileSystem.writeFile(DDP + "sheetjs.xlsx", b64, "base64");
+```
+
+</details>
+
+#### `react-native-fs`
+
+The `ascii` encoding returns binary strings compatible with the `binary` type:
+
+<details open><summary><b>Reading and Writing snippets</b> (click to show)</summary>
+
+_Reading Data_
+
+```js
+import * as XLSX from "xlsx";
+import { readFile } from "react-native-fs";
+
+const bstr = await readFile(path, "ascii");
+/* bstr is a binary string */
+const workbook = XLSX.read(bstr, {type: "binary"});
+```
+
+_Writing Data_
+
+```js
+import * as XLSX from "xlsx";
+import { writeFile, DocumentDirectoryPath } from "react-native-fs";
+
+const bstr = XLSX.write(workbook, {type:'binary', bookType:"xlsx"});
+/* bstr is a binary string */
+await writeFile(DocumentDirectoryPath + "/sheetjs.xlsx", bstr, "ascii");
+```
+
+</details>
+
+#### `expo-file-system`
+
+:::caution
+
+Some Expo APIs return URIs that cannot be read with `expo-file-system`.  This
+will manifest as an error:
+
+> Unsupported scheme for location '...'
+
+The [`expo-document-picker`](#expo-document-picker) snippet makes a local copy.
+
+:::
+
+The `EncodingType.Base64` encoding is compatible with `base64` type.
+
+<details><summary><b>Reading and Writing snippets</b> (click to show)</summary>
+
+_Reading Data_
+
+Calling `FileSystem.readAsStringAsync` with `FileSystem.EncodingType.Base64`
+encoding returns a promise resolving to a string compatible with `base64` type:
+
+```js
+import * as XLSX from "xlsx";
+import * as FileSystem from 'expo-file-system';
+
+const b64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+const workbook = XLSX.read(b64, { type: "base64" });
+```
+
+_Writing Data_
+
+The `FileSystem.EncodingType.Base64` encoding accepts Base64 strings:
+
+```js
+import * as XLSX from "xlsx";
+import * as FileSystem from 'expo-file-system';
+
+const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
+/* b64 is a base64 string */
+await FileSystem.writeAsStringAsync(FileSystem.documentDirectory + "sheetjs.xlsx", b64, { encoding: FileSystem.EncodingType.Base64 });
+```
+
+</details>
+
+### Demo
+
+:::warning
+
+There are many moving parts and pitfalls with React Native apps. It is strongly
+recommended to follow the official React Native tutorials for iOS and Android
+before approaching this demo.  Details like creating an Android Virtual Device
+are not covered here.
+
+:::
+
+<details open><summary><b>Complete Example</b> (click to show)</summary>
+
+This example tries to separate the library-specific functions.
+
+0) **Follow the official React Native CLI Quickstart!**
+
+Quickstart URL: <http://reactnative.dev/docs/environment-setup>
+
+Follow the instructions for iOS and for Android.  They will cover installation
+and system configuration.  By the end, you should be able to run the sample app
+in the Android and the iOS simulators.
+
+1) Create project:
+
+```
+npx react-native init SheetJSRN --version="0.67.2"
+```
+
+2) Install shared dependencies:
+
+```bash
+cd SheetJSRN
+curl -LO http://oss.sheetjs.com/assets/img/logo.png
+npm i -S https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+npm i -S react-native-table-component react-native-document-picker
+```
+
+Refresh iOS project by running `pod install` from the `ios` subfolder:
+
+```bash
+cd ios
+pod install
+cd ..
+```
+
+3) Download [`index.js`](pathname:///mobile/index.js) and replace:
+
+```bash
+curl -LO https://docs.sheetjs.com/mobile/index.js
+```
+
+Start the iOS emulator:
+
+```bash
+npx react-native run-ios
+```
+
+You should see the skeleton app:
+
+![React Native iOS App](pathname:///mobile/rnios1.png)
+
+4) Pick a filesystem library for integration:
+
+
+<Tabs>
+  <TabItem value="RNBU" label="RNBU">
+
+Install `react-native-blob-util` dependency:
+
+```bash
+npm i -S react-native-blob-util
+```
+
+Add the highlighted lines to `index.js`:
+
+```js title="index.js"
+import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
+
+// highlight-start
+import { read, write } from 'xlsx';
+import { pickSingle } from 'react-native-document-picker';
+import { Platform } from 'react-native';
+import RNFetchBlob from 'react-native-blob-util';
+
+async function pickAndParse() {
+  /* rn-fetch-blob / react-native-blob-util need a copy */
+  const f = await pickSingle({allowMultiSelection: false, copyTo: "documentDirectory", mode: "open" });
+  let path = f.fileCopyUri;
+  if (Platform.OS === 'ios') path = path.replace(/^.*\/Documents\//, RNFetchBlob.fs.dirs.DocumentDir + "/");
+  const res = await RNFetchBlob.fs.readFile(path, 'ascii');
+  return read(new Uint8Array(res), {type: 'buffer'});
+}
+
+async function writeWorkbook(wb) {
+  const wbout = write(wb, {type:'buffer', bookType:"xlsx"});
+  const file = RNFetchBlob.fs.dirs.DocumentDir + "/sheetjsw.xlsx";
+  await RNFetchBlob.fs.writeFile(file, Array.from(wbout), 'ascii');
+  return file;
+}
+// highlight-end
+
+const make_width = ws => {
+```
+
+  </TabItem>
+  <TabItem value="RNFA" label="RNFA">
+
+Install `react-native-file-access` dependency:
+
+```bash
+npm i -S react-native-file-access
+```
+
+Add the highlighted lines to `index.js`:
+
+```js title="index.js"
+import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
+
+// highlight-start
+import { read, write } from 'xlsx';
+import { pickSingle } from 'react-native-document-picker';
+import { Dirs, FileSystem } from 'react-native-file-access';
+
+async function pickAndParse() {
+  /* react-native-file-access does not need a copy */
+  const f = await pickSingle({allowMultiSelection: false, mode: "open" });
+  const res = await FileSystem.readFile(f.uri, "base64");
+  return read(res, {type: 'base64'});
+}
+
+async function writeWorkbook(wb) {
+  const wbout = write(wb, {type:'base64', bookType:"xlsx"});
+  const file = Dirs.DocumentDir + "/sheetjsw.xlsx";
+  await FileSystem.writeFile(file, wbout, "base64");
+  return file;
+}
+// highlight-end
+
+const make_width = ws => {
+```
+
+  </TabItem>
+  <TabItem value="RNFB" label="RNFB">
+
+Install `rn-fetch-blob` dependency:
+
+```bash
+npm i -S rn-fetch-blob
+```
+
+Add the highlighted lines to `index.js`:
+
+```js title="index.js"
+import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
+
+// highlight-start
+import { read, write } from 'xlsx';
+import { pickSingle } from 'react-native-document-picker';
+import { Platform } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
+
+async function pickAndParse() {
+  /* rn-fetch-blob / react-native-blob-util need a copy */
+  const f = await pickSingle({allowMultiSelection: false, copyTo: "documentDirectory", mode: "open" });
+  let path = f.fileCopyUri;
+  if (Platform.OS === 'ios') path = path.replace(/^.*\/Documents\//, RNFetchBlob.fs.dirs.DocumentDir + "/");
+  const res = await RNFetchBlob.fs.readFile(path, 'ascii');
+  return read(new Uint8Array(res), {type: 'buffer'});
+}
+
+async function writeWorkbook(wb) {
+  const wbout = write(wb, {type:'buffer', bookType:"xlsx"});
+  const file = RNFetchBlob.fs.dirs.DocumentDir + "/sheetjsw.xlsx";
+  await RNFetchBlob.fs.writeFile(file, Array.from(wbout), 'ascii');
+  return file;
+}
+// highlight-end
+
+const make_width = ws => {
+```
+
+  </TabItem>
+  <TabItem value="RNFS" label="RNFS">
+
+Install `react-native-fs` dependency:
+
+```bash
+npm i -S react-native-fs
+```
+
+Add the highlighted lines to `index.js`:
+
+```js title="index.js"
+import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
+
+// highlight-start
+import { read, write } from 'xlsx';
+import { pickSingle } from 'react-native-document-picker';
+import { writeFile, readFile, DocumentDirectoryPath } from 'react-native-fs';
+
+async function pickAndParse() {
+  /* react-native-fs needs a copy */
+  const f = await pickSingle({allowMultiSelection: false, copyTo: "cachesDirectory", mode: "open" });
+  const bstr = await readFile(f.fileCopyUri, 'ascii');
+  return read(bstr, {type:'binary'});
+}
+
+async function writeWorkbook(wb) {
+  const wbout = write(wb, {type:'binary', bookType:"xlsx"});
+  const file = DocumentDirectoryPath + "/sheetjsw.xlsx";
+  await writeFile(file, wbout, 'ascii');
+  return file;
+}
+// highlight-end
+
+const make_width = ws => {
+```
+
+  </TabItem>
+  <TabItem value="EXPO" label="EXPO">
+
+:::caution
+
+At the time of testing, the `npx install-expo-modules` step breaks the Android
+project. The demo works as expected on iOS.
+
+:::
+
+Install `expo-file-system` and `expo-document-picker` dependencies:
+
+```bash
+npx install-expo-modules
+npm i -S expo-file-system expo-document-picker
+```
+
+Add the highlighted lines to `index.js`:
+
+```js title="index.js"
+import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
+
+// highlight-start
+import { read, write } from 'xlsx';
+import { getDocumentAsync } from 'expo-document-picker';
+import { documentDirectory, readAsStringAsync, writeAsStringAsync } from 'expo-file-system';
+
+async function pickAndParse() {
+  const result = await getDocumentAsync({copyToCacheDirectory: true});
+  const path = result.uri;
+  const res = await readAsStringAsync(path, { encoding: "base64" });
+  return read(res, {type: 'base64'});
+}
+
+async function writeWorkbook(wb) {
+  const wbout = write(wb, {type:'base64', bookType:"xlsx"});
+  const file = documentDirectory + "sheetjsw.xlsx";
+  await writeAsStringAsync(file, wbout, { encoding: "base64" });
+  return file;
+}
+// highlight-end
+
+const make_width = ws => {
+```
+
+  </TabItem>
+</Tabs>
+
+
+5) Refresh the app:
+
+```bash
+cd ios
+pod install
+cd ..
+```
+
+After doing this, the simulator must be stopped and the dev server must reload:
+
+```bash
+npx react-native run-ios
+```
+
+**iOS Testing**
+
+The app can be tested with the following sequence in the simulator:
+
+- Download <https://sheetjs.com/pres.numbers>
+- In the simulator, click the Home icon to return to the home screen
+- Click on the "Files" icon
+- Click and drag `pres.numbers` from a Finder window into the simulator.
+
+![save file iOS](pathname:///mobile/quasar7a.png)
+
+- Make sure "On My iPhone" is highlighted and select "Save"
+- Click the Home icon again then select the SheetJSRN app
+- Click "Import data" and select `pres`:
+
+![pick file iOS](pathname:///mobile/rnios2.png)
+
+Once selected, the screen should refresh with new contents:
+
+![read file iOS](pathname:///mobile/rnios3.png)
+
+- Click "Export data".  You will see a popup with a location:
+
+![write file iOS](pathname:///mobile/rnios4.png)
+
+- Find the file and verify the contents are correct:
+
+```bash
+find ~/Library/Developer/CoreSimulator -name sheetjsw.xlsx |
+  while read x; do echo "$x"; npx xlsx-cli "$x"; done
+```
+
+Once testing is complete, stop the simulator and the dev process.
+
+**Android Testing**
+
+There are no Android-specific steps.  Emulator can be started with:
+
+```bash
+npx react-native run-android
+```
+
+![React Native Android App](pathname:///mobile/rnand1.png)
+
+The app can be tested with the following sequence in the simulator:
+
+- Download <https://sheetjs.com/pres.numbers>
+- Click and drag `pres.numbers` from a Finder window into the simulator.
+- Click "Import data" and select `pres.numbers`:
+
+![pick file Android](pathname:///mobile/rnand2.png)
+
+Once selected, the screen should refresh with new contents:
+
+![read file Android](pathname:///mobile/rnand3.png)
+
+- Click "Export data".  You will see a popup with a location:
+
+![write file Android](pathname:///mobile/rnand4.png)
+
+- Pull the file from the simulator and verify the contents:
+
+```bash
+adb exec-out run-as com.sheetjsrn cat files/sheetjsw.xlsx > /tmp/sheetjsw.xlsx
+npx xlsx-cli /tmp/sheetjsw.xlsx
+```
+
+</details>
 
 ## NativeScript
 
@@ -465,7 +1091,7 @@ window.requestFileSystem(window.PERSISTENT, 0, function(fs) {
 The demo builds off of the Vite example.  Familiarity with VueJS and TypeScript
 is assumed.
 
-<details open><summary><b>Complete Example</b> (click to show)</summary>
+<details><summary><b>Complete Example</b> (click to show)</summary>
 
 0) Ensure all of the dependencies are installed.  Install the CLI globally:
 

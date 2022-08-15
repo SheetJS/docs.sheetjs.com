@@ -524,7 +524,7 @@ async function openFile() {
 There are two steps to writing files: obtaining a path and writing binary data:
 
 ```js
-import { read } from 'xlsx';
+import { write } from 'xlsx';
 import { save } from '@tauri-apps/api/dialog';
 import { writeBinaryFile } from '@tauri-apps/api/fs';
 

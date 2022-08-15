@@ -21,7 +21,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Angular.JS`](./legacy#angularjs)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
 - [`Knockout`](./legacy#knockout)
-- [`React, React Native and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
+- [`React and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
 - [`VueJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
 
 ### Front-End UI Components
@@ -35,13 +35,13 @@ The demo projects include small runnable examples and short explainers.
 ### Platforms and Integrations
 
 - [`Command-Line Tools`](./cli)
-- [`iOS / Android Mobile Applications`](./mobile)
+- [`iOS and Android Mobile Applications`](./mobile)
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
 - [`Content Management and Static Sites`](./content)
 - [`Electron`](./desktop#electron)
 - [`NW.js`](./desktop#nwjs)
 - [`Tauri`](./desktop#tauri)
-- [`Chrome / Chromium Extension`](./chromium)
+- [`Chrome and Chromium Extensions`](./chromium)
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
 - [`NetSuite SuiteScript`](./netsuite)
@@ -51,7 +51,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Other JavaScript Engines`](./engines)
 - [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
 - [`Databases and Structured Data Stores`](./database)
-- [`NoSQL, K/V, and Unstructured Data Stores`](./nosql)
+- [`NoSQL and Unstructured Data Stores`](./nosql)
 - [`Legacy Internet Explorer`](./legacy#internet-explorer)
 
 ### Bundlers and Tooling

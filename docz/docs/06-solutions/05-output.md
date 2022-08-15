@@ -241,62 +241,7 @@ shows a complete example and details the required version-specific settings.
   </TabItem>
   <TabItem value="reactnative" label="React Native">
 
-:::caution
-
-React Native does not provide a way to write files to the filesystem.  A
-separate third-party library must be used.
-
-Since React Native internals change between releases, libraries may only work
-with specific versions of React Native.  Project documentation should be
-consulted before picking a library.
-
-:::
-
-The [`react` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/react) includes a sample React Native app.
-
-The following libraries have been tested:
-
-- [`react-native-file-access`](https://npm.im/react-native-file-access)
-
-The `base64` encoding accepts Base64 strings compatible with the `binary` type:
-
-```js
-import * as XLSX from "xlsx";
-import { Dirs, FileSystem } from "react-native-file-access";
-const DDP = Dirs.DocumentDir + "/";
-
-const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
-/* b64 is a base64 string */
-await FileSystem.writeFile(DDP + "sheetjs.xlsx", b64, "base64");
-```
-
-- [`react-native-fs`](https://npm.im/react-native-fs)
-
-The `ascii` encoding accepts binary strings compatible with the `binary` type:
-
-```js
-import * as XLSX from "xlsx";
-import { writeFile, DocumentDirectoryPath } from "react-native-fs";
-const DDP = DocumentDirectoryPath + "/";
-
-const bstr = XLSX.write(workbook, {type:'binary', bookType:"xlsx"});
-/* bstr is a binary string */
-await writeFile(DDP + "sheetjs.xlsx", bstr, "ascii");
-```
-
-- [`expo-file-system`](https://www.npmjs.com/package/expo-file-system)
-
-The `FileSystem.EncodingType.Base64` encoding accepts Base64 strings:
-
-```js
-import * as XLSX from "xlsx";
-import * as FileSystem from 'expo-file-system';
-const DDP = FileSystem.documentDirectory;
-
-const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
-/* b64 is a base64 string */
-await FileSystem.writeAsStringAsync(DDP + "sheetjs.xlsx", b64, { encoding: FileSystem.EncodingType.Base64 });
-```
+[The React Native Demo](../demos/mobile#rn-file-plugins) covers tested plugins.
 
   </TabItem>
   <TabItem value="extendscript" label="Photoshop">
