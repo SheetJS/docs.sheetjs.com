@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- sheetjs (C) 2013-present  SheetJS http://sheetjs.com -->
+<!-- vim: set ts=2: -->
+<html lang="en" style="height: 100%">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>SheetJS React Demo</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<script src="https://unpkg.com/react/umd/react.production.min.js"></script>
+	<script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+	<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js"></script>
+	<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+	<style>body, #app { height: 100%; }</style>
+</head>
+<body>
+	<div class="container-fluid"><h1><a href="http://sheetjs.com">SheetJS × React Demo</a></h1><br /></div>
+	<div id="app" class="container-fluid"></div>
+	<script type="text/babel">
+		/* sheetjs (C) 2013-present  SheetJS -- http://sheetjs.com */
+		/* Notes:
+			 - usage: `ReactDOM.render( <SheetJSApp />, document.getElementById('app') );`
+			 - xlsx.full.min.js is loaded in the head of the HTML page
+			 - this script should be referenced with type="text/babel"
+			 - babel.js in-browser transpiler should be loaded before this script
+		*/
+		const { read, writeFile } = XLSX;
+		const { decode_range, encode_col, sheet_to_json, aoa_to_sheet, book_new, book_append_sheet } = XLSX.utils;
+
+		/* generate an array of column objects */
+		const make_cols = refstr => Array.from({length: decode_range(refstr).e.c + 1}, (_, i) => ({ name: encode_col(i), key: i}));
+
+		/* main component */
+		function SheetJSApp() {
+			const [data, setData] = React.useState([]);
+			const [cols, setCols] = React.useState([]);
+
+			const handleFile = (file) => {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					/* Parse data */
+					const ab = e.target.result;
+					const wb = read(ab, { type: 'array' });
+					/* Get first worksheet */
+					const wsname = wb.SheetNames[0];
+					const ws = wb.Sheets[wsname];
+					/* Convert array of arrays */
+					const data = sheet_to_json(ws, { header: 1 });
+					/* Update state */
+					setData(data);
+					setCols(make_cols(ws['!ref']))
+				};
+				reader.readAsArrayBuffer(file);
+			}
+
+			const exportFile = () => {
+				/* convert state to workbook */
+				const ws = aoa_to_sheet(data);
+				const wb = book_new();
+				book_append_sheet(wb, ws, "SheetJS");
+				/* generate XLSX file and send to client */
+				writeFile(wb, "sheetjs.xlsx")
+			};
+
+			return (
+				<DragDropFile handleFile={handleFile}>
+					<div className="row"><div className="col-xs-12">
+						<DataInput handleFile={handleFile} />
+					</div></div>
+					<div className="row"><div className="col-xs-12">
+						{data.length ? <button className="btn btn-success" onClick={exportFile}>Export</button> : ""}
+					</div></div>
+					<div className="row"><div className="col-xs-12">
+						<OutTable data={data} cols={cols} />
+					</div></div>
+				</DragDropFile>
+			);
+		}
+
+		/* -------------------------------------------------------------------------- */
+
+		/*
+			Simple HTML5 file drag-and-drop wrapper
+			usage: <DragDropFile handleFile={handleFile}>...</DragDropFile>
+				handleFile(file:File):void;
+		*/
+
+		function DragDropFile({ handleFile, children }) {
+			const suppress = (e) => { e.stopPropagation(); e.preventDefault(); };
+			const handleDrop = (e) => {
+				e.stopPropagation(); e.preventDefault();
+				const files = e.dataTransfer.files;
+				if (files && files[0]) handleFile(files[0]);
+			};
+
+			return ( <div onDrop={handleDrop} onDragEnter={suppress} onDragOver={suppress}>{children}</div> );
+		}
+
+		/*
+			Simple HTML5 file input wrapper
+			usage: <DataInput handleFile={callback} />
+				handleFile(file:File):void;
+		*/
+
+		function DataInput({ handleFile }) {
+			const handleChange = (e) => {
+				const files = e.target.files;
+				if (files && files[0]) handleFile(files[0]);
+			};
+
+			return (
+				<form className="form-inline">
+					<div className="form-group">
+						<label htmlFor="file">Drag or choose a spreadsheet file</label><br />
+						<input type="file" className="form-control" id="file" accept={SheetJSFT} onChange={handleChange} />
+					</div>
+				</form>
+			)
+		}
+		/* list of supported file types */
+		const SheetJSFT = [
+			"xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123", "wb*", "wq*", "html", "htm"
+		].map(x => `.${x}`).join(",");
+
+		/*
+			Simple HTML Table
+			usage: <OutTable data={data} cols={cols} />
+				data:Array<Array<any> >;
+				cols:Array<{name:string, key:number|string}>;
+		*/
+		function OutTable({ data, cols }) {
+			return (
+				<div className="table-responsive">
+					<table className="table table-striped">
+						<thead>
+							<tr>{cols.map((c) => <th key={c.key}>{c.name}</th>)}</tr>
+						</thead>
+						<tbody>
+							{data.map((r, i) => <tr key={i}>
+								{cols.map(c => <td key={c.key}>{r[c.key]}</td>)}
+							</tr>)}
+						</tbody>
+					</table>
+				</div>
+			);
+		}
+
+		/* React 18 uses ReactDOM.createRoot; < 18 should use ReactDOM.render */
+		const root_elt = document.getElementById('app');
+		if(typeof ReactDOM.createRoot !== "undefined") {
+			const root = ReactDOM.createRoot(root_elt);
+			root.render(<SheetJSApp/>);
+		} else {
+			ReactDOM.render(<SheetJSApp />, root_elt);
+		}
+	</script>
+</body>
+</html>

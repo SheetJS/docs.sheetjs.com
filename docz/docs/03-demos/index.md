@@ -21,7 +21,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Angular.JS`](./legacy#angularjs)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
 - [`Knockout`](./legacy#knockout)
-- [`React and NextJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/)
+- [`React`](./react)
 - [`VueJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
 
 ### Front-End UI Components
@@ -68,3 +68,9 @@ The demo projects include small runnable examples and short explainers.
 - [`vite`](./bundler#vite)
 - [`webpack`](./bundler#webpack)
 - [`wmr`](./bundler#wmr)
+
+:::note
+
+If a demo for a library or framework is not included here, please leave a note.
+
+:::
