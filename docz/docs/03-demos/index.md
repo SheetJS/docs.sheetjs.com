@@ -18,18 +18,18 @@ The demo projects include small runnable examples and short explainers.
 
 ### Frameworks
 
-- [`Angular.JS`](./legacy#angularjs)
 - [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
-- [`Knockout`](./legacy#knockout)
 - [`React`](./react)
-- [`VueJS`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/)
+- [`VueJS`](./vue)
+- [`Angular.JS`](./legacy#angularjs)
+- [`Knockout`](./legacy#knockout)
 
 ### Front-End UI Components
 
 - [`canvas-datagrid`](./grid#canvas-datagrid)
-- [`x-spreadsheet`](https://github.com/SheetJS/SheetJS/tree/master/demos/xspreadsheet/)
-- [`react-data-grid`](https://github.com/SheetJS/SheetJS/tree/master/demos/react/modify/)
-- [`vue3-table-light`](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/modify/)
+- [`x-spreadsheet`](./grid#x-spreadsheet)
+- [`react-data-grid`](./grid#react-data-grid)
+- [`vue3-table-lite`](./grid#vue3-table-lite)
 - [`angular-ui-grid`](./grid#angular-ui-grid)
 
 ### Platforms and Integrations

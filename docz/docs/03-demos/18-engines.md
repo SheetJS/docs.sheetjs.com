@@ -434,7 +434,7 @@ ready, it will read the hardcoded test file and print the contents as CSV.
 
 5) Run the script using the Hermes standalone binary:
 
-```
+```bash
 hermes xlsx.hermes.js
 ```
 
@@ -540,6 +540,93 @@ to `SheetJSwift.xlsx`. That file can be verified by opening in Excel / Numbers.
 
 </details>
 
+## JerryScript
+
+JerryScript is a lightweight JavaScript engine designed for use in low-memory
+environments like microcontrollers.  As part of the build suite, the project
+generates a C library and a standalone CLI tool.
+
+The simplest way to interact with the engine is to pass Base64 strings.
+
+:::note
+
+While applications should link against the official libraries, the standalone tool
+is useful for verifying functionality.
+
+:::
+
+:::caution
+
+This demo requires a much larger heap size than is normally used in JerryScript
+deployments! In local testing, the following sizes were needed:
+
+- 8192 (8M) for <https://sheetjs.com/pres.xlsx>
+- 65536 (64M) for <https://sheetjs.com/pres.numbers>
+
+This works on a Raspberry Pi.
+
+:::
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+Due to limitations of the standalone binary, this demo will encode a test file
+as a Base64 string and directly add it to an amalgamated script.
+
+0) Build the library and command line tool with required options:
+
+```bash
+git clone --depth=1 https://github.com/jerryscript-project/jerryscript.git
+cd jerryscript
+python tools/build.py --error-messages=ON --logging=ON --mem-heap=8192 --cpointer-32bit=ON
+```
+
+1) Download the standalone script, shim, and test file:
+
+<ul>
+<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js`}>xlsx.full.min.js</a></li>
+<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js`}>shim.min.js</a></li>
+<li><a href="https://sheetjs.com/pres.xlsx">pres.xlsx</a></li>
+</ul>
+
+2) Bundle the test file and create `payload.js`:
+
+```bash
+node -e "fs.writeFileSync('payload.js', 'var payload = \"' + fs.readFileSync('pres.xlsx').toString('base64') + '\";')"
+```
+
+3) Create support scripts:
+
+- `global.js` creates a `global` variable and defines a fake `console`:
+
+```js title="global.js"
+var global = (function(){ return this; }).call(null);
+var console = { log: function(x) { print(x); } };
+```
+
+- `jerry.js` will call `XLSX.read` and `XLSX.utils.sheet_to_csv`:
+
+```js title="jerry.js"
+/* sheetjs (C) 2013-present  SheetJS -- http://sheetjs.com */
+var wb = XLSX.read(payload, {type:'base64'});
+console.log(XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]));
+```
+
+4) Create the amalgamation `xlsx.jerry.js`:
+
+```bash
+cat global.js xlsx.full.min.js payload.js jerry.js > xlsx.jerry.js
+```
+
+The final script defines `global` before loading the standalone library.  Once
+ready, it will read the hardcoded test file and print the contents as CSV.
+
+5) Run the script using the `jerry` standalone binary:
+
+```bash
+build/bin/jerry xlsx.jerry.js; echo $?
+```
+
+</details>
 
 ## QuickJS
 

@@ -1,4 +1,4 @@
-/* xlsx.js (C) 2013-present  SheetJS -- http://sheetjs.com */
+/* sheetjs (C) 2013-present  SheetJS -- http://sheetjs.com */
 var XLSX = require('xlsx');
 /*jshint browser:true */
 /*global require */

@@ -27,6 +27,86 @@ suitable for a number of libraries.  When more advanced shapes are needed,
 it is easier to munge the output of an array of arrays.
 
 
+### x-spreadsheet
+
+With a familiar UI, [`x-spreadsheet`](https://myliang.github.io/x-spreadsheet/)
+is an excellent choice for developers looking for a modern editor.
+
+[Click here for a live integration demo.](pathname:///xspreadsheet/)
+
+<details><summary><b>Full Exposition</b> (click to show)</summary>
+
+**Obtaining the Library**
+
+The `x-data-spreadsheet` NodeJS packages include a minified script that can be
+directly inserted as a script tag.  The unpkg CDN also serves this script:
+
+```html
+<!-- x-spreadsheet stylesheet -->
+<link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet/dist/xspreadsheet.css"/>
+<!-- x-spreadsheet library -->
+<script src="https://unpkg.com/x-data-spreadsheet/dist/xspreadsheet.js"></script>
+```
+
+**Previewing and Editing Data**
+
+The HTML document needs a container element:
+
+```html
+<div id="gridctr"></div>
+```
+
+Grid initialization is a one-liner:
+
+```js
+var grid = x_spreadsheet(document.getElementById("gridctr"));
+```
+
+`x-spreadsheet` handles the entire edit cycle. No intervention is necessary.
+
+**SheetJS and x-spreadsheet**
+
+The integration library can be downloaded from the SheetJS CDN:
+
+[Development Use](https://cdn.sheetjs.com/xspreadsheet/xlsxspread.js)
+
+[Production Use](https://cdn.sheetjs.com/xspreadsheet/xlsxspread.min.js)
+
+
+When used in a browser tag, it exposes two functions: `xtos` and `stox`.
+
+- `stox(worksheet)` returns a data structure suitable for `grid.loadData`
+- `xtos(data)` accepts the result of `grid.getData` and generates a workbook
+
+_Reading Data_
+
+The following snippet fetches a spreadsheet and loads the grid:
+
+```js
+(async() => {
+  const ab = await (await fetch("https://sheetjs.com/pres.numbers")).arrayBuffer();
+  grid.loadData(stox(XLSX.read(ab)));
+})();
+```
+
+The same pattern can be used in file input elements and other data sources.
+
+_Writing Data_
+
+The following snippet exports the grid data to a file:
+
+```js
+/* build workbook from the grid data */
+XLSX.writeFile(xtos(grid.getData()), "SheetJS.xlsx");
+```
+
+**Additional Features**
+
+This demo barely scratches the surface.  The underlying grid component includes
+many additional features that work with [SheetJS Pro](https://sheetjs.com/pro).
+
+</details>
+
 ### Canvas DataGrid
 
 After extensive testing, [`canvas-datagrid`](https://canvas-datagrid.js.org/demo.html)
@@ -119,7 +199,6 @@ This demo barely scratches the surface.  The underlying grid component includes
 many additional features including massive data streaming, sorting and styling.
 
 </details>
-
 
 ### Angular UI Grid
 
@@ -223,7 +302,7 @@ import { WorkSheet, utils } from 'xlsx';
 
 type Row = any[];
 
-function ws_to_rdg(rows: Row[]): WorkSheet {
+function rdg_to_ws(rows: Row[]): WorkSheet {
   return utils.aoa_to_sheet(rows);
 }
 ```
@@ -361,8 +440,135 @@ export default function App() {
 4) run `npm start`.  When you load the dev page in the browser, it will attempt
 to fetch <https://sheetjs.com/pres.numbers> and load the data.
 
-</details>
-
 The following screenshot was taken from the demo:
 
 ![react-data-grid screenshot](pathname:///react/rdg1.png)
+
+</details>
+
+### vue3-table-lite
+
+:::note
+
+This demo was tested against `vue3-table-lite 1.2.4`, VueJS `3.2.37`, ViteJS
+3.0.7, and `@vitejs/plugin-vue` 3.0.3 on 2022 August 18
+
+:::
+
+[`vue3-table-lite`](https://vue3-lite-table.vercel.app/) is a data grid built
+for Vue
+
+[A complete example is included below.](#vte-demo)
+
+#### Rows and Columns Bindings
+
+`vue3-table-lite` presents two bindable attributes: an array of column metadata
+(`columns`) and an array of objects representing the displayed data (`rows`).
+Typically both are `ref` objects:
+
+
+```html
+<script setup lang="ts">
+import { ref } from "vue";
+import VueTableLite from "vue3-table-lite/ts";
+
+/* rows */
+type Row = any[];
+const rows = ref<Row[]>([]);
+
+/* columns */
+type Column = { field: string; label: string; };
+const columns = ref<Column[]>([]);
+</script>
+
+<template>
+  <vue-table-lite :columns="columns" :rows="rows"></vue-table-lite>
+</template>
+```
+
+These can be mutated through the `value` property in Vue lifecycle methods:
+
+```ts
+import { onMounted } from "vue";
+onMounted(() => {
+  columns.value = [ { field: "name", label: "Names" }];
+  rows.value = [ { name: "SheetJS" }, { name: "VueJS" } ];
+})
+```
+
+The most generic data representation is an array of arrays. To sate the grid,
+the columns must be objects whose `field` property is the stringified number:
+
+```js
+import { ref } from "vue";
+import { utils } from 'xlsx';
+
+/* generate row and column data */
+function ws_to_vte(ws) {
+  /* create an array of arrays */
+  const rows = utils.sheet_to_json(ws, { header: 1 });
+
+  /* create column array */
+  const range = utils.decode_range(ws["!ref"]||"A1");
+  const columns = Array.from({ length: range.e.c + 1 }, (_, i) => ({
+    field: String(i), // VTE will access row["0"], row["1"], etc
+    label: utils.encode_col(i), // the column labels will be A, B, etc
+  }));
+
+  return { rows, columns };
+}
+
+const rows = ref([]);
+const columns = ref([]);
+
+/* update refs */
+function update_refs(ws) {
+  const data = ws_to_vte(ws);
+  rows.value = data.rows;
+  columns.value = data.columns;
+}
+```
+
+In the other direction, a worksheet can be generated with `aoa_to_sheet`:
+
+```js
+import { utils } from 'xlsx';
+
+const rows = ref([]);
+
+function vte_to_ws(rows) {
+  return utils.aoa_to_sheet(rows.value);
+}
+```
+
+#### VTE Demo
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Create a new ViteJS App using the Vue + TypeScript template:
+
+```bash
+npm create vite@latest sheetjs-vue -- --template vue-ts
+cd sheetjs-vue
+```
+
+2) Install dependencies:
+
+```bash
+npm i
+npm i -S https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz vue3-table-lite
+```
+
+3) Download [`src/App.vue`](pathname:///vtl/App.vue) and replace the contents:
+
+```bash
+cd src
+rm -f App.vue
+curl -LO https://docs.sheetjs.com/vtl/App.vue
+cd ..
+```
+
+4) run `npm run dev`.  When you load the dev page in the browser, it will try
+to fetch <https://sheetjs.com/pres.numbers> and load the data.
+
+</details>

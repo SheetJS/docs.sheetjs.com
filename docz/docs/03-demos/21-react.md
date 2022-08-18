@@ -1,5 +1,5 @@
 ---
-sidebar_position: 20
+sidebar_position: 21
 title: ReactJS
 ---
 
@@ -38,7 +38,7 @@ Typically, some users will create a spreadsheet with source data that should be
 loaded into the site.  This sheet will have known columns.  For example, our
 [presidents sheet](https://sheetjs.com/pres.xlsx) has "Name" / "Index" columns:
 
-![`pres.xlsx` data](pathname:///react/pres.png)
+![`pres.xlsx` data](pathname:///pres.png)
 
 This naturally maps to an array of typed objects, as in the TS example below:
 
