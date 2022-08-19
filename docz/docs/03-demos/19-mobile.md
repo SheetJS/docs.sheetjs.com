@@ -1367,3 +1367,68 @@ id,content
 ```
 
 </details>
+
+## Ionic
+
+:::warning Telemetry
+
+Before starting this demo, manually disable telemetry.  On Linux and macOS:
+
+```bash
+rm -rf ~/.ionic/
+mkdir ~/.ionic
+cat <<EOF > ~/.ionic/config.json
+{
+  "version": "6.20.1",
+  "telemetry": false,
+  "npmClient": "npm"
+}
+EOF
+npx @capacitor/cli telemetry off
+```
+
+To verify telemetry was disabled:
+
+```bash
+npx @ionic/cli config get -g telemetry
+npx @capacitor/cli telemetry
+```
+
+:::
+
+### Cordova
+
+:::caution
+
+The latest version of Ionic uses CapacitorJS. These notes are for older apps
+using Cordova
+
+:::
+
+`Array<Array<any>>` neatly maps to a table with `ngFor`:
+
+```html
+<ion-grid>
+  <ion-row *ngFor="let row of data">
+    <ion-col *ngFor="let val of row">
+      {{val}}
+    </ion-col>
+  </ion-row>
+</ion-grid>
+```
+
+`@ionic-native/file` reads and writes files on devices. `readAsArrayBuffer`
+returns `ArrayBuffer` objects suitable for `array` type, and `array` type can
+be converted to blobs that can be exported with `writeFile`:
+
+```ts
+/* read a workbook */
+const ab: ArrayBuffer = await this.file.readAsArrayBuffer(url, filename);
+const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'array'});
+
+/* write a workbook */
+const wbout: ArrayBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+let blob = new Blob([wbout], {type: 'application/octet-stream'});
+this.file.writeFile(url, filename, blob, {replace: true});
+```
+

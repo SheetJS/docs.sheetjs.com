@@ -18,7 +18,7 @@ The demo projects include small runnable examples and short explainers.
 
 ### Frameworks
 
-- [`Angular 2+ and Ionic`](https://github.com/SheetJS/SheetJS/tree/master/demos/angular2/)
+- [`Angular 2+ and Ionic`](./angular)
 - [`React`](./react)
 - [`VueJS`](./vue)
 - [`Angular.JS`](./legacy#angularjs)

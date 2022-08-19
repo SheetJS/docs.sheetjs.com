@@ -74,7 +74,7 @@ Similarly, file input elements automatically map to standard Web APIs.
 For example, assuming a file input element on the page:
 
 ```html
-<input type="file" name="xlfile" id="xlf" /> 
+<input type="file" name="xlfile" id="xlf" />
 ```
 
 The event handler would process the event as if it were a web event:
@@ -235,7 +235,7 @@ File input elements automatically map to standard Web APIs.
 For example, assuming a file input element on the page:
 
 ```html
-<input type="file" name="xlfile" id="xlf" /> 
+<input type="file" name="xlfile" id="xlf" />
 ```
 
 The event handler would process the event as if it were a web event:

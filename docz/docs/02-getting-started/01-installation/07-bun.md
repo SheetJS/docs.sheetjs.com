@@ -13,8 +13,7 @@ import current from '/version.js';
 :::caution Bun support is considered experimental.
 
 Great open source software grows with user tests and reports. Any issues should
-be reported to the [SheetJS project](https://github.com/SheetJS/sheetjs/issues)
-for further diagnosis.
+be reported to the Bun project for further diagnosis.
 
 :::
 

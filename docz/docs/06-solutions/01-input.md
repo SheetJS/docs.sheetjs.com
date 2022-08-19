@@ -295,7 +295,7 @@ input_dom_element.addEventListener("change", handleFile, false);
   </TabItem>
 </Tabs>
 
-The [`oldie` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/) shows an IE-compatible fallback scenario.
+The [`oldie` demo](../demos/legacy#internet-explorer) shows an IE-compatible fallback scenario.
 
   </TabItem>
   <TabItem value="nodejs" label="NodeJS">
@@ -663,7 +663,7 @@ console.log(wb.SheetNames);`}</code></pre>
   </TabItem>
 </Tabs>
 
-More detailed examples are covered in the [included demos](https://github.com/SheetJS/SheetJS/tree/master/demos/)
+More detailed examples are covered in the [included demos](../demos/)
 
 ## Processing JSON and JS Data
 
@@ -728,9 +728,7 @@ the optional `opts` argument in more detail.
 
 [`x-spreadsheet`](https://github.com/myliang/x-spreadsheet) is an interactive
 data grid for previewing and modifying structured data in the web browser.  The
-[demo](https://github.com/sheetjs/sheetjs/tree/master/demos/xspreadsheet)
-includes a sample script with the `xtos` function for converting from
-x-spreadsheet to a workbook.  Live Demo: <https://oss.sheetjs.com/sheetjs/x-spreadsheet>
+[demo](../demos/grid#x-spreadsheet) includes more detailed examples.
 
 ["Typed Arrays and ML"](../demos/ml) covers strategies for
 creating worksheets from ML library exports (datasets stored in Typed Arrays).
@@ -738,7 +736,7 @@ creating worksheets from ML library exports (datasets stored in Typed Arrays).
 <details>
   <summary><b>Records from a database query (SQL or no-SQL)</b> (click to show)</summary>
 
-The [`database` demo](https://github.com/sheetjs/sheetjs/tree/master/demos/database/) includes examples of working with
+The [`database` demo](../demos/database/) includes examples of working with
 databases and query results.
 
 </details>
@@ -833,8 +831,8 @@ var workbook = XLSX.read(htmlstr, {type:"string"});
 <details>
   <summary><b>Chrome/Chromium Extension</b> (click to show)</summary>
 
-The [`chrome` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/chrome/) shows a complete example and details the
-required permissions and other settings.
+The [`chrome` demo](../demos/chromium/) shows a complete example and details the required
+permissions and other settings.
 
 In an extension, it is recommended to generate the workbook in a content script
 and pass the object back to the extension:

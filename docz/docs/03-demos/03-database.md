@@ -570,7 +570,7 @@ can be adapted to generate SQL statements for a variety of databases, including:
 
 **PostgreSQL**
 
-The `pg` connector library was tested against the `generate_sql` output as-is. 
+The `pg` connector library was tested against the `generate_sql` output as-is.
 
 The `rows` property of a query result is an array of objects that plays nice
 with `json_to_sheet`:

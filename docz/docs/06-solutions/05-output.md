@@ -165,7 +165,7 @@ Downloadify.create(id,{
 });
 ```
 
-The [`oldie` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/oldie/) shows an IE-compatible fallback scenario.
+The [`oldie` demo](../demos/legacy#internet-explorer) shows an IE-compatible fallback scenario.
 
 </details>
 
@@ -549,9 +549,7 @@ With the `header: 1` option, the function exports an array of arrays of values.
 
 [`x-spreadsheet`](https://github.com/myliang/x-spreadsheet) is an interactive
 data grid for previewing and modifying structured data in the web browser.  The
-[demo](https://github.com/SheetJS/SheetJS/tree/master/demos/xspreadsheet)
-includes a sample script with the `stox` function for converting from
-a workbook to x-spreadsheet.  Live Demo: <https://oss.sheetjs.com/sheetjs/x-spreadsheet>
+[demo](../demos/grid#x-spreadsheet) includes a sample script and live demo.
 
   </TabItem>
   <TabItem value="react" label="React">
@@ -594,9 +592,8 @@ export default function App() {
   </TabItem>
   <TabItem value="vue" label="VueJS">
 
-[`vue3-table-lite`](https://linmasahiro.github.io/vue3-table-lite/dist/) is a
-simple VueJS 3 data table.  It is featured in the
-[VueJS demo](https://github.com/SheetJS/SheetJS/tree/master/demos/vue/modify/).
+[`vue3-table-lite`](https://vue3-lite-table.vercel.app/) is a simple VueJS 3
+data table.  It is featured in the [dedicated demo](../demos/grid#vue3-table-lite).
 
   </TabItem>
 </Tabs>
@@ -609,8 +606,7 @@ generating typed arrays and tensors from worksheet data.
 <details>
   <summary><b>Populating a database (SQL or no-SQL)</b> (click to show)</summary>
 
-The [`database` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/database/)
-includes examples of working with databases and query results.
+The [`database` demo](../demos/database/) includes examples of working with databases and query results.
 
 </details>
 
@@ -706,7 +702,7 @@ function Tabeller(props) {
 }
 ```
 
-The [`react` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/react) includes more React examples.
+The [`react` demo](../demos/react) includes more React examples.
 
   </TabItem>
   <TabItem value="vue" label="VueJS">
@@ -740,7 +736,7 @@ const S5SComponent = {
 };
 ```
 
-The [`vuejs` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/vue) includes more React examples.
+The [`vuejs` demo](../demos/vue) includes more React examples.
 
   </TabItem>
 </Tabs>
