@@ -1370,6 +1370,15 @@ id,content
 
 ## Ionic
 
+:::note
+
+This demo was tested on an Intel Mac on 2022 August 18 with Cordova backend.
+The file integration uses `@ionic-native/file` version `5.36.0`.
+
+The iOS simulator runs iOS 15.5 on an iPod Touch 7th Gen.
+
+:::
+
 :::warning Telemetry
 
 Before starting this demo, manually disable telemetry.  On Linux and macOS:
@@ -1400,8 +1409,7 @@ npx @capacitor/cli telemetry
 
 :::caution
 
-The latest version of Ionic uses CapacitorJS. These notes are for older apps
-using Cordova
+The latest version of Ionic uses CapacitorJS. These notes are for Cordova apps.
 
 :::
 
@@ -1432,3 +1440,77 @@ let blob = new Blob([wbout], {type: 'application/octet-stream'});
 this.file.writeFile(url, filename, blob, {replace: true});
 ```
 
+### Demo
+
+The demo uses Cordova.
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) Disable telemetry as noted in the warning.
+
+Install required global dependencies:
+
+```bash
+npm i -g cordova-res @angular/cli native-run
+```
+
+Follow the [React Native demo](#demo) to ensure iOS and Android sims are ready.
+
+
+1) Create a new project:
+
+```bash
+npx @ionic/cli start SheetJSIonic blank --type angular --cordova --quiet --no-git --no-link --confirm
+```
+
+If a prompt discusses Cordova and Capacitor, enter `Yes` to continue.
+
+If a prompt asks about creating an Ionic account, enter `N` to opt out.
+
+2) Set up Cordova:
+
+```bash
+npx @ionic/cli cordova platform add ios --confirm
+npx @ionic/cli cordova plugin add cordova-plugin-file
+npm install --save @ionic-native/core @ionic-native/file @ionic/cordova-builders
+```
+
+3) Install dependencies:
+
+```bash
+npm install --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+```
+
+4) Add `@ionic-native/file` to the module.  Differences highlighted below:
+
+```ts title="src/app/app.module.ts"
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+// highlight-next-line
+import { File } from '@ionic-native/file/ngx';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+
+  // highlight-next-line
+  providers: [File, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+
+5) Download [`home.page.ts`](pathname:///ionic/home.page.ts) and replace:
+
+```bash
+curl -o src/app/home/home.page.ts -L https://docs.sheetjs.com/ionic/home.page.ts
+```
+
+6) Test the app:
+
+```bash
+npx @ionic/cli cordova emulate ios
+```
+
+</details>

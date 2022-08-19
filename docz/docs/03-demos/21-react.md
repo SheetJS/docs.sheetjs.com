@@ -71,15 +71,13 @@ console.log(data);
 A component will typically map over the data. The following example generates
 a TABLE with a row for each President:
 
-```tsx title="src/SheetJSReactAoO.tsx"
-import React, { useEffect, useState } from "react";
-import { read, utils } from 'xlsx';
-
-interface President { Name: string; Index: number; }
+```jsx title="src/SheetJSReactAoO.js"
+import React, { useCallback, useEffect, useState } from "react";
+import { read, utils, writeFileXLSX } from 'xlsx';
 
 export default function SheetJSReactAoO() {
   /* the component state is an array of presidents */
-  const [pres, setPres] = useState<President[]>([]);
+  const [pres, setPres] = useState([]);
 
   /* Fetch and update the state once */
   useEffect(() => { (async() => {
@@ -87,10 +85,19 @@ export default function SheetJSReactAoO() {
     // highlight-start
     const wb = read(f); // parse the array buffer
     const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
-    const data = utils.sheet_to_json<President>(ws); // generate objects
+    const data = utils.sheet_to_json(ws); // generate objects
     setPres(data); // update state
     // highlight-end
   })(); }, []);
+
+  /* get state data and export to XLSX */
+  const exportFile = useCallback(() => {
+    // highlight-next-line
+    const ws = utils.json_to_sheet(pres);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Data");
+    writeFileXLSX(wb, "SheetJSReactAoO.xlsx");
+  }, [pres]);
 
   return (<table><thead><th>Name</th><th>Index</th></thead><tbody>
     { /* generate row for each president */
@@ -101,7 +108,9 @@ export default function SheetJSReactAoO() {
       </tr>))
 // highlight-end
     }
-  </tbody></table>);
+  </tbody><tfoot><td colSpan={2}>
+    <button onClick={exportFile}>Export XLSX</button>
+  </td></tfoot></table>);
 }
 ```
 
@@ -115,13 +124,15 @@ The `sheet_to_html` function generates HTML that is aware of merges and other
 worksheet features.  React `dangerouslySetInnerHTML` attribute allows code to
 set the `innerHTML` attribute, effectively inserting the code into the page:
 
-```tsx title="src/SheetJSReactHTML.tsx"
-import React, { useEffect, useState } from "react";
-import { read, utils } from 'xlsx';
+```jsx title="src/SheetJSReactHTML.js"
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { read, utils, writeFileXLSX } from 'xlsx';
 
 export default function SheetJSReactHTML() {
   /* the component state is an HTML string */
-  const [html, setHtml] = useState<string>("");
+  const [html, setHtml] = useState("");
+  /* the ref is used in export */
+  const tbl = useRef(null);
 
   /* Fetch and update the state once */
   useEffect(() => { (async() => {
@@ -134,8 +145,20 @@ export default function SheetJSReactHTML() {
     // highlight-end
   })(); }, []);
 
+  /* get live table and export to XLSX */
+  const exportFile = useCallback(() => {
+    // highlight-start
+    const elt = tbl.current.getElementsByTagName("TABLE")[0];
+    const wb = utils.table_to_book(elt);
+    // highlight-end
+    writeFileXLSX(wb, "SheetJSReactHTML.xlsx");
+  }, [tbl]);
+
+  return ( <>
+    <button onClick={exportFile}>Export XLSX</button>
   // highlight-next-line
-  return ( <div dangerouslySetInnerHTML={{ __html: html }} />);
+    <div ref={tbl} dangerouslySetInnerHTML={{ __html: html }} />
+  </>);
 }
 ```
 

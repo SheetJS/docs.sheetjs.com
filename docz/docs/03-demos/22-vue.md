@@ -74,7 +74,7 @@ a TABLE with a row for each President:
 ```html title="src/SheetJSVueAoO.vue"
 <script setup>
 import { ref, onMounted } from "vue";
-import { read, utils } from 'xlsx';
+import { read, utils, writeFileXLSX } from 'xlsx';
 
 const rows = ref([]);
 
@@ -89,6 +89,14 @@ onMounted(async() => {
   /* update data */
   rows.value = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 });
+
+/* get state data and export to XLSX */
+function exportFile() {
+  const ws = utils.json_to_sheet(rows.value);
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, "Data");
+  writeFileXLSX(wb, "SheetJSVueAoO.xlsx");
+}
 </script>
 
 <template>
@@ -97,7 +105,9 @@ onMounted(async() => {
       <td>{{ row.Name }}</td>
       <td>{{ row.Index }}</td>
     </tr>
-  </tbody></table>
+  </tbody><tfoot><td colSpan={2}>
+    <button @click="exportFile">Export XLSX</button>
+  </td></tfoot></table>
 </template>
 ```
 
@@ -114,9 +124,10 @@ attribute, effectively inserting the code into the page:
 ```html title="src/SheetJSVueHTML.vue"
 <script setup>
 import { ref, onMounted } from "vue";
-import { read, utils } from 'xlsx';
+import { read, utils, writeFileXLSX } from 'xlsx';
 
 const html = ref("");
+const tableau = ref();
 
 onMounted(async() => {
   /* Download from https://sheetjs.com/pres.numbers */
@@ -129,10 +140,17 @@ onMounted(async() => {
   /* update data */
   html.value = utils.sheet_to_html(wb.Sheets[wb.SheetNames[0]]);
 });
+
+/* get live table and export to XLSX */
+function exportFile() {
+  const wb = utils.table_to_book(tableau.value.getElementsByTagName("TABLE")[0])
+  writeFileXLSX(wb, "SheetJSVueHTML.xlsx");
+}
 </script>
 
 <template>
   <div v-html="html"></div>
+  <button @click="exportFile">Export XLSX</button>
 </template>
 ```
 

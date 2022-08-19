@@ -417,7 +417,7 @@ for(var i = 0; i < stmts.length; ++i) await new Promise((res, rej) => {
 
 The result of a SQL SELECT statement is a `SQLResultSet`.  The `rows` property
 is a `SQLResultSetRowList`.  It is an "array-like" structure that has `length`
-and properies like `0`, `1`, etc.  However, this is not a real Array object.
+and properties like `0`, `1`, etc.  However, this is not a real Array object.
 A real Array can be created using `Array.from`:
 
 ```js

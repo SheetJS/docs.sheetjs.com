@@ -269,7 +269,7 @@ function SheetJSHeaderOrder() {
 
 ### HTML Table Input
 
-**Create a worksheet or workbook from an HTML DOM TABLE**
+**Create a worksheet or workbook from a HTML DOM TABLE**
 
 ```js
 var ws = XLSX.utils.table_to_sheet(elt, opts);

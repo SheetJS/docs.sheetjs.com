@@ -37,6 +37,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Command-Line Tools`](./cli)
 - [`iOS and Android Mobile Applications`](./mobile)
 - [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
+- [`Deno Server-Side Processing`](./server#deno)
 - [`Content Management and Static Sites`](./content)
 - [`Electron`](./desktop#electron)
 - [`NW.js`](./desktop#nwjs)

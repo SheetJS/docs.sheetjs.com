@@ -16,7 +16,7 @@ and TypeScript familiarity is assumed.
 Other demos cover general Angular deployments, including:
 
 - [iOS and Android applications powered by NativeScript](./mobile#nativescript)
-- [iOS and Android applications powered by ionic](./mobile#nativescript)
+- [iOS and Android applications powered by ionic](./mobile#ionic)
 
 :::warning
 
@@ -80,12 +80,12 @@ console.log(data);
 ]
 ```
 
-A component will typically loop over the data uaing `*ngFor`. The following
+A component will typically loop over the data using `*ngFor`. The following
 example generates a TABLE with a row for each President:
 
 ```ts title="src/app/app.component.ts"
 import { Component } from '@angular/core';
-import { read, utils } from 'xlsx';
+import { read, utils, writeFileXLSX } from 'xlsx';
 
 interface President { Name: string; Index: number };
 
@@ -101,7 +101,9 @@ interface President { Name: string; Index: number };
       <td>{{row.Index}}</td>
     </tr>
 // highlight-end
-  </tbody>
+  </tbody><tfoot>
+    <button (click)="onSave()">Export XLSX</button>
+  </tfoot>
 </table></div>
 `
 })
@@ -122,6 +124,14 @@ export class AppComponent {
     this.rows = utils.sheet_to_json<President>(wb.Sheets[wb.SheetNames[0]]);
 
   })(); }
+  /* get state data and export to XLSX */
+  onSave(): void {
+    // highlight-next-line
+    const ws = utils.json_to_sheet(this.rows);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Data");
+    writeFileXLSX(wb, "SheetJSAngularAoO.xlsx");
+  }
 }
 ```
 
@@ -137,20 +147,22 @@ and should therefore be safe to pass to an `innerHTML`-bound variable, but the
 `DomSanitizer` approach is strongly recommended:
 
 ```ts title="src/app/app.component.ts"
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 // highlight-next-line
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { read, utils } from 'xlsx';
+import { read, utils, writeFileXLSX } from 'xlsx';
 
 @Component({
   selector: 'app-root',
 // highlight-next-line
-  template: `<div class="content" role="main" [innerHTML]="html"></div>`
+  template: `<div class="content" role="main" [innerHTML]="html" #tableau></div>
+    <button (click)="onSave()">Export XLSX</button>`
 })
 export class AppComponent {
   // highlight-start
   constructor(private sanitizer: DomSanitizer) {}
   html: SafeHtml = "";
+  @ViewChild('tableau') tabeller!: ElementRef<HTMLDivElement>;
   // highlight-end
   ngOnInit(): void { (async() => {
     /* Download from https://sheetjs.com/pres.numbers */
@@ -166,6 +178,14 @@ export class AppComponent {
     this.html = this.sanitizer.bypassSecurityTrustHtml(h);
     // highlight-end
   })(); }
+  /* get live table and export to XLSX */
+  onSave(): void {
+    // highlight-start
+    const elt = this.tabeller.nativeElement.getElementsByTagName("TABLE")[0];
+    const wb = utils.table_to_book(elt);
+    // highlight-end
+    writeFileXLSX(wb, "SheetJSAngularHTML.xlsx");
+  }
 }
 ```
 

@@ -48,7 +48,7 @@ then `AAA`.  Some sample values, along with SheetJS column indices, are listed:
 | Second  | `B`     |     `1` |
 | 26th    | `Z`     |    `25` |
 | 27th    | `AA`    |    `26` |
-| 702st   | `ZZ`    |   `701` |
+| 702nd   | `ZZ`    |   `701` |
 | 703rd   | `AAA`   |   `702` |
 | 16384th | `XFD`   | `16383` |
 

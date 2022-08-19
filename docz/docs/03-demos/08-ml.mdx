@@ -223,9 +223,7 @@ var dataset = Float32Array.from(column);
 
 `XLSX.utils.aoa_to_sheet` can generate a worksheet from an array of arrays.
 ML libraries typically provide APIs to pull an array of arrays, but it will
-be transponsed
-a row-major array of arrays.  To export multiple data
-sets, "transpose" the data:
+be transposed. To export multiple data sets, manually "transpose" the data:
 
 ```js
 /* assuming data is an array of typed arrays */

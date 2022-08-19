@@ -7,7 +7,7 @@ import current from '/version.js';
 
 Over the years, many frameworks have been released. Some were popular years ago
 but have waned in recent years. There are still many deployments using these
-frameworks and it is oftentimes esasier to continue maintenance than to rewrite
+frameworks and it is oftentimes easier to continue maintenance than to rewrite
 using modern web techniques.
 
 SheetJS libraries strive to maintain broad browser and JS engine compatibility.
