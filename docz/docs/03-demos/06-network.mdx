@@ -482,3 +482,37 @@ function SheetJSSuperAgentUL() {
 ```
 
 </details>
+
+## NodeJS Demos
+
+This demo focuses on a number of strategies. Some of these demos were written
+before NodeJS added `fetch`.
+
+### request
+
+:::warning
+
+`request` has been deprecated and should only be used in legacy deployments.
+
+:::
+
+Setting the option `encoding: null` passes raw buffers:
+
+```js
+var XLSX = require('xlsx'), request = require('request');
+var url = 'https://sheetjs.com/pres.numbers';
+
+/* call `request` with the option `encoding: null` */
+// highlight-next-line
+request(url, {encoding: null}, function(err, res, data) {
+  if(err || res.statusCode !== 200) return;
+
+  /* if the request was succesful, parse the data */
+  // highlight-next-line
+  var wb = XLSX.read(data);
+
+  /* print the first worksheet to console */
+  var ws = wb.Sheets[wb.SheetNames[0]];
+  console.log(XLSX.utils.sheet_to_csv(ws, {blankrows:false}));
+});
+```

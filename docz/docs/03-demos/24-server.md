@@ -1,5 +1,5 @@
 ---
-sidebar_position: 23
+sidebar_position: 24
 title: HTTP Server Processing
 ---
 
@@ -65,7 +65,7 @@ require("http").createServer(function(req, res) {
 
 ## Deno
 
-:::warning
+:::caution
 
 Many hosted services like Deno Deploy do not offer filesystem access.
 
@@ -221,5 +221,197 @@ deno run --allow-net SheetJSDrash.ts
 Click "Choose File" and select `pres.numbers`.  Then click "Submit"
 
 The page should show the contents of the file as an HTML table.
+
+</details>
+
+## NodeJS
+
+### Express
+
+The `express-formidable` middleware is powered by the `formidable` parser.  It
+adds a `files` property to the request.
+
+When downloading binary data, Express handles `Buffer` data in `res.end`.  The
+convenience `attachment` method adds the required header:
+
+```js
+// Header 'Content-Disposition: attachment; filename="SheetJS.xlsx"'
+res.attachment("SheetJS.xlsx");
+```
+
+The following demo Express server will respond to POST requests to `/upload`
+with a CSV output of the first sheet.  It will also respond to GET requests to
+`/download`, responding with a fixed XLSX worksheet:
+
+```js title="SheetJSExpressCSV.js"
+var XLSX = require('xlsx'), express = require('express');
+
+/* create app */
+var app = express();
+/* add express-formidable middleware */
+// highlight-next-line
+app.use(require('express-formidable')());
+/* route for handling uploaded data */
+app.post('/upload', function(req, res) {
+  // highlight-start
+  var f = req.files["upload"]; // <input type="file" id="upload" name="upload">
+  var wb = XLSX.readFile(f.path);
+  // highlight-end
+  /* respond with CSV data from the first sheet */
+  res.status(200).end(XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]));
+});
+app.get('/download', function(req, res) {
+  /* generate workbook object */
+  var ws = XLSX.utils.aoa_to_sheet(["SheetJS".split(""), [5,4,3,3,7,9,5]]);
+  var wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Data");
+  // highlight-start
+  /* generate buffer */
+  var buf = XLSX.write(wb, {type: "buffer", bookType: "xlsx"});
+  /* set headers */
+  res.attachment("SheetJSExpress.xlsx");
+  /* respond with file data */
+  res.status(200).end(buf);
+  // highlight-end
+});
+app.listen(+process.env.PORT||3000);
+```
+
+<details><summary><b>Testing</b> (click to show)</summary>
+
+0) Save the code sample to `SheetJSExpressCSV.js`
+
+1) Install dependencies:
+
+```bash
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz express express-formidable
+```
+
+2) Start server (note: it will not print anything to console when running)
+
+```bash
+node SheetJSExpressCSV.js
+```
+
+3) Test POST requests using <https://sheetjs.com/pres.numbers>:
+
+```bash
+curl -LO https://sheetjs.com/pres.numbers
+curl -X POST -F upload=@pres.numbers http://localhost:3000/upload
+```
+
+The response should show the data in CSV rows.
+
+4) Test GET requests by opening http://localhost:3000/download in your browser.
+
+It should prompt to download `SheetJSExpress.xlsx`
+
+</details>
+
+### NestJS
+
+[The NestJS docs](https://docs.nestjs.com/techniques/file-upload) have detailed
+instructions for file upload support. In the controller, the `path` property
+works with `XLSX.readFile`.
+
+When downloading binary data, NestJS expects `StreamableFile`-wrapped Buffers.
+
+The following demo NestJS Controller will respond to POST requests to `/upload`
+with a CSV output of the first sheet.  It will also respond to GET requests to
+`/download`, responding with a fixed export:
+
+```ts title="src/sheetjs/sheetjs.controller.js"
+import { Controller, Get, Header, Post, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { readFile, utils } from 'xlsx';
+
+@Controller('sheetjs')
+export class SheetjsController {
+  @Post('upload') //  <input type="file" id="upload" name="upload">
+  @UseInterceptors(FileInterceptor('upload'))
+  async uploadXlsxFile(@UploadedFile() file: Express.Multer.File) {
+    /* file.path is a path to the workbook */
+    // highlight-next-line
+    const wb = readFile(file.path);
+    /* generate CSV of first worksheet */
+    return utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]);
+  }
+
+  @Get('download')
+  @Header('Content-Disposition', 'attachment; filename="SheetJSNest.xlsx"')
+  async downloadXlsxFile(): Promise<StreamableFile> {
+    var ws = utils.aoa_to_sheet(["SheetJS".split(""), [5,4,3,3,7,9,5]]);
+    var wb = utils.book_new(); utils.book_append_sheet(wb, ws, "Data");
+    // highlight-start
+    /* generate buffer */
+    var buf = write(wb, {type: "buffer", bookType: "xlsx"});
+    /* Return a streamable file */
+    return new StreamableFile(buf);
+    // highlight-end
+  }
+}
+```
+
+<details><summary><b>Testing</b> (click to show)</summary>
+
+1) Create a new project:
+
+```bash
+npx @nestjs/cli new -p npm sheetjs-nest
+cd sheetjs-nest
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+npm i --save-dev @types/multer
+mkdir -p upload
+```
+
+2) Create a new controller and a new module:
+
+```bash
+npx @nestjs/cli generate module sheetjs
+npx @nestjs/cli generate controller sheetjs
+```
+
+3) Add Multer to the new module by editing `src/sheetjs/sheetjs.module.ts`.
+Changes are highlighted below:
+
+```ts title="src/sheetjs/sheetjs.module.ts"
+import { Module } from '@nestjs/common';
+import { SheetjsController } from './sheetjs.controller';
+// highlight-next-line
+import { MulterModule } from '@nestjs/platform-express';
+
+@Module({
+// highlight-start
+  imports: [
+    MulterModule.register({
+      dest: './upload',
+    }),
+  ],
+// highlight-end
+  controllers: [SheetjsController]
+})
+export class SheetjsModule {}
+```
+
+4) Copy the `src/sheetjs/sheetjs.controller.ts` example from earlier, replacing
+the contents of the existing file.
+
+5) Start the server with
+
+```bash
+npx @nestjs/cli start
+```
+
+3) Test POST requests using <https://sheetjs.com/pres.numbers>:
+
+```bash
+curl -LO https://sheetjs.com/pres.numbers
+curl -X POST -F upload=@pres.numbers http://localhost:3000/sheetjs/upload
+```
+
+The response should show the data in CSV rows.
+
+4) Test GET requests by opening http://localhost:3000/sheetjs/download in your browser.
+
+It should prompt to download `SheetJSNest.xlsx`
 
 </details>
