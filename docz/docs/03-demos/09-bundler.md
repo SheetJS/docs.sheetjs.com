@@ -124,7 +124,7 @@ import * as fs from 'fs';
 XLSX.set_fs(fs);
 
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -209,7 +209,7 @@ import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 (async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -291,7 +291,7 @@ set_fs(fs);
 
 (async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -369,7 +369,7 @@ import { utils, version, writeFileXLSX } from 'xlsx';
 document.getElementById("vers").innerText = version;
 document.getElementById("xport").onclick = async() => {
   /* fetch JSON data and parse */
-  const url = "https://sheetjs.com/executive.json";
+  const url = "https://sheetjs.com/data/executive.json";
   const raw_data = await (await fetch(url)).json();
 
   /* filter for the Presidents */
@@ -495,7 +495,7 @@ import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -589,7 +589,7 @@ import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -694,7 +694,7 @@ import { utils, version, writeFileXLSX } from 'xlsx';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -910,7 +910,7 @@ SystemJS.config({
 SystemJS.import('xlsx').then(async function(XLSX) {
 
   /* fetch JSON data and parse */
-  const url = "https://sheetjs.com/executive.json";
+  const url = "https://sheetjs.com/data/executive.json";
   const raw_data = await (await fetch(url)).json();
 
   /* filter for the Presidents */
@@ -1005,7 +1005,7 @@ interface President {
 
 async function xport() {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data: President[] = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -1108,7 +1108,7 @@ import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -1268,7 +1268,7 @@ import { utils, version, writeFileXLSX } from 'xlsx/xlsx.mjs';
 
 document.getElementById("xport").addEventListener("click", async() => {
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */

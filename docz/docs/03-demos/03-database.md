@@ -101,7 +101,7 @@ await db.collection('coll').insertMany(aoo, { ordered: true });
 
 :::
 
-This example will fetch <https://sheetjs.com/cd.xls>, scan the columns of the
+This example will fetch <https://sheetjs.com/data/cd.xls>, scan the columns of the
 first worksheet to determine data types, and generate 6 PostgreSQL statements.
 
 <details><summary><b>Explanation</b> (click to show)</summary>
@@ -208,7 +208,7 @@ function SheetJSQLWriter() {
       if(fields.length) return `INSERT INTO \`${wsname}\` (${fields.join(", ")}) VALUES (${values.join(", ")})`;
     })).filter(x => x).slice(0, 6);
   }
-  const [url, setUrl] = React.useState("https://sheetjs.com/cd.xls");
+  const [url, setUrl] = React.useState("https://sheetjs.com/data/cd.xls");
   const set_url = React.useCallback((evt) => setUrl(evt.target.value));
   const [out, setOut] = React.useState("");
   const xport = React.useCallback(async() => {
@@ -494,7 +494,7 @@ for(var i = 0; i < localStorage.length; ++i) aoo.push(JSON.parse(localStorage.ge
 const ws = XLSX.utils.json_to_sheet(aoo);
 ```
 
-This example will fetch <https://sheetjs.com/cd.xls>, fill `localStorage` with
+This example will fetch <https://sheetjs.com/data/cd.xls>, fill `localStorage` with
 rows, then generate a worksheet from the rows and write to a new file.
 
 :::caution
@@ -506,7 +506,7 @@ is strongly recommended to convert that array to a worksheet directly.
 
 ```jsx live
 function SheetJStorage() {
-  const [url, setUrl] = React.useState("https://sheetjs.com/cd.xls");
+  const [url, setUrl] = React.useState("https://sheetjs.com/data/cd.xls");
   const set_url = React.useCallback((evt) => setUrl(evt.target.value));
   const [out, setOut] = React.useState("");
   const xport = React.useCallback(async() => {

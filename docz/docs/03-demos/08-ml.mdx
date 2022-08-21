@@ -44,7 +44,7 @@ function worksheet_to_csv_url(worksheet) {
 ```
 
 [This demo mirrors TFjs docs](https://js.tensorflow.org/api/latest/#data.csv),
-fetching [an XLSX export of the example dataset](https://sheetjs.com/bht.xlsx).
+fetching [an XLSX export of the example dataset](https://sheetjs.com/data/bht.xlsx).
 
 <details><summary><b>TF CSV Demo using XLSX files</b> (click to show)</summary>
 
@@ -53,7 +53,7 @@ function SheetJSToTFJSCSV() {
   const [output, setOutput] = React.useState("");
   const doit = React.useCallback(async () => {
     /* fetch file */
-    const f = await fetch("https://sheetjs.com/bht.xlsx");
+    const f = await fetch("https://sheetjs.com/data/bht.xlsx");
     const ab = await f.arrayBuffer();
     /* parse file and get first worksheet */
     const wb = XLSX.read(ab);
@@ -125,7 +125,7 @@ loads data from a JSON file:
 ]
 ```
 
-In real use cases, data is stored in [spreadsheets](https://sheetjs.com/cd.xls)
+In real use cases, data is stored in [spreadsheets](https://sheetjs.com/data/cd.xls)
 
 ![cd.xls screenshot](pathname:///files/cd.png)
 
@@ -140,7 +140,7 @@ from the official example are highlighted below:
 async function getData() {
   // highlight-start
   /* fetch file */
-  const carsDataResponse = await fetch('https://sheetjs.com/cd.xls');
+  const carsDataResponse = await fetch('https://sheetjs.com/data/cd.xls');
   /* get file data (ArrayBuffer) */
   const carsDataAB = await carsDataResponse.arrayBuffer();
   /* parse */

@@ -17,7 +17,7 @@ require.config({
 require(["xlsx"], function(XLSX) {
   document.getElementById("xport").addEventListener("click", async() => {
     /* fetch JSON data and parse */
-    const url = "https://sheetjs.com/executive.json";
+    const url = "https://sheetjs.com/data/executive.json";
     const raw_data = await (await fetch(url)).json();
 
     /* filter for the Presidents */

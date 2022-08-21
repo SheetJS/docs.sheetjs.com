@@ -10,6 +10,10 @@ build:
 serve:
 	cd docs; python -mSimpleHTTPServer || python3 -mhttp.server; cd -
 
+.PHONY: spell
+spell:
+	npx spellchecker-cli -d .spelling -f 'docz/**/*.md*'
+
 .PHONY: index
 index: readme ## Rebuild site
 	sed -i .bak 's/](d/](https:\/\/github.com\/SheetJS\/SheetJS\/tree\/master\/d/g' README.md

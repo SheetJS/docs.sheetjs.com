@@ -18,8 +18,8 @@ and birthdays.  [Click here](#live-demo) to jump to the live demo
 
 ### Raw Data
 
-[The raw data is available in JSON form](https://theunitedstates.io/congress-legislators/executive.json).
-For convenience, it has been [mirrored here](https://sheetjs.com/executive.json)
+[The raw data is available in JSON form](https://theunitedstates.io/congress-legislators/data/executive.json).
+For convenience, it has been [mirrored here](https://sheetjs.com/data/executive.json)
 
 The data result is an Array of objects.  This is the data for John Adams:
 
@@ -165,7 +165,7 @@ XLSX.writeFile(workbook, "Presidents.xlsx");
 ```jsx live
 function Presidents() { return ( <button onClick={async () => {
   /* fetch JSON data and parse */
-  const url = "https://sheetjs.com/executive.json";
+  const url = "https://sheetjs.com/data/executive.json";
   const raw_data = await (await fetch(url)).json();
 
   /* filter for the Presidents */
@@ -213,7 +213,7 @@ hosted (no `file:///` access).
 <script>
 (async() => {
   /* fetch JSON data and parse */
-  const url = "https://sheetjs.com/executive.json";
+  const url = "https://sheetjs.com/data/executive.json";
   const raw_data = await (await fetch(url)).json();
 
   /* filter for the Presidents */
@@ -259,7 +259,7 @@ const XLSX = require("xlsx");
 
 (async() => {
   /* fetch JSON data and parse */
-  const url = "https://sheetjs.com/executive.json";
+  const url = "https://sheetjs.com/data/executive.json";
   const raw_data = await (await fetch(url)).json();
 
   /* filter for the Presidents */
@@ -309,7 +309,7 @@ const axios = require("axios");
 
 (async() => {
   /* fetch JSON data and parse */
-  const url = "https://sheetjs.com/executive.json";
+  const url = "https://sheetjs.com/data/executive.json";
   // highlight-next-line
   const raw_data = (await axios(url, {responseType: "json"})).data;
 
@@ -352,7 +352,7 @@ Save the following script to `snippet.ts` and run with
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */
@@ -393,7 +393,7 @@ import * as fs from 'fs';
 XLSX.set_fs(fs);
 
 /* fetch JSON data and parse */
-const url = "https://sheetjs.com/executive.json";
+const url = "https://sheetjs.com/data/executive.json";
 const raw_data = await (await fetch(url)).json();
 
 /* filter for the Presidents */

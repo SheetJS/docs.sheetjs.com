@@ -36,7 +36,7 @@ The demo projects include small runnable examples and short explainers.
 
 - [`Command-Line Tools`](./cli)
 - [`iOS and Android Mobile Applications`](./mobile)
-- [`NodeJS Server-Side Processing`](https://github.com/SheetJS/SheetJS/tree/master/demos/server/)
+- [`NodeJS Server-Side Processing`](./server#nodejs)
 - [`Deno Server-Side Processing`](./server#deno)
 - [`Content Management and Static Sites`](./content)
 - [`Electron`](./desktop#electron)
@@ -50,7 +50,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Excel JavaScript API`](./excel)
 - [`Headless Automation`](./headless)
 - [`Other JavaScript Engines`](./engines)
-- [`"serverless" functions`](https://github.com/SheetJS/SheetJS/tree/master/demos/function/)
+- [`Azure Functions and Storage`](./azure)
 - [`Databases and Structured Data Stores`](./database)
 - [`NoSQL and Unstructured Data Stores`](./nosql)
 - [`Legacy Internet Explorer`](./legacy#internet-explorer)

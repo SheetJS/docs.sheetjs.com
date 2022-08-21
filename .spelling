@@ -23,12 +23,18 @@ SpreadsheetML
 Unhide
 VBA
 Visicalc
+Chartsheet
 chartsheet
+Chartsheets
 chartsheets
+Dialogsheet
 dialogsheet
+Dialogsheets
 dialogsheets
 dBASE
+Macrosheet
 macrosheet
+Macrosheets
 macrosheets
 tooltip
 tooltips
@@ -192,3 +198,11 @@ vscode-data-preview
 axios
 superagent
 
+LLC
+Bundlers
+JSON
+QPW
+XLML
+XLS
+XLSB
+XLSX
