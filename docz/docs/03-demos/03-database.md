@@ -545,8 +545,7 @@ function SheetJStorage() {
 
 ### IndexedDB
 
-[`localForage`](https://localforage.github.io/localForage/) is a lightweight
-IndexedDB wrapper that presents an async Storage interface.
+`localForage` is a IndexedDB wrapper that presents an async Storage interface.
 
 Arrays of objects can be stored using `JSON.stringify` using row index as key:
 

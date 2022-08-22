@@ -16,6 +16,12 @@ will be available in the future.
 This demo focuses on two key offerings: cloud storage ("Azure Blob Storage")
 and the "Serverless Function" platform ("Azure Functions").
 
+:::note
+
+This was tested on 2022 August 21.
+
+:::
+
 ## Azure Functions
 
 This discussion focuses on the "HTTP Trigger" function type.
@@ -209,12 +215,6 @@ Get the function url and test using the same sequence as in step 5.
 </details>
 
 ## Azure Blob Storage
-
-:::note
-
-This was tested on 2022 August 21.
-
-:::
 
 The main module for Azure Blob Storage is `@azure/storage-blob`. This example
 was tested using the "Connection String" authentication method.  The strings

@@ -51,6 +51,7 @@ The demo projects include small runnable examples and short explainers.
 - [`Headless Automation`](./headless)
 - [`Other JavaScript Engines`](./engines)
 - [`Azure Functions and Storage`](./azure)
+- [`Amazon Web Services`](./aws)
 - [`Databases and Structured Data Stores`](./database)
 - [`NoSQL and Unstructured Data Stores`](./nosql)
 - [`Legacy Internet Explorer`](./legacy#internet-explorer)

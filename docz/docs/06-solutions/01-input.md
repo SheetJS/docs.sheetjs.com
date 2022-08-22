@@ -321,7 +321,7 @@ const server = http.createServer((req, res) => {
 }).listen(process.env.PORT || 7262);
 ```
 
-The [`server` demo](https://github.com/SheetJS/SheetJS/tree/master/demos/server) has more advanced examples.
+The [`server` demo](../demos/server) has more advanced examples.
 
   </TabItem>
   <TabItem value="deno" label="Deno">
