@@ -39,7 +39,7 @@ import TabItem from '@theme/TabItem';
 <Tabs>
   <TabItem value="wsl" label="Windows WSL">
 
-The OSX/Linux workflow works in WSL.  Initial setup is involved:
+The MacOS/Linux workflow works in WSL.  Initial setup is involved:
 
 1) Install mercurial and subversion.
 
@@ -66,7 +66,7 @@ sudo n 16
 ```
 
 3) follow <https://github.com/paul-nelson-baker/git-openssl-shellscript> to
-build and install a version of Git with OpenSSL:
+build and install a version of Git with proper SSL support:
 
 ```bash
 # Git does not support OpenSSL out of the box, must do this
@@ -75,10 +75,10 @@ chmod +x compile-git-with-openssl.sh
 ./compile-git-with-openssl.sh
 ```
 
-(instructions continued in the OSX/Linux part)
+(instructions continued in the MacOS/Linux part)
 
   </TabItem>
-  <TabItem value="osx" label="OSX/Linux">
+  <TabItem value="osx" label="MacOS/Linux">
 
 Initial setup:
 

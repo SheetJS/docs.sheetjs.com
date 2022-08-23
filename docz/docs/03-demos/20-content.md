@@ -29,7 +29,7 @@ This was tested against `next v12.2.5` on 2022 August 16.
 
 :::
 
-:::caution
+:::info
 
 At a high level, there are two ways to pull spreadsheet data into NextJS apps:
 loading an asset module or performing the file read operations from the NextJS
@@ -145,7 +145,7 @@ export async function getStaticProps(ctx) {
 
 These routes require a NodeJS dynamic server. Static page generation will fail!
 
-`getStaticProps` and `getStaticPaths` support SSG.
+`getStaticProps` and `getStaticPaths` support static site generation (SSG).
 
 `getServerSideProps` is suited for NodeJS hosted deployments where the workbook
 changes frequently and a static site is undesirable.
@@ -185,14 +185,14 @@ npx next telemetry status
 ```
 
 1) Set up folder structure.  At the end, a `pages` folder with a `sheets`
-   subfolder must be created.  On Linux or macOS or WSL:
+   subfolder must be created.  On Linux or MacOS or WSL:
 
 ```bash
 mkdir -p pages/sheets/
 ```
 
 2) Download the [test file](pathname:///next/sheetjs.xlsx) and place in the
-   project root.  On Linux or macOS or WSL:
+   project root.  On Linux or MacOS or WSL:
 
 ```bash
 curl -LO https://docs.sheetjs.com/next/sheetjs.xlsx
@@ -206,7 +206,7 @@ npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz next
 
 4) Download test scripts:
 
-Download and place the following scripts in the `pages` subdirectory:
+Download and place the following scripts in the `pages` subfolder:
 
 - [`index.js`](pathname:///next/index.js)
 - [`getServerSideProps.js`](pathname:///next/getServerSideProps.js)
@@ -214,7 +214,7 @@ Download and place the following scripts in the `pages` subdirectory:
 - [`getStaticProps.js`](pathname:///next/getStaticProps.js)
 
 Download [`[id].js`](pathname:///next/%5Bid%5D.js) and place in the
-`pages/sheets` subdirectory.
+`pages/sheets` subfolder.
 
 :::caution Percent-Encoding in the script name
 
@@ -223,7 +223,7 @@ browser saved the file to `%5Bid%5D.js`. rename the file.
 
 :::
 
-On Linux or macOS or WSL:
+On Linux or MacOS or WSL:
 
 ```bash
 cd pages
@@ -255,7 +255,7 @@ The individual worksheets are available at
 - http://localhost:3000/sheets/1
 - http://localhost:3000/sheets/2
 
-6) Stop the dev server and run a production build:
+6) Stop the server and run a production build:
 
 ```bash
 npx next build
@@ -315,13 +315,13 @@ Route (pages)                              Size     First Load JS
 npx next export
 ```
 
-The static site will be written to the `out` subdirectory, which can be hosted with
+The static site will be written to the `out` subfolder, which can be hosted with
 
 ```bash
 npx http-server out
 ```
 
-The command will start a local webserver on port 8080.
+The command will start a local HTTP server on port 8080.
 
 </details>
 
@@ -419,7 +419,7 @@ npx create-nuxt-app SheetJSNuxt
 
 When prompted, enter the following options:
 
-- `Project name`: press Enter (use default SheetJSNuxt)
+- `Project name`: press Enter (use default `SheetJSNuxt`)
 - `Programming language`: press Down Arrow (`TypeScript` selected) then Enter
 - `Package manager`: select `Npm` and press Enter
 - `UI framework`: select `None` and press Enter
@@ -434,7 +434,7 @@ When prompted, enter the following options:
 
 The project will be configured and modules will be installed.
 
-2) Install the SheetJS library and start the dev server:
+2) Install the SheetJS library and start the server:
 
 ```bash
 cd SheetJSNuxt
@@ -445,11 +445,10 @@ npm run dev
 When the build finishes, the terminal will display a URL like:
 
 ```
-ℹ Listening on: http://localhost:64688/                                                            05:41:11
-No issues found.                                                                                   05:41:11
+ℹ Listening on: http://localhost:64688/
 ```
 
-The dev server is listening on that URL.  Open the link in a web browser.
+The server is listening on that URL.  Open the link in a web browser.
 
 3) Download <https://sheetjs.com/pres.xlsx> and move to the `content` folder.
 
@@ -492,7 +491,7 @@ in Excel.  Add a new row to the bottom and save the file:
 
 ![Adding a new line to `pres.xlsx`](pathname:///nuxt/nuxl6.png)
 
-The dev server terminal should show a line like:
+The server terminal window should show a line like:
 
 ```
 ℹ Updated ./content/pres.xlsx                                       @nuxt/content 05:43:37
@@ -502,7 +501,7 @@ The page should automatically refresh with the new content:
 
 ![Nuxt Demo end of step 6](pathname:///nuxt/nuxt6.png)
 
-7) Stop the dev server (press `CTRL+C` in the terminal window) and run
+7) Stop the server (press `CTRL+C` in the terminal window) and run
 
 ```bash
 npm run generate
@@ -519,3 +518,52 @@ the static nature is trivial: make another change in Excel and save.  The page
 will not change.
 
 </details>
+
+## Lume
+
+Lume is a static site generator for the Deno platform.
+
+`lume#loadData` can add custom loaders for data.  The loader method receives a
+path to the file, which can be read with `XLSX.readFile`.  This should be added
+to `_config.js`, like in the example below:
+
+```js title="_config.js"
+import lume from "lume/mod.ts";
+import { readFile, utils } from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
+
+function wbLoader(path) {
+  const wb = readFile(path);
+  const res = wb.SheetNames.map(n => ({
+    name: n,
+    data: utils.sheet_to_json(wb.Sheets[n])
+  }));
+  return { data: res };
+}
+
+const site = lume();
+const exts = [".xlsx", ".numbers", /* ... other supported extensions */];
+// highlight-next-line
+site.loadData(exts, wbLoader);
+
+export default site;
+```
+
+The actual spreadsheets should be placed in the `_data` subfolder.
+
+The variable name is the stem of the filename (`sheetjs` if `sheetjs.xlsx` or
+`sheetjs.numbers` exists).  A Nunjucks or JSX template can loop through the
+worksheets and the data rows. The example assumes each worksheet has a `name` and `index` column:
+
+```jsx title="index.jsx"
+export default ({sheetjs}) => {
+  return (<>{(sheetjs.data).map(sheet => (<>
+    <h2>{sheet.name}</h2>
+    <table><thead><th>Name</th><th>Index</th></thead>
+    <tbody>{sheet.data.map(row => (<tr>
+      <td>{row.name}</td>
+      <td>{row.index}</td>
+    </tr>))}</tbody>
+    </table>
+  </>))}</>);
+};
+```

@@ -15,6 +15,7 @@ The demo projects include small runnable examples and short explainers.
 - [`LocalStorage and SessionStorage`](./database#localstorage-and-sessionstorage)
 - [`Web SQL Database`](./database#websql)
 - [`IndexedDB`](./database#indexeddb)
+- [`Local File Access`](./localfile)
 
 ### Frameworks
 

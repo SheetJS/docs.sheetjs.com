@@ -81,7 +81,7 @@ duk_pop(ctx);
 
 :::note
 
-This demo was tested on macOS x64.
+This demo was tested on MacOS x64.
 
 :::
 
@@ -444,15 +444,15 @@ hermes xlsx.hermes.js
 
 :::warning Platform Limitations
 
-JavaScriptCore is primarily deployed in macOS and iOS applications.  There is
+JavaScriptCore is primarily deployed in MacOS and iOS applications.  There is
 some experimental support through the Bun runtime, but production applications
 intending to support Windows / Linux / Android should try to embed V8.
 
 :::
 
-iOS and OSX ship with the JavaScriptCore framework for running JS scripts from
+iOS and MacOS ship with the JavaScriptCore framework for running JS code from
 Swift and Objective-C.  Hybrid function invocation is tricky, but explicit data
-passing is straightforward.  The demo shows a standalone Swift example for OSX.
+passing is straightforward. The demo shows a standalone Swift sample for MacOS.
 
 Binary strings can be passed back and forth using `String.Encoding.isoLatin1`.
 
@@ -502,9 +502,9 @@ The demo includes a sample `SheetJSCore` Wrapper class to simplify operations.
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 
-:::caution This demo only runs on macOS
+:::caution This demo only runs on MacOS
 
-This example requires macOS + Swift and will not work on Windows or Linux!
+This example requires MacOS + Swift and will not work on Windows or Linux!
 
 :::
 

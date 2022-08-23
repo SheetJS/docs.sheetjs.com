@@ -8,9 +8,9 @@ title: Overview
 
 ![License](https://img.shields.io/github/license/SheetJS/sheetjs)
 [![Build Status](https://img.shields.io/github/workflow/status/sheetjs/sheetjs/Tests:%20node.js)](https://github.com/SheetJS/sheetjs/actions)
-[![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/SheetJS/sheetjs)](https://snyk.io/test/github/SheetJS/sheetjs)
+[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/SheetJS/sheetjs)](https://snyk.io/test/github/SheetJS/sheetjs)
 [![npm Downloads](https://img.shields.io/npm/dm/xlsx.svg)](https://cdn.sheetjs.com/)
-[![GitHub Repo stars](https://img.shields.io/github/stars/SheetJS/sheetjs?style=social)](https://github.com/SheetJS/sheetjs)
+[![GitHub stars](https://img.shields.io/github/stars/SheetJS/sheetjs?style=social)](https://github.com/SheetJS/sheetjs)
 
 SheetJS Community Edition offers battle-tested open-source solutions for
 extracting useful data from almost any complex spreadsheet and generating new
@@ -220,6 +220,6 @@ This,is,a,Test
 
 ### Supported File Formats
 
-![circo graph of format support](./img/formats.png)
+![graph of format support](./img/formats.png)
 
 ![graph legend](./img/legend.png)

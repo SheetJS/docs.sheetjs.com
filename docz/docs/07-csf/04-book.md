@@ -80,7 +80,7 @@ XLSX.write(wb, {Props:{Author:"SheetJS"}});
 |:----------|:-----------------------------------------------------------------|
 | `Sheet`   | Name scope.  Sheet Index (0 = first sheet) or `null` (Workbook)  |
 | `Name`    | Case-sensitive name.  Standard rules apply **                    |
-| `Ref`     | A1-style Reference (`"Sheet1!$A$1:$D$20"`)                       |
+| `Ref`     | A1-Style Reference (`"Sheet1!$A$1:$D$20"`)                       |
 | `Comment` | Comment (only applicable for XLS/XLSX/XLSB)                      |
 
 Excel allows two sheet-scoped defined names to share the same name.  However, a

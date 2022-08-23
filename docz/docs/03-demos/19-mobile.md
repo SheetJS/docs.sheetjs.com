@@ -27,7 +27,7 @@ The ["JavaScript Engines"](./engines) section includes samples for JavaScript
 engines used in the mobile app frameworks.  SheetJS libraries have been tested
 in the relevant engines and should "just work" with some caveats.
 
-:::caution readFile and writeFile
+:::caution `readFile` and `writeFile`
 
 `XLSX.readFile` and `XLSX.writeFile` do not work in mobile apps!  The demos
 include platform-specific details for fetching file data for `XLSX.read` and
@@ -39,7 +39,7 @@ provide, usually there are third-party modules to provide needed functionality.
 
 :::
 
-macOS is required for the iOS demos.  The Android demos were tested on macOS.
+MacOS is required for the iOS demos.  The Android demos were tested on MacOS.
 
 ## React Native
 
@@ -605,7 +605,7 @@ The app can be tested with the following sequence in the simulator:
 ![save file iOS](pathname:///mobile/quasar7a.png)
 
 - Make sure "On My iPhone" is highlighted and select "Save"
-- Click the Home icon again then select the SheetJSRN app
+- Click the Home icon again then select the `SheetJSRN` app
 - Click "Import data" and select `pres`:
 
 ![pick file iOS](pathname:///mobile/rnios2.png)
@@ -735,7 +735,7 @@ with Angular and TypeScript is assumed.
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 
-0) Follow the official Environment Setup instructions (tested with "macOS + iOS")
+0) Follow the official Environment Setup instructions (tested with "MacOS + iOS")
 
 1) Create a skeleton NativeScript + Angular app:
 
@@ -1011,7 +1011,7 @@ The iOS simulator runs iOS 15.5 on an iPhone SE 3rd generation.
 
 :::
 
-This demo will focus on VueJS and Cordova with the Quasar Vite starter project.
+This demo will use the Quasar ViteJS starter project with VueJS and Cordova.
 
 ### Integration Details
 
@@ -1274,7 +1274,7 @@ To test that reading works:
 ![Quasar Step 7 save file](pathname:///mobile/quasar7a.png)
 
 - Make sure "On My iPhone" is highlighted and select "Save"
-- Click the Home icon again then select the SheetJSQuasar app
+- Click the Home icon again then select the `SheetJSQuasar` app
 - Click the "Load" button, then select "Choose File" and select `pres`:
 
 ![Quasar Step 7 load file](pathname:///mobile/quasar7b.png)
@@ -1381,7 +1381,7 @@ The iOS simulator runs iOS 15.5 on an iPod Touch 7th Gen.
 
 :::warning Telemetry
 
-Before starting this demo, manually disable telemetry.  On Linux and macOS:
+Before starting this demo, manually disable telemetry.  On Linux and MacOS:
 
 ```bash
 rm -rf ~/.ionic/

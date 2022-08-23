@@ -5,7 +5,7 @@ hide_table_of_contents: true
 
 # File Formats
 
-![circo graph of format support](../img/formats.png)
+![graph of format support](../img/formats.png)
 
 ![graph legend](../img/legend.png)
 
@@ -48,17 +48,17 @@ range limits will be silently truncated:
 
 | Format                                    | Last Cell  | Max Cols | Max Rows |
 |:------------------------------------------|:-----------|---------:|---------:|
-| Excel 2007+ XML Formats (XLSX/XLSM)       | XFD1048576 |    16384 |  1048576 |
-| Excel 2007+ Binary Format (XLSB BIFF12)   | XFD1048576 |    16384 |  1048576 |
-| Numbers 12.1 (NUMBERS)                    | ALL1000000 |     1000 |  1000000 |
-| Quattro Pro 9+ (QPW)                      | IV1000000  |      256 |  1000000 |
-| Excel 97-2004 (XLS BIFF8)                 | IV65536    |      256 |    65536 |
-| Excel 5.0/95 (XLS BIFF5)                  | IV16384    |      256 |    16384 |
-| Excel 4.0 (XLS BIFF4)                     | IV16384    |      256 |    16384 |
-| Excel 3.0 (XLS BIFF3)                     | IV16384    |      256 |    16384 |
-| Excel 2.0/2.1 (XLS BIFF2)                 | IV16384    |      256 |    16384 |
-| Lotus 1-2-3 R2 - R5 (WK1/WK3/WK4)         | IV8192     |      256 |     8192 |
-| Lotus 1-2-3 R1 (WKS)                      | IV2048     |      256 |     2048 |
+| Excel 2007+ XML Formats (XLSX/XLSM)       |`XFD1048576`|    16384 |  1048576 |
+| Excel 2007+ Binary Format (XLSB BIFF12)   |`XFD1048576`|    16384 |  1048576 |
+| Numbers 12.1 (NUMBERS)                    |`ALL1000000`|     1000 |  1000000 |
+| Quattro Pro 9+ (QPW)                      |`IV1000000 `|      256 |  1000000 |
+| Excel 97-2004 (XLS BIFF8)                 |`IV65536   `|      256 |    65536 |
+| Excel 5.0/95 (XLS BIFF5)                  |`IV16384   `|      256 |    16384 |
+| Excel 4.0 (XLS BIFF4)                     |`IV16384   `|      256 |    16384 |
+| Excel 3.0 (XLS BIFF3)                     |`IV16384   `|      256 |    16384 |
+| Excel 2.0/2.1 (XLS BIFF2)                 |`IV16384   `|      256 |    16384 |
+| Lotus 1-2-3 R2 - R5 (WK1/WK3/WK4)         |`IV8192    `|      256 |     8192 |
+| Lotus 1-2-3 R1 (WKS)                      |`IV2048    `|      256 |     2048 |
 
 Excel 2003 SpreadsheetML range limits are governed by the version of Excel and
 are not enforced by the writer.
@@ -208,7 +208,7 @@ files compatible with Visual FoxPro extensions.
 
 Multi-file extensions like external memos and tables are currently unsupported,
 limited by the general ability to read arbitrary files in the web browser.  The
-reader understands DBF Level 7 extensions like DATETIME.
+reader understands DBF Level 7 extensions like `DATETIME`.
 
 #### Symbolic Link (SYLK)
 

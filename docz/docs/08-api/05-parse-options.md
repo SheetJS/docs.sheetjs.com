@@ -65,7 +65,7 @@ The read functions accept an options argument:
   for files employing other encryption methods.
 - Newer Excel functions are serialized with the `_xlfn.` prefix, hidden from the
   user. SheetJS will strip `_xlfn.` normally. The `xlfn` option preserves them.
-- WTF is mainly for development.  By default, the parser will suppress read
+- `WTF` is mainly for development.  By default, the parser will suppress read
   errors on single worksheets, allowing you to read from the worksheets that do
   parse properly. Setting `WTF:true` forces those errors to be thrown.
 

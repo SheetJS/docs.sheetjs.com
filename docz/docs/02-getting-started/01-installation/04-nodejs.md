@@ -79,8 +79,8 @@ For general stability, "vendoring" modules is the recommended approach:
 <div>1) Download the tarball (<code parentName="pre">xlsx-{current}.tgz</code>) for the desired version. The current
    version is available at <a href={`https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}>https://cdn.sheetjs.com/xlsx-{current}/xlsx-{current}.tgz</a></div><br/>
 
-2) Create a `vendor` subdirectory at the root of your project and move the
-   tarball to that folder.  Add it to your project repository.
+2) Create a `vendor` subfolder at the root of your project and move the tarball
+   to that folder.  Add it to your project repository.
 
 3) Install the tarball using a package manager:
 

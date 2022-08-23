@@ -5,7 +5,7 @@ sidebar_position: 17
 # Clipboard Data
 
 Spreadsheet software like Excel typically support copying and pasting cells and
-data. This is implemented through the Clipboard ("Pasteboard" in OSX parlance).
+data. This is implemented through the Clipboard ("Pasteboard" in MacOS).
 
 When copying a selection of cells, Excel for Windows stores a screenshot of the
 selected cells as an image.  It also creates and stores a number of strings and
@@ -159,7 +159,7 @@ Electron additionally supports binary operations using `Buffer` objects.  This
 support is considered "experimental" and is not guaranteed to work on any
 platform.  Issues should be raised with the Electron project
 
-On the `macOS` platform, some versions of Excel store a packaged file with key
+On the `MacOS` platform, some versions of Excel store a packaged file with key
 `dyn.ah62d4qmxhk4d425try1g44pdsm11g55gsu1en5pcqzwc4y5tsz3gg3k`.  The package is
 a simple CFB file that can be parsed:
 

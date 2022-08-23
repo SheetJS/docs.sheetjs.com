@@ -58,7 +58,7 @@ const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez")
 ### Reshaping the Array
 
 For this example, the name will be the first name combined with the last name
-(`row.name.first + " " + row.name.last`) and the birthday will be the subfield
+(`row.name.first + " " + row.name.last`) and the birthday will be available at
 `row.bio.birthday`.  Using `Array#map`, the dataset can be massaged in one call:
 
 ```js
@@ -109,8 +109,8 @@ additional styling options like cell styling and frozen rows.
 By default, `json_to_sheet` creates a worksheet with a header row. In this case,
 the headers come from the JS object keys: "name" and "birthday".
 
-The headers are in cells A1 and B1.  `XLSX.utils.sheet_add_aoa` can write text
-values to the existing worksheet starting at cell A1:
+The headers are in cells `A1` and `B1`.  `XLSX.utils.sheet_add_aoa` can write
+text values to the existing worksheet starting at cell `A1`:
 
 ```js
 XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });

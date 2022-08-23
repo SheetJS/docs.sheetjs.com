@@ -169,7 +169,7 @@ of column attribute objects and an array of row objects.  The former is used to
 generate column headings and for indexing into the row objects.
 
 The safest approach is to use an array of arrays for state and to generate
-column objects that map to A1-style column headers.
+column objects that map to A1-Style column headers.
 
 The [React Data Grid demo](./grid#rows-and-columns-state) uses this approach
 with the following column and row structure:

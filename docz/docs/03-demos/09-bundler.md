@@ -965,7 +965,7 @@ As it uses `fetch`, this demo requires Node 18.
 
 ViteJS adopted nascent `package.json` patterns. Version 0.18.10 implements the
 patterns required for ViteJS 3.0.3. These patterns are evolving and a future
-version of Vite may require more packaging changes.
+version of ViteJS may require more packaging changes.
 
 :::
 

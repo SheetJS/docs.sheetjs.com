@@ -78,7 +78,7 @@ accepts an options argument:
 | `origin`         | Description                                               |
 | :--------------- | :-------------------------------------------------------- |
 | (cell object)    | Use specified cell (cell object)                          |
-| (string)         | Use specified cell (A1-style cell)                        |
+| (string)         | Use specified cell (A1-Style cell)                        |
 | (number >= 0)    | Start from the first column at specified row (0-indexed)  |
 | -1               | Append to bottom of worksheet starting on first column    |
 | (default)        | Start from cell A1                                        |
@@ -203,7 +203,7 @@ an options argument:
 | `origin`         | Description                                               |
 | :--------------- | :-------------------------------------------------------- |
 | (cell object)    | Use specified cell (cell object)                          |
-| (string)         | Use specified cell (A1-style cell)                        |
+| (string)         | Use specified cell (A1-Style cell)                        |
 | (number >= 0)    | Start from the first column at specified row (0-indexed)  |
 | -1               | Append to bottom of worksheet starting on first column    |
 | (default)        | Start from cell A1                                        |
@@ -352,7 +352,7 @@ an options argument:
 | `origin`         | Description                                               |
 | :--------------- | :-------------------------------------------------------- |
 | (cell object)    | Use specified cell (cell object)                          |
-| (string)         | Use specified cell (A1-style cell)                        |
+| (string)         | Use specified cell (A1-Style cell)                        |
 | (number >= 0)    | Start from the first column at specified row (0-indexed)  |
 | -1               | Append to bottom of worksheet starting on first column    |
 | (default)        | Start from cell A1                                        |
@@ -559,7 +559,7 @@ takes an options argument:
 | `range`          | Description                                               |
 | :--------------- | :-------------------------------------------------------- |
 | (number)         | Use worksheet range but set starting row to the value     |
-| (string)         | Use specified range (A1-style bounded range string)       |
+| (string)         | Use specified range (A1-Style bounded range string)       |
 | (default)        | Use worksheet range (`ws['!ref']`)                        |
 
 `header` is expected to be one of:

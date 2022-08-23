@@ -37,7 +37,7 @@ the ending col `16383`:
 
 ## A1-Style
 
-A1-style is the default address style in Lotus 1-2-3 and Excel.
+A1-Style is the default address style in Lotus 1-2-3 and Excel.
 
 Columns are specified with letters, counting from `A` to `Z`, then `AA` to `ZZ`,
 then `AAA`.  Some sample values, along with SheetJS column indices, are listed:
@@ -126,7 +126,7 @@ var address = XLSX.utils.decode_cell("A2");
 
 The argument is expected to be a string representing a single cell address.
 
-_Generate an A1-style address string from a SheetJS cell address_
+_Generate an A1-Style address string from a SheetJS cell address_
 
 ```js
 var a1_addr = XLSX.utils.encode_cell({r:1, c:0});
@@ -136,7 +136,7 @@ The argument is expected to be a SheetJS cell address
 
 #### Cell Ranges
 
-_Generate a SheetJS cell range from an A1-style range string_
+_Generate a SheetJS cell range from an A1-Style range string_
 
 ```js
 var range = XLSX.utils.decode_range("A1:D3");
@@ -146,7 +146,7 @@ The argument is expected to be a string representing a range or a single cell
 address.  The single cell address is interpreted as a single cell range, so
 `XLSX.utils.decode_range("D3")` is the same as `XLSX.utils.decode_range("D3:D3")`
 
-_Generate an A1-style address string from a SheetJS cell address_
+_Generate an A1-Style address string from a SheetJS cell address_
 
 ```js
 var a1_range = XLSX.utils.encode_range({ s: { c: 0, r: 0 }, e: { c: 3, r: 2 } });

@@ -86,7 +86,7 @@ Tests utilize the mocha testing framework.
  - <https://saucelabs.com/u/sheetjs> for XLS\* modules using Sauce Labs
 
 The test suite also includes tests for various time zones.  To change
-the timezone locally, set the TZ environment variable:
+the timezone locally, set the `TZ` environment variable:
 
 ```bash
 $ env TZ="Asia/Kolkata" WTF=1 make test_misc
@@ -107,5 +107,5 @@ files snapshot from [the repo](https://github.com/SheetJS/test_files/releases)
 
 <http://github.com/SheetJS/test_files/releases/download/20170409/test_files.zip>
 
-(download and unzip to the `test_files` subdirectory)
+(download and unzip to the `test_files` subfolder)
 

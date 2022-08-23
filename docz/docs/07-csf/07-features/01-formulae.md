@@ -9,17 +9,17 @@ import TabItem from '@theme/TabItem';
 
 <details><summary><b>Formulae File Format Support</b> (click to show)</summary>
 
-The parser will translate from the storage representation to A1-style strings,
-while the writer will translate from A1-style strings to the file format.
+The parser will translate from the storage representation to A1-Style strings,
+while the writer will translate from A1-Style strings to the file format.
 
 | Formats           | Parse | Write | Array | Dynamic | Storage Representation |
 |:------------------|:-----:|:-----:|:-----:|:-------:|:-----------------------|
-| XLSX / XLSM       |   ✔   |   ✔   |   ✔   |    ✔    | A1-style strings       |
+| XLSX / XLSM       |   ✔   |   ✔   |   ✔   |    ✔    | A1-Style strings       |
 | XLSB              |   ✔   |       |   ✔   |    ✔    | BIFF parsed tokens     |
 | XLS               |   ✔   |       |   ✔   |         | BIFF parsed tokens     |
 | XLML              |   ✔   |   ✔   |   ✔   |         | RC-style strings       |
 | SYLK              |   ✔   |   ✔   |       |         | A1 / RC-style strings  |
-| CSV / TXT         |   ✔   |   ✔   |       |         | A1-style strings       |
+| CSV / TXT         |   ✔   |   ✔   |       |         | A1-Style strings       |
 | ODS / FODS / UOS  |   ✔   |   ✔   |       |         | OpenFormula strings    |
 | WK\*              |   ✔   |       |       |         | Lotus parsed tokens    |
 | WQ\* / WB\* / QPW |       |       |       |         | Quattro Pro tokens     |
@@ -124,7 +124,7 @@ const workbook = XLSX.readFile("test.xlsx", { cellFormula: true });
 
 ## A1-Style Formulae
 
-The A1-style formula string is stored in the `f` field of the cell object.
+The A1-Style formula string is stored in the `f` field of the cell object.
 Spreadsheet software typically represent formulae with a leading `=` sign, but
 SheetJS formulae omit the `=`.
 
@@ -132,7 +132,7 @@ SheetJS formulae omit the `=`.
 
 For example, consider [this test file](pathname:///files/concat.xlsx):
 
-![D1=CONCAT("Sheet", "JS")](pathname:///files/concat.png)
+![`D1=CONCAT("Sheet", "JS")`](pathname:///files/concat.png)
 
 ```jsx live
 /* The live editor requires this function wrapper */

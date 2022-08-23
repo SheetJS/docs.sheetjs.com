@@ -73,7 +73,7 @@ files and convert to CSV.
 
 Older versions of IE do not support HTML5 File API but do support Base64.
 
-On OSX you can get the Base64 encoding with:
+On MacOS you can get the Base64 encoding with:
 
 ```bash
 $ <target_file base64 | pbcopy

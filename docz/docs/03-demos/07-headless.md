@@ -170,7 +170,7 @@ To run the example, save the following script to `SheetJSPhantom.js` in the same
 folder as `phantomjs.exe` or `phantomjs` and run
 
 ```
-./phantomjs SheetJSPhantom.js     ## macOS / Linux
+./phantomjs SheetJSPhantom.js     ## MacOS / Linux
 .\phantomjs.exe SheetJSPhantom.js ## windows
 ```
 

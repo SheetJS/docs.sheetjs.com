@@ -15,7 +15,7 @@ Cell objects are plain JS objects with keys and values following the convention:
 | `z` | number format string associated with the cell (if requested)           |
 | `w` | formatted text (if applicable)                                         |
 |     | **Formulae** ([More Info](./features/formulae))                        |
-| `f` | cell formula encoded as an A1-style string (if applicable)             |
+| `f` | cell formula encoded as an A1-Style string (if applicable)             |
 | `F` | range of enclosing array if formula is array formula (if applicable)   |
 | `D` | if true, array formula is dynamic (if applicable)                      |
 |     | **Other Cell Properties** ([More Info](./features))                    |
