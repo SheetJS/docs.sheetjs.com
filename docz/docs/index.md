@@ -23,9 +23,8 @@ port calculations to web apps; automate common spreadsheet tasks, and much more!
 
 ## Simple Examples
 
-The code editors are live -- feel free to edit!  Due to technical limitations,
-they showcase ReactJS patterns.  Other parts of the documentation will cover
-more common use cases including plain JavaScript.
+The code editors are live -- feel free to edit! They use ReactJS components and
+run entirely in the web browser.
 
 ### Export an HTML Table to Excel XLSX
 
@@ -51,14 +50,23 @@ more common use cases including plain JavaScript.
 
 4) Add an event handler for the `click` event to create a workbook and download:
 
-```js
+```html
+<script>
 document.getElementById("sheetjsexport").addEventListener('click', function() {
   /* Create worksheet from HTML DOM TABLE */
   var wb = XLSX.utils.table_to_book(document.getElementById("TableToExport"));
   /* Export to file (start a download) */
   XLSX.writeFile(wb, "SheetJSTable.xlsx");
 });
+</script>
 ```
+
+</details>
+
+<details><summary><b>How to automate with NodeJS</b> (click to show)</summary>
+
+[The "Headless Automation" demo](http://localhost:3000/docs/demos/headless)
+includes complete examples using the `puppeteer` and `playwright` libraries.
 
 </details>
 
@@ -164,50 +172,63 @@ support for CSS styling and rich text.
 
 </details>
 
-### Convert a CSV file to HTML Table and Excel XLSX
+### Preview a workbook on your device
 
-<details><summary><b>Live Example</b> (click to show)</summary>
+<details open><summary><b>Live Example</b> (click to hide)</summary>
+
+This example starts from a CSV string.  Use the File Input element to select
+a workbook to load.  Use the "Export XLSX" button to write the table to XLSX.
 
 ```jsx live
 /* The live editor requires this function wrapper */
 function Tabeller(props) {
+  const [__html, setHTML] = React.useState("");
 
-  /* Starting CSV data -- change data here */
-  const csv = `\
+  /* Load sample data once */
+  React.useEffect(() => {
+    /* Starting CSV data -- change data here */
+    const csv = `\
 This,is,a,Test
 வணக்கம்,สวัสดี,你好,가지마
 1,2,3,4`;
 
-  /* Parse CSV into a workbook object */
-  const wb = XLSX.read(csv, {type: "string"});
+    /* Parse CSV into a workbook object */
+    const wb = XLSX.read(csv, {type: "string"});
 
-  /* Get the worksheet (default name "Sheet1") */
-  const ws = wb.Sheets.Sheet1;
+    /* Get the worksheet (default name "Sheet1") */
+    const ws = wb.Sheets.Sheet1;
 
-  /* Create HTML table */
-  const id = "tabeller"; // HTML TABLE ID
-  const __html = XLSX.utils.sheet_to_html(ws, { id });
+    /* Create HTML table */
+    setHTML(XLSX.utils.sheet_to_html(ws, { id: "tabeller" }));
+  }, []);
 
   return (<>
+    {/* Import Button */}
+    <input type="file" onChange={async(e) => {
+      /* get data as an ArrayBuffer */
+      const file = e.target.files[0];
+      const data = await file.arrayBuffer();
 
-    {/* Show HTML preview */}
-    <div dangerouslySetInnerHTML={{__html}}/>
+      /* parse and load first worksheet */
+      const wb = XLSX.read(data);
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      setHTML(XLSX.utils.sheet_to_html(ws, { id: "tabeller" }));
+    }}/>
 
     {/* Export Button */}
     <button onClick={() => {
 
       /* Create worksheet from HTML DOM TABLE */
-      const table = document.getElementById(id);
+      const table = document.getElementById("tabeller");
       const wb = XLSX.utils.table_to_book(table);
 
       /* Export to file (start a download) */
       XLSX.writeFile(wb, "SheetJSIntro.xlsx");
-    }}>
-      <b>Export XLSX!</b>
-    </button>
+    }}><b>Export XLSX!</b></button>
 
+    {/* Show HTML preview */}
+    <div dangerouslySetInnerHTML={{__html}}/>
   </>);
-
 }
 ```
 

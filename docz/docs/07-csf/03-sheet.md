@@ -84,8 +84,8 @@ In addition to the aforementioned sheet keys, worksheets also add:
 
 | key       | Excel feature                                 | default |
 |:----------|:----------------------------------------------|:--------|
-| `above`   | Uncheck "Summary rows below detail"           | `false` |
-| `left`    | Uncheck "Summary rows to the right of detail" | `false` |
+| `above`   | Disable "Summary rows below detail"           | `false` |
+| `left`    | Disable "Summary rows to the right of detail" | `false` |
 
 - `ws['!protect']`: object of write sheet protection properties.  The `password`
   key specifies the password for formats that support password-protected sheets

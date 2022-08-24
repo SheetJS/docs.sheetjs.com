@@ -30,7 +30,7 @@ issues should be directed to the Angular project.
 ## Installation
 
 [The "Frameworks" section](../getting-started/installation/frameworks) covers
-installation with pnpm and other package managers.
+installation with `pnpm` and other package managers.
 
 The library can be imported directly from JS or TS code with:
 

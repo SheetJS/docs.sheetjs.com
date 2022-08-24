@@ -53,7 +53,7 @@ sap.ui.define([
 
 :::warning
 
-The [SAP Website has a note about including third-party JS libraries.](https://blogs.sap.com/2017/04/30/how-to-include-third-party-libraries-modules-in-sapui5/SAPUI5)
+The [SAP Website has a note about including third-party JS libraries.](https://blogs.sap.com/2017/04/30/how-to-include-third-party-libraries-modules-in-sapui5/)
 It recommends copying and pasting JavaScript code.
 
 **Copy and pasting code does not work** for SheetJS scripts as they contain

@@ -147,8 +147,8 @@ curl https://bun.sh/install | bash
 ## Development
 
 The `xlsx.js` and `xlsx.mjs` files are constructed from the files in the `bits`
-subdirectory. The build script (run `make`) will concatenate the individual
-bits to produce the scripts.
+subfolder. The build script (run `make`) will concatenate the individual bits
+to produce the scripts.
 
 To produce the dist files, run `make dist`.  The dist files are updated in each
 version release and *should not be committed between versions*.

@@ -533,7 +533,7 @@ takes an options argument:
 | Option Name |  Default | Description                                         |
 | :---------- | :------: | :-------------------------------------------------- |
 |`raw`        | `true`   | Use raw values (true) or formatted strings (false)  |
-|`range`      | from WS  | Override Range (see table below)                    |
+|`range`      |    **    | Override Range (see table below)                    |
 |`header`     |          | Control output format (see table below)             |
 |`dateNF`     |  FMT 14  | Use specified date format in string output          |
 |`defval`     |          | Use specified value in place of null or undefined   |

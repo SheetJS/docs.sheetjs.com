@@ -210,7 +210,7 @@ the generated file.  Confirm it is a valid file.
 func azure functionapp publish NAME_OF_FUNCTION_APP
 ```
 
-Get the function url and test using the same sequence as in step 5.
+Get the function URL and test using the same sequence as in step 5.
 
 </details>
 

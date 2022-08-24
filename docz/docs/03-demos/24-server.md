@@ -370,7 +370,7 @@ npx @nestjs/cli generate module sheetjs
 npx @nestjs/cli generate controller sheetjs
 ```
 
-3) Add Multer to the new module by editing `src/sheetjs/sheetjs.module.ts`.
+3) Add `multer` to the new module by editing `src/sheetjs/sheetjs.module.ts`.
 Changes are highlighted below:
 
 ```ts title="src/sheetjs/sheetjs.module.ts"

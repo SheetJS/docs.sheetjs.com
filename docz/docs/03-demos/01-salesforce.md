@@ -1,8 +1,7 @@
 ---
 sidebar_position: 1
+title: Salesforce LWC
 ---
-
-# Salesforce LWC
 
 Salesforce apps can use third-party libraries in "Lightning Web Components".
 
