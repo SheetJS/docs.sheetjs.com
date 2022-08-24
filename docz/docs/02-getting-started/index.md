@@ -1,5 +1,6 @@
 ---
 hide_table_of_contents: true
+pagination_next: getting-started/example
 ---
 
 # Getting Started

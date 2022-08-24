@@ -8,9 +8,57 @@ The ["Common Spreadsheet Format"](../csf/general) is a simple object
 representation of the core concepts of a workbook.  The utility functions work
 with the object representation and are intended to handle common use cases.
 
-## Modifying Workbook Structure
+The [Data Input](./input) and [Data Output](./output) sections cover how to
+read from data sources and write to data sources.
 
-#### API
+## Workbook
+
+### Worksheets
+
+:::note
+
+Worksheet names are case-sensitive.
+
+:::
+
+_List the Worksheet names in tab order_
+
+```js
+var wsnames = workbook.SheetNames;
+```
+
+The `SheetNames` property of the workbook object is a list of the worksheet
+names in "tab order".  API functions will look at this array.
+
+_Access a Worksheet by name_
+
+```js
+var worksheet = workbook.Sheets[sheet_name];
+```
+
+The workbook object's `Sheets` property is an object whose keys are sheet names
+and whose values are worksheet objects.
+
+_Access the first Worksheet_
+
+```js
+var first_ws = workbook.Sheets[workbook.SheetNames[0]];
+```
+
+Combining the previous examples, `workbook.Sheets[workbook.SheetNames[n]]` is
+the `n`-th worksheet if it exists in the workbook.
+
+
+_Replace a Worksheet in place_
+
+```js
+workbook.Sheets[sheet_name] = new_worksheet;
+```
+
+The `Sheets` property of the workbook object is an object whose keys are names
+and whose values are worksheet objects.  By reassigning to a property of the
+`Sheets` object, the worksheet object can be changed without disrupting the
+rest of the worksheet structure.
 
 _Append a Worksheet to a Workbook_
 
@@ -40,29 +88,7 @@ XLSX.utils.book_append_sheet(workbook, sheetC, "Sheet2", true); // Sheet4
 XLSX.utils.book_append_sheet(workbook, sheetD, "Sheet2", true); // Sheet5
 ```
 
-_List the Worksheet names in tab order_
-
-```js
-var wsnames = workbook.SheetNames;
-```
-
-The `SheetNames` property of the workbook object is a list of the worksheet
-names in "tab order".  API functions will look at this array.
-
-_Replace a Worksheet in place_
-
-```js
-workbook.Sheets[sheet_name] = new_worksheet;
-```
-
-The `Sheets` property of the workbook object is an object whose keys are names
-and whose values are worksheet objects.  By reassigning to a property of the
-`Sheets` object, the worksheet object can be changed without disrupting the
-rest of the worksheet structure.
-
 #### Examples
-
-This example uses [`XLSX.utils.aoa_to_sheet`](../api/utilities#array-of-arrays-input).
 
 ```js
 var ws_name = "SheetJS";
@@ -74,21 +100,53 @@ var ws_data = [
 ];
 var ws = XLSX.utils.aoa_to_sheet(ws_data);
 
+/* Create workbook */
+var wb = XLSX.utils.book_new();
+
 /* Add the worksheet to the workbook */
+// highlight-next-line
 XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+/* Write to file */
+XLSX.writeFile(wb, "SheetJS.xlsx");
 ```
 
-## Modifying Cell Values
+### Other Properties
 
-#### API
+_Add a Defined Name_
 
-_Modify a single cell value in a worksheet_
+```js
+if(!workbook.Workbook) workbook.Workbook = {};
+if(!workbook.Workbook.Names) workbook.Workbook.Names = [];
+workbook.Workbook.Names.push({
+  Name: "SourceData",
+  Ref: "Sheet1!A1:D12"
+});
+```
+
+This is described in more detail in ["Workbook Object"](../csf/book#defined-names).
+
+_Set Workbook Properties_
+
+```js
+if(!wb.Props) wb.Props = {};
+wb.Props["Company"] = "SheetJS LLC";
+```
+
+The full set of property names, and their mapping to the Excel UI, is included
+in ["File Properties"](../csf/book#file-properties)
+
+## Worksheet
+
+### Cells
+
+_Modify a single cell value in a Worksheet_
 
 ```js
 XLSX.utils.sheet_add_aoa(worksheet, [[new_value]], { origin: address });
 ```
 
-_Modify multiple cell values in a worksheet_
+_Modify multiple cell values in a Worksheet_
 
 ```js
 XLSX.utils.sheet_add_aoa(worksheet, aoa, opts);
@@ -122,8 +180,29 @@ XLSX.utils.sheet_add_aoa(worksheet, [
 ], { origin: -1 });
 ```
 
-## Modifying Other Worksheet / Workbook / Cell Properties
+### Other Properties
 
-The ["Common Spreadsheet Format"](../csf/general) section describes
-the object structures in greater detail.
+_Merge a group of cells_
 
+```js
+if(!worksheet["!merges"]) worksheet["!merges"] = [];
+worksheet["!merges"].push(XLSX.utils.decode_range("A1:E1"));
+```
+
+The `!merges` property of a worksheet object is a list of [Cell Ranges](../csf/general#cell-ranges).
+The data for the cell will be taken from the top-left cell.
+
+A range can be created with `decode_range` or specified manually:
+
+```js
+worksheet["!merges"].push({
+  s: { r: 2, c: 1 }, // s ("start"): c = 1 r = 2 -> "B3"
+  e: { r: 3, c: 4 }  // e ("end"):   c = 4 r = 3 -> "E4"
+});
+```
+
+:::caution
+
+This approach does not verify if two merged ranges intersect.
+
+:::

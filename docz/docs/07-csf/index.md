@@ -1,4 +1,5 @@
 ---
+pagination_next: api/index
 hide_table_of_contents: true
 title: Common Spreadsheet Format
 ---

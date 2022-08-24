@@ -1,4 +1,6 @@
 ---
+pagination_prev: getting-started/index
+pagination_next: getting-started/example
 sidebar_position: 5
 sidebar_custom_props:
   summary: Photoshop, InDesign, and other Creative Cloud apps

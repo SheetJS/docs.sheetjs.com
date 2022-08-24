@@ -1,4 +1,6 @@
 ---
+pagination_prev: getting-started/index
+pagination_next: getting-started/example
 sidebar_position: 2
 sidebar_custom_props:
   summary: Angular, React, VueJS, Webpack, etc.

@@ -27,12 +27,6 @@ suitable for a number of libraries.  When more advanced shapes are needed,
 it is easier to munge the output of an array of arrays.
 
 
-### Tabulator
-
-[Tabulator](http://tabulator.info/docs/5.3/download#xlsx) includes deep support
-through a special Export button.  It handles the SheetJS-related operations.
-
-
 ### x-spreadsheet
 
 With a familiar UI, [`x-spreadsheet`](https://myliang.github.io/x-spreadsheet/)
@@ -205,6 +199,13 @@ This demo barely scratches the surface.  The underlying grid component includes
 many additional features including massive data streaming, sorting and styling.
 
 </details>
+
+
+### Tabulator
+
+[Tabulator](http://tabulator.info/docs/5.3/download#xlsx) includes deep support
+through a special Export button.  It handles the SheetJS-related operations.
+
 
 ### Angular UI Grid
 

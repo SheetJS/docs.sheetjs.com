@@ -1,4 +1,5 @@
 ---
+pagination_prev: getting-started/index
 sidebar_position: 1
 hide_table_of_contents: true
 ---
@@ -19,7 +20,7 @@ The demo projects include small runnable examples and short explainers.
 
 ### Frameworks
 
-- [`Angular 2+ and Ionic`](./angular)
+- [`Angular`](./angular)
 - [`React`](./react)
 - [`VueJS`](./vue)
 - [`Angular.JS`](./legacy#angularjs)
