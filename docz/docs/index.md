@@ -65,8 +65,8 @@ document.getElementById("sheetjsexport").addEventListener('click', function() {
 
 <details><summary><b>How to automate with NodeJS</b> (click to show)</summary>
 
-[The "Headless Automation" demo](http://localhost:3000/docs/demos/headless)
-includes complete examples using the `puppeteer` and `playwright` libraries.
+[The "Headless Automation" demo](./demos/headless) includes complete examples
+using the `puppeteer` and `playwright` browser automation frameworks.
 
 </details>
 
