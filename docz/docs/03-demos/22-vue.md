@@ -5,7 +5,7 @@ title: VueJS
 
 [VueJS](https://vuejs.org/) is a JS library for building user interfaces.
 
-This demo tries to cover common Vue data flow ideas and strategies. Single-File
+This demo covers common VueJS data flow ideas and strategies.  Single-File
 Components (SFC) and VueJS familiarity is assumed.
 
 Other demos cover general VueJS deployments, including:
@@ -163,8 +163,8 @@ generate column headings and for indexing into the row objects.
 The safest approach is to use an array of arrays for state and to generate
 column objects that map to A1-Style column headers.
 
-The [Vue Table Lite demo](./grid#rows-and-columns-bindings) uses this approach
-with the following column and row structure:
+The [`vue3-table-lite` demo](./grid#rows-and-columns-bindings) generates rows
+and columns objects with the following structure:
 
 ```js
 /* rows are generated with a simple array of arrays */

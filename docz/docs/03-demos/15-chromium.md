@@ -15,7 +15,7 @@ This library is compatible with Chrome and Chromium extensions and should just
 work out of the box.  Specific API support is listed in the Chrome extensions
 API documentation.
 
-[Right-Click and download the final crx](pathname:///chromium/SheetJSDemo.crx)
+[Right-Click and download the final CRX](pathname:///chromium/SheetJSDemo.crx)
 
 :::caution
 

@@ -68,7 +68,7 @@ The following table lists tested file plugins.  "OS" lists tested platforms
 ("A" for Android and "I" for iOS).  "Copy" indicates whether an explicit copy
 is needed (file picker copies to cache directory and file plugin reads cache).
 
-| Filesystem Plugin          | File Picker Plugin             |  OS  | Copy |
+| File system Plugin         | File Picker Plugin             |  OS  | Copy |
 |:---------------------------|:-------------------------------|:----:|:-----|
 | `react-native-file-access` | `react-native-document-picker` | `AI` |      |
 | `react-native-blob-util`   | `react-native-document-picker` | `AI` | YES  |
@@ -165,7 +165,7 @@ const wb = XLSX.read(new Uint8Array(res), {type:'buffer'});
 
 :::caution
 
-On iOS, URIs from `react-native-document-picker` must be massaged:
+On iOS, the URI from `react-native-document-picker` must be massaged:
 
 ```js
 import { pickSingle } from 'react-native-document-picker';
@@ -218,7 +218,7 @@ import * as XLSX from "xlsx";
 import { FileSystem } from "react-native-file-access";
 
 const b64 = await FileSystem.readFile(path, "base64");
-/* b64 is a base64 string */
+/* b64 is a Base64 string */
 const workbook = XLSX.read(b64, {type: "base64"});
 ```
 
@@ -230,7 +230,7 @@ import { Dirs, FileSystem } from "react-native-file-access";
 const DDP = Dirs.DocumentDir + "/";
 
 const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
-/* b64 is a base64 string */
+/* b64 is a Base64 string */
 await FileSystem.writeFile(DDP + "sheetjs.xlsx", b64, "base64");
 ```
 
@@ -270,7 +270,7 @@ await writeFile(DocumentDirectoryPath + "/sheetjs.xlsx", bstr, "ascii");
 
 :::caution
 
-Some Expo APIs return URIs that cannot be read with `expo-file-system`.  This
+Some Expo APIs return URI that cannot be read with `expo-file-system`. This
 will manifest as an error:
 
 > Unsupported scheme for location '...'
@@ -305,7 +305,7 @@ import * as XLSX from "xlsx";
 import * as FileSystem from 'expo-file-system';
 
 const b64 = XLSX.write(workbook, {type:'base64', bookType:"xlsx"});
-/* b64 is a base64 string */
+/* b64 is a Base64 string */
 await FileSystem.writeAsStringAsync(FileSystem.documentDirectory + "sheetjs.xlsx", b64, { encoding: FileSystem.EncodingType.Base64 });
 ```
 
@@ -326,9 +326,9 @@ are not covered here.
 
 This example tries to separate the library-specific functions.
 
-0) **Follow the official React Native CLI Quickstart!**
+0) **Follow the official React Native CLI Guide!**
 
-Quickstart URL: <http://reactnative.dev/docs/environment-setup>
+Development Environment Guide: <http://reactnative.dev/docs/environment-setup>
 
 Follow the instructions for iOS and for Android.  They will cover installation
 and system configuration.  By the end, you should be able to run the sample app
@@ -587,7 +587,7 @@ pod install
 cd ..
 ```
 
-After doing this, the simulator must be stopped and the dev server must reload:
+Once refreshed, the development process must be restarted:
 
 ```bash
 npx react-native run-ios
@@ -625,7 +625,7 @@ find ~/Library/Developer/CoreSimulator -name sheetjsw.xlsx |
   while read x; do echo "$x"; npx xlsx-cli "$x"; done
 ```
 
-Once testing is complete, stop the simulator and the dev process.
+Once testing is complete, stop the simulator and the development process.
 
 **Android Testing**
 
@@ -674,7 +674,7 @@ on an iPhone SE 3rd generation.
 
 :::warning Binary Data issues
 
-NativeScript will not safely transmit binary or UTF8 strings. XLSB, NUMBERS,
+NativeScript will not safely transmit binary or UTF-8 strings. XLSB, NUMBERS,
 XLSX, XLS, ODS, SYLK, and DBF exports are known to be mangled.
 
 [This is a known NativeScript bug](https://github.com/NativeScript/NativeScript/issues/9586)
@@ -731,7 +731,7 @@ await file.writeText(bstr, encoding.ISO_8859_1);
 ### Demo
 
 The demo builds off of the NativeScript + Angular example.  Familiarity with
-with Angular and TypeScript is assumed.
+Angular and TypeScript is assumed.
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 
@@ -1088,7 +1088,7 @@ window.requestFileSystem(window.PERSISTENT, 0, function(fs) {
 
 ### Demo
 
-The demo builds off of the Vite example.  Familiarity with VueJS and TypeScript
+The demo draws from the ViteJS example.  Familiarity with VueJS and TypeScript
 is assumed.
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
@@ -1107,6 +1107,8 @@ npm i -g @quasar/cli cordova
 npm init quasar
 ```
 
+<!-- spellchecker-disable -->
+
 When prompted:
 
 - "What would you like to build?": `App with Quasar CLI`
@@ -1124,6 +1126,8 @@ When prompted:
 - "Install project dependencies": `No`
 
 2) Install dependencies:
+
+<!-- spellchecker-enable -->
 
 ```bash
 cd SheetJSQuasar
@@ -1166,7 +1170,7 @@ Return to the project directory:
 cd ..
 ```
 
-4) Start the dev server:
+4) Start the development server:
 
 ```bash
 quasar dev -m ios
@@ -1174,7 +1178,8 @@ quasar dev -m ios
 
 :::caution
 
-If the app is blank, delete the app and close the simulator, then restart dev
+If the app is blank or not refreshing, delete the app and close the simulator,
+then restart the development process.
 
 :::
 
@@ -1228,7 +1233,7 @@ The app should now show two buttons at the bottom:
 :::caution
 
 If the app is blank or not refreshing, delete the app and close the simulator,
-then restart the dev process.
+then restart the development process.
 
 :::
 
@@ -1372,7 +1377,7 @@ id,content
 
 :::note
 
-This demo was tested on an Intel Mac on 2022 August 18 with Cordova backend.
+This demo was tested on an Intel Mac on 2022 August 18 with Cordova.
 The file integration uses `@ionic-native/file` version `5.36.0`.
 
 The iOS simulator runs iOS 15.5 on an iPod Touch 7th Gen.

@@ -10,8 +10,19 @@ Some of our original research is documented at <https://oss.sheetjs.com/notes/>
 The specifications list is non-exhaustive.
 
  - Worksheet File Format (From Lotus) December 1984
- - Open Document Format for Office Applications Version 1.2 (29 September 2011)
- - ISO/IEC 29500:2012(E) "Information technology — Document description and processing languages — Office Open XML File Formats"
+ - Open Document Format for Office Applications Version 1.3
+
+:::info
+
+The primary specifications for XLSX are:
+
+ - `ISO/IEC 29500` "Information technology — Document description and processing languages — Office Open XML File Formats"
+ - `ECMA-376` "Office Open XML file formats"
+
+As some editions of `ECMA-376` are identical to `ISO` specification editions,
+most of the public XLSX document community use the spec names interchangeably.
+
+:::
 
 ## Open Specifications Promise
 
@@ -29,7 +40,7 @@ to sue.  The documentation that falls under the promise are listed below.
  - `MS-ODRAWXML`: Office Drawing Extensions to Office Open XML Structure
  - `MS-OE376`: Office Implementation Information for ECMA-376 Standards Support
  - `MS-OFFCRYPTO`: Office Document Cryptography Structure
- - `MS-OI29500`: Office Implementation Information for ISO/IEC 29500 Standards Support
+ - `MS-OI29500`: Office Implementation Information for `ISO/IEC 29500` Standards Support
  - `MS-OLEDS`: Object Linking and Embedding (OLE) Data Structures
  - `MS-OLEPS`: Object Linking and Embedding (OLE) Property Set Data Structures
  - `MS-OODF3`: Office Implementation Information for ODF 1.2 Standards Support

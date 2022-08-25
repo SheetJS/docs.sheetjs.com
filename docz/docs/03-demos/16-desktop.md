@@ -5,12 +5,12 @@ title: Desktop Applications
 
 Web technologies like JavaScript and HTML have been adapted to the traditional
 app space.  Typically these frameworks bundle a JavaScript engine as well as a
-windowing framework. SheetJS is compatible with many toolkits.
+windowing framework. SheetJS is compatible with many app frameworks.
 
 ## NW.js
 
-The [Standalone scripts](../getting-started/installation/standalone) can be referenced in a
-`SCRIPT` tag from the entry point HTML page.
+The [Standalone scripts](../getting-started/installation/standalone) can be
+referenced in a `SCRIPT` tag from the entry point HTML page.
 
 This demo was tested against NW.js 0.66.0.
 
@@ -151,7 +151,7 @@ The demo project is wired for `electron-forge` to build the standalone binary.
 1) Download the demo files:
 
 - [`package.json`](pathname:///electron/package.json) : project structure
-- [`main.js`](pathname:///electron/main.js) : entrypoint
+- [`main.js`](pathname:///electron/main.js) : main process script
 - [`index.html`](pathname:///electron/index.html) : window page
 - [`index.js`](pathname:///electron/index.js) : script loaded in render context
 
@@ -186,7 +186,7 @@ For a recent Intel Mac, the path will be `out/sheetjs-electron-darwin-x64/`
 
 ### Writing Files
 
-[`XLSX.writeFile`](../api/write-options) writes workbooks to the filesystem.
+[`XLSX.writeFile`](../api/write-options) writes workbooks to the file system.
 `showSaveDialog` shows a Save As dialog and returns the selected file name:
 
 ```js
@@ -282,7 +282,7 @@ document.getElementById("drop").addEventListener("drop", handleDrop, false);
 
 **Electron API**
 
-[`XLSX.readFile`](../api/parse-options) reads workbooks from the filesystem.
+[`XLSX.readFile`](../api/parse-options) reads workbooks from the file system.
 `showOpenDialog` shows a Save As dialog and returns the selected file name.
 Unlike the Web APIs, the `showOpenDialog` flow can be initiated by app code:
 
@@ -343,20 +343,20 @@ Electron 12.0.0 and later also require `worldSafeExecuteJavascript: true` and
 `contextIsolation: true`.
 
 Electron 14+ must use `@electron/remote` instead of `remote`.  An `initialize`
-call is required to enable DevTools in the window.
+call is required to enable Developer Tools in the window.
 
 :::
 
 ## Tauri
 
 The [NodeJS Module](../getting-started/installation/nodejs) can be imported
-from frontend code.
+from JavaScript code.
 
 This demo was tested against Tauri 1.0.5 on 2022 August 13.
 
 :::note
 
-Tauri currently does not provide NodeJS-esque `fs` wrapper functions.  The raw
+Tauri currently does not provide the equivalent of NodeJS `fs` module.  The raw
 `@tauri-apps/api` methods used in the examples are not expected to change.
 
 :::
@@ -396,7 +396,7 @@ When prompted:
 - Window Title: `SheetJS + Tauri`
 - UI recipe: `create-vite`
 - Add "@tauri-apps/api": `Y`
-- Vite template: `vue-ts`
+- ViteJS template: `vue-ts`
 
 2) Enter the directory:
 

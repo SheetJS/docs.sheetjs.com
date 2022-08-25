@@ -20,9 +20,9 @@ Other demos cover general Angular deployments, including:
 
 :::warning
 
-Angular dev tooling uses native NodeJS modules. There are a number of issues
-when trying to run Angular projects with different NodeJS versions. These
-issues should be directed to the Angular project.
+Angular tooling uses native NodeJS modules. There are a number of issues when
+trying to run Angular projects with different NodeJS versions. These issues
+should be directed to the Angular project.
 
 :::
 

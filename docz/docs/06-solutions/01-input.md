@@ -326,7 +326,7 @@ The [`server` demo](../demos/server) has more advanced examples.
   </TabItem>
   <TabItem value="deno" label="Deno">
 
-[Drash](https://drash.land/drash/) is a framework for Deno's HTTP server.  In a
+[Drash](https://drash.land/drash/) is a HTTP server framework for Deno.  In a
 `POST` request handler, the body parser can pull file data into a `Uint8Array`:
 
 <pre><code parentName="pre" {...{"className": "language-ts"}}>{`\

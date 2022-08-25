@@ -69,8 +69,8 @@ XLSX and XLSM files are ZIP containers containing a series of XML files in
 accordance with the Open Packaging Conventions (OPC).  The XLSM format, almost
 identical to XLSX, is used for files containing macros.
 
-The format is standardized in ECMA-376 and later in ISO/IEC 29500.  Excel does
-not follow the specification, and there are additional documents discussing how
+The format is standardized in `ECMA-376` and `ISO/IEC 29500`.  Excel does not
+follow the specification, and there are additional documents discussing how
 Excel deviates from the specification.
 
 ### Excel 2.0-95 (BIFF2/BIFF3/BIFF4/BIFF5)
@@ -160,8 +160,8 @@ All versions of Works were limited to a single worksheet.
 Works for DOS 1.x - 3.x and Works for Windows 2.x extends the Lotus WKS format
 with additional record types.
 
-Works for Windows 3.x - 5.x uses the same format and WKS extension.  The BOF
-record has type `FF`
+Works for Windows 3.x - 5.x uses the same format and WKS extension.  The `BOF`
+record has type `0xFF`
 
 Works for Windows 6.x - 9.x use the XLR format.  XLR is nearly identical to
 BIFF8 XLS: it uses the CFB container with a Workbook stream.  Works 9 saves the
@@ -185,8 +185,8 @@ The writer currently exports a small range from the first worksheet.
 #### OpenDocument Spreadsheet (ODS/FODS)
 
 ODS is an XML-in-ZIP format akin to XLSX while FODS is an XML format akin to
-SpreadsheetML.  Both are detailed in the OASIS standard, but tools like LO/OO
-add undocumented extensions.  The parsers and writers do not implement the full
+SpreadsheetML.  Both are detailed in the OASIS standard, but LibreOffice adds
+undocumented extensions.  The parsers and writers do not implement the full
 standard, instead focusing on parts necessary to extract and store raw data.
 
 #### Uniform Office Spreadsheet (UOS1/2)

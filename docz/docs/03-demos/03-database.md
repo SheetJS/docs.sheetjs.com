@@ -231,7 +231,7 @@ documents, and other simple data files. They enable workflows where the library
 generates CSV data for the database to process or where the library parses CSV
 files created by the database.
 
-#### Worksheets to CSVs
+#### Worksheet to CSV
 
 CSV data can be generated from worksheets using `XLSX.utils.sheet_to_csv`.
 
@@ -243,7 +243,7 @@ const csv = XLSX.utils.sheet_to_json(ws);
 const csv_arr = wb.SheetNames.map(n => XLSX.utils.sheet_to_json(wb.Sheets[n]));
 ```
 
-#### CSVs to Worksheets
+#### CSV to Worksheet
 
 `XLSX.read` can read strings with CSV data.  It will generate single-sheet
 workbooks with worksheet name `Sheet1`.
@@ -432,11 +432,11 @@ db.readTransaction(tx =>
 );
 ```
 
-The following demo generates a database with hardcoded SQL statements. Queries
+The following demo generates a database with 5 fixed SQL statements. Queries
 can be changed in the Live Editor.  The WebSQL database can be inspected in the
 "WebSQL" section of the "Application" Tab of Developer Tools:
 
-![WebSQL DevTools](pathname:///files/websql.png)
+![WebSQL view in Developer Tools](pathname:///files/websql.png)
 
 ```jsx live
 function SheetQL() {
@@ -735,14 +735,6 @@ async function generate_sql(knex, ws, wsname) {
 
 ### MongoDB Structured Collections
 
-:::warning MongoDB Relicense
-
-This demo was originally written when MongoDB was licensed under AGPLv3. It was
-relicensed in 2018 to the Server-Side Public License. This demo was tested with
-the "MongoDB Community Server" and may not work with the "Enterprise" Server.
-
-:::
-
 MongoDB is a popular document-oriented database engine.
 
 It is straightforward to treat collections as worksheets.  Each object maps to
@@ -782,7 +774,7 @@ It was verified in Node 16.16.0.
 npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz mongodb
 ```
 
-2) Start a MongoDB server on localhost (follow official instructions)
+2) Start a MongoDB server on `localhost` (follow official instructions)
 
 3) Save the following to `SheetJSMongoCRUD.mjs` (the key step is highlighted):
 

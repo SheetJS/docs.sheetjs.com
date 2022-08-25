@@ -2,6 +2,9 @@
 sidebar_position: 7
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Headless Automation
 
 Headless automation involves controlling "headless browsers" to access websites
@@ -18,9 +21,9 @@ back to the automation script.
 This demo focuses on exporting table data to a workbook.  Headless browsers do
 not generally support passing objects between the browser context and the
 automation script, so the file data must be generated in the browser context
-and sent back to the automation script for saving in the filesystem.  Steps:
+and sent back to the automation script for saving in the file system.  Steps:
 
-1) Launch the headless browser and load the target webpage.
+1) Launch the headless browser and load the target site.
 
 2) Add the standalone SheetJS build to the page in a `SCRIPT` tag.
 
@@ -37,7 +40,7 @@ This demo exports data from <https://sheetjs.com/demos/table>.
 :::note
 
 It is also possible to parse files from the browser context, but parsing from
-the automation context is more performant and strongly recommended.
+the automation context is more efficient and strongly recommended.
 
 :::
 
@@ -49,6 +52,9 @@ an installer script.  Installation is straightforward:
 ```bash
 npm i https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz puppeteer
 ```
+
+<Tabs>
+  <TabItem value="nodejs" label="NodeJS">
 
 Binary strings are the favored data type.  They can be safely passed from the
 browser context to the automation script.  NodeJS provides an API to write
@@ -93,6 +99,71 @@ const puppeteer = require('puppeteer');
   await browser.close();
 })();
 ```
+
+This script will generate `SheetJSPuppeteer.xlsb` which can be opened in Excel.
+
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+:::caution
+
+Deno Puppeteer is a fork. It is not officially supported by the Puppeteer team.
+
+:::
+
+Installation is straightforward:
+
+```bash
+env PUPPETEER_PRODUCT=chrome deno run -A --unstable https://deno.land/x/puppeteer@14.1.1/install.ts
+```
+
+Base64 strings are the favored data type.  They can be safely passed from the
+browser context to the automation script.  Deno can decode the Base64 strings
+and write the decoded `Uint8Array` data to file with `Deno.writeFileSync`
+
+To run the example, after installing the packages, save the following script to
+`SheetJSPuppeteer.ts` and run `deno run -A --unstable SheetJSPuppeteer.js`.
+
+```js title="SheetJSPuppeteer.ts"
+import puppeteer from "https://deno.land/x/puppeteer@14.1.1/mod.ts";
+import { decode } from "https://deno.land/std/encoding/base64.ts"
+
+/* (1) Load the target page */
+const browser = await puppeteer.launch();
+const page = await browser.newPage();
+page.on("console", msg => console.log("PAGE LOG:", msg.text()));
+await page.setViewport({width: 1920, height: 1080});
+await page.goto('https://sheetjs.com/demos/table');
+
+/* (2) Load the standalone SheetJS build from the CDN */
+await page.addScriptTag({ url: 'https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js' });
+
+/* (3) Run the snippet in browser and return data */
+const b64 = await page.evaluate(() => {
+  /* NOTE: this function will be evaluated in the browser context.
+     `page`, `fs` and `puppeteer` are not available.
+     `XLSX` will be available thanks to step 2 */
+
+  /* find first table */
+  var table = document.body.getElementsByTagName('table')[0];
+
+  /* call table_to_book on first table */
+  var wb = XLSX.utils.table_to_book(table);
+
+  /* generate XLSB and return binary string */
+  return XLSX.write(wb, {type: "base64", bookType: "xlsb"});
+});
+/* (4) write data to file */
+Deno.writeFileSync("SheetJSPuppeteer.xlsb", decode(b64));
+
+await browser.close();
+```
+
+This script will generate `SheetJSPuppeteer.xlsb` which can be opened in Excel.
+
+  </TabItem>
+</Tabs>
+
 
 ## Playwright
 

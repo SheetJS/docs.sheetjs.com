@@ -8,12 +8,12 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 The most popular JavaScript engine is V8.  Designed for embedding in software,
-it powers Chrome, NodeJS, UXP, Deno and many other platforms and runtimes.
+it powers Chrome, NodeJS, UXP, Deno and many other platforms.
 
-There are many other runtimes with different design goals.  Some are designed
+There are many other JS engines with different design goals.  Some are designed
 for low-power or low-memory environments.  Others aim for interoperability with
-specific programming languages or environments.  Typically they support a
-superset of ES3 and are capable of running SheetJS code.
+specific programming languages or environments.  Typically they support ES3 and
+are capable of running SheetJS code.
 
 
 ## General Caveats
@@ -40,9 +40,9 @@ var console = { log: function(x) { print(x); } };
 
 **Binary Data**
 
-Some engines do not provide easy ways of marshalling binary data.  For example,
-it is common to pass null-terminated arrays, which would truncate XLSX and XLS
-files.  APIs that accept pointers without length should be avoided.
+Some engines do not provide easy ways to exchange binary data.  For example, it
+is common to pass null-terminated arrays, which would truncate XLSX, XLS, and
+other exports.  APIs that accept pointers without length should be avoided.
 
 Base64 strings are safe for passing between JS and native code, but they should
 only be used when there is no safe way to pass `ArrayBuffer` or `Uint8Array`.
@@ -81,7 +81,7 @@ duk_pop(ctx);
 
 :::note
 
-This demo was tested on MacOS x64.
+This demo was tested on Intel Mac (`darwin-x64`).
 
 :::
 
@@ -256,7 +256,7 @@ wb, _ = vm.RunString("wb = XLSX.read(buf, {type:'buffer'});")
 `"base64"` strings can be decoded in Go:
 
 ```go
-/* write to base64 string */
+/* write to Base64 string */
 b64str, _ := vm.RunString("XLSX.write(wb, {type:'base64', bookType:'xlsx'})")
 
 /* pull data back into Go and write to file */
@@ -430,7 +430,7 @@ cat global.js xlsx.full.min.js payload.js hermes.js > xlsx.hermes.js
 ```
 
 The final script defines `global` before loading the standalone library.  Once
-ready, it will read the hardcoded test file and print the contents as CSV.
+ready, it will read the bundled test data and print the contents as CSV.
 
 5) Run the script using the Hermes standalone binary:
 
@@ -461,7 +461,7 @@ Binary strings can be passed back and forth using `String.Encoding.isoLatin1`.
 `String(contentsOf:encoding:)` reads from a path and returns an encoded string:
 
 ```swift
-/* read sheetjs.xls as base64 string */
+/* read sheetjs.xls as Base64 string */
 let file_path = shared_dir.appendingPathComponent("sheetjs.xls");
 let data: String! = try String(contentsOf: file_path, encoding: String.Encoding.isoLatin1);
 ```
@@ -478,8 +478,8 @@ context.evaluateScript("var wb = XLSX.read(payload, {type:'binary'});");
 
 **Writing data**
 
-When writing to binary string in JSC, the result should be stored in a variable
-and stringified in Swift:
+When writing to binary string in JavaScriptCore, the result should be stored in
+a variable and converted to string in Swift:
 
 ```swift
 /* write to binary string */
@@ -618,7 +618,7 @@ cat global.js xlsx.full.min.js payload.js jerry.js > xlsx.jerry.js
 ```
 
 The final script defines `global` before loading the standalone library.  Once
-ready, it will read the hardcoded test file and print the contents as CSV.
+ready, it will read the bundled test data and print the contents as CSV.
 
 5) Run the script using the `jerry` standalone binary:
 
@@ -834,7 +834,7 @@ cat global.js xlsx.full.min.js payload.js chakra.js > xlsx.chakra.js
 ```
 
 The final script defines `global` before loading the standalone library.  Once
-ready, it will read the hardcoded test file and print the contents as CSV.
+ready, it will read the bundled test data and print the contents as CSV.
 
 5) Run the script using the ChakraCore standalone binary:
 

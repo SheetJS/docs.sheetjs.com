@@ -169,9 +169,9 @@ bun bun.js
 </details>
 
 
-## ESBuild
+## esbuild
 
-The `xlsx.mjs` source file are written in a subset of ES6 that ESBuild
+The `xlsx.mjs` source file are written in a subset of ES6 that `esbuild`
 understands and is able to transpile down for older browsers.
 
 Both the `node` and `browser` platforms work out of the box.
@@ -339,7 +339,7 @@ node esb.node.js
 
 ## Parcel
 
-Parcel Bundler should play nice with SheetJS out of the box.
+Parcel should play nice with SheetJS out of the box.
 
 :::warning Parcel Bug
 
@@ -846,7 +846,7 @@ While SystemJS works in NodeJS, the built-in `require` should be preferred.
 
 :::
 
-The NodeJS module entrypoint is `xlsx/xlsx.js` and should be mapped:
+The NodeJS module main script is `xlsx/xlsx.js` and should be mapped:
 
 ```js
 SystemJS.config({

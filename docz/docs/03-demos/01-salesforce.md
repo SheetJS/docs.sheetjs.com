@@ -25,7 +25,11 @@ This demo was built on a "Developer Edition" account. At the time of writing, an
 
 ### Create Sample Project and Component
 
+<!-- spellchecker-disable -->
+
 Following the steps in ["Develop in Non-Scratch Orgs"](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.get_started_sfdx_deploy):
+
+<!-- spellchecker-enable -->
 
 ```bash
 ## Login
@@ -101,7 +105,7 @@ Click "Save" to activate the page, then click the left arrow to return to Setup.
 Click the App Launcher and select "Bolt Solutions" then "SheetJS Demo".  You
 should see a page like
 
-![SheetForce Demo](pathname:///files/sfinitial.png)
+![Demo](pathname:///files/sfinitial.png)
 
 
 ## Adding the Standalone Script

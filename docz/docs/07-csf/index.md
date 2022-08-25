@@ -7,7 +7,7 @@ title: Common Spreadsheet Format
 import DocCardList from '@theme/DocCardList';
 import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 
-The "Common Spreadsheet Format" (CSF) is the object model used by SheetJS. This
+The "Common Spreadsheet Format" is the object model used by SheetJS. This
 section covers the JS representation of workbooks, worksheets, cells, ranges,
 addresses and other features.
 

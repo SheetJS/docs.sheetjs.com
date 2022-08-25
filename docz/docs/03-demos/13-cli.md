@@ -7,8 +7,8 @@ import current from '/version.js';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-With the availability of JS engines and the success of server-side runtimes, it
-is natural to want command-line tools for various workflows.
+With the availability of JS engines and the success of server-side platforms,
+it is feasible to build command-line tools for various workflows.
 
 This demo covers a number of strategies for building standalone processors. The
 goal is to generate CSV output from an arbitrary spreadsheet file.
@@ -63,7 +63,7 @@ deno compile -r --allow-read sheet2csv.ts
 
 ## NodeJS
 
-There are a few popular tools for compiling NodeJS scripts to executables.
+There are a few popular tools for compiling NodeJS scripts to CLI programs.
 
 The demo script presents a friendly command line interface including flags:
 

@@ -7,7 +7,7 @@ exports.handler = function(event, context, callback) {
   if(event.requestContext.http.method == "GET") {
     /* make workbook */
     var wb = XLSX.read("S,h,e,e,t,J,S\n5,4,3,3,7,9,5", {type: "binary"});
-    /* write to XLSX file in base64 encoding */
+    /* write to XLSX file in Base64 encoding */
     var body = XLSX.write(wb, {type:"base64", bookType: "xlsx"});
     /* mark as attached file */
     var headers = { "Content-Disposition": 'attachment; filename="SheetJSLambda.xlsx"'};

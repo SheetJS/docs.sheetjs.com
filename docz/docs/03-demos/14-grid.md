@@ -24,7 +24,7 @@ import and export data.
 
 The `sheet_to_json` utility function generates arrays of objects, which is
 suitable for a number of libraries.  When more advanced shapes are needed,
-it is easier to munge the output of an array of arrays.
+it is easier to process an array of arrays.
 
 
 ### x-spreadsheet
@@ -204,7 +204,7 @@ many additional features including massive data streaming, sorting and styling.
 ### Tabulator
 
 [Tabulator](http://tabulator.info/docs/5.3/download#xlsx) includes deep support
-through a special Export button.  It handles the SheetJS-related operations.
+through a special Export button.  It handles the SheetJS operations internally.
 
 
 ### Angular UI Grid
@@ -223,7 +223,7 @@ The [AngularJS demo](./legacy#angularjs) covers more general strategies.
 <details><summary><b>Notes</b> (click to show)</summary>
 
 The library does not provide any way to modify the import button, so the demo
-includes a simple directive for a HTML File Input control.  It also includes a
+includes a simple directive for a File Input HTML element.  It also includes a
 sample service for export which adds an item to the export menu.
 
 The demo `SheetJSImportDirective` follows the prescription from the README for
@@ -276,7 +276,7 @@ export default function App() {
 ```
 
 The most generic data representation is an array of arrays. To sate the grid,
-the columns must be objects whose `key` property is the stringified number:
+columns must be objects whose `key` property is the index converted to string:
 
 ```ts
 import { WorkSheet, utils } from 'xlsx';
@@ -314,11 +314,15 @@ function rdg_to_ws(rows: Row[]): WorkSheet {
 }
 ```
 
+<!-- spellchecker-disable -->
+
 #### RDG Demo
+
+<!-- spellchecker-enable -->
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 
-1) Create a new TypeScript CRA app:
+1) Create a new TypeScript `create-react-app` app:
 
 ```bash
 npx create-react-app sheetjs-cra --template typescript
@@ -333,7 +337,7 @@ npm i -S https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz react-data-grid
 
 3) Replace the contents of `src/App.tsx` with the following code.  Note: a copy
 to clipboard button will show up if you move your mouse over the code.  The
-notable SheetJS-specific code is highlighted below:
+notable SheetJS integration code is highlighted below:
 
 ```tsx title="src/App.tsx"
 import React, { useEffect, useState, ChangeEvent } from "react";
@@ -444,8 +448,8 @@ export default function App() {
 }
 ```
 
-4) run `npm start`.  When you load the dev page in the browser, it will attempt
-to fetch <https://sheetjs.com/pres.numbers> and load the data.
+4) run `npm start`.  When you load the page in the browser, it will attempt to
+   fetch <https://sheetjs.com/pres.numbers> and load the data.
 
 The following screenshot was taken from the demo:
 
@@ -453,7 +457,11 @@ The following screenshot was taken from the demo:
 
 </details>
 
+<!-- spellchecker-disable -->
+
 ### vue3-table-lite
+
+<!-- spellchecker-enable -->
 
 :::note
 
@@ -462,14 +470,13 @@ This demo was tested against `vue3-table-lite 1.2.4`, VueJS `3.2.37`, ViteJS
 
 :::
 
-[`vue3-table-lite`](https://vue3-lite-table.vercel.app/) is a data grid built
-for Vue
+[`vue3-table-lite`](https://vue3-lite-table.vercel.app/) is a VueJS data grid.
 
-[A complete example is included below.](#vte-demo)
+[A complete example is included below.](#vuejs-demo)
 
 #### Rows and Columns Bindings
 
-`vue3-table-lite` presents two bindable attributes: an array of column metadata
+`vue3-table-lite` presents two attribute bindings: an array of column metadata
 (`columns`) and an array of objects representing the displayed data (`rows`).
 Typically both are `ref` objects:
 
@@ -493,7 +500,7 @@ const columns = ref<Column[]>([]);
 </template>
 ```
 
-These can be mutated through the `value` property in Vue lifecycle methods:
+These can be mutated through the `value` property in VueJS lifecycle methods:
 
 ```ts
 import { onMounted } from "vue";
@@ -504,7 +511,7 @@ onMounted(() => {
 ```
 
 The most generic data representation is an array of arrays. To sate the grid,
-the columns must be objects whose `field` property is the stringified number:
+columns must be objects whose `field` property is the index converted to string:
 
 ```js
 import { ref } from "vue";
@@ -548,11 +555,11 @@ function vte_to_ws(rows) {
 }
 ```
 
-#### VTE Demo
+#### VueJS Demo
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 
-1) Create a new ViteJS App using the Vue + TypeScript template:
+1) Create a new ViteJS App using the VueJS + TypeScript template:
 
 ```bash
 npm create vite@latest sheetjs-vue -- --template vue-ts
@@ -575,7 +582,7 @@ curl -LO https://docs.sheetjs.com/vtl/App.vue
 cd ..
 ```
 
-4) run `npm run dev`.  When you load the dev page in the browser, it will try
-to fetch <https://sheetjs.com/pres.numbers> and load the data.
+4) run `npm run dev`.  When you load the page in the browser, it will try to
+   fetch <https://sheetjs.com/pres.numbers> and load the data.
 
 </details>

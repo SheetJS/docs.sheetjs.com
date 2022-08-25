@@ -71,11 +71,11 @@ var workbook = XLSX.read(f.getContents(), {type: "base64"});
 `N/file` provides [`file.create`](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4223861820.html)
 and `file.load` for creating and loading files respectively.
 
-Binary content must be base64-encoded.  Fortunately, `XLSX.write` with `base64`
+Binary content must be Base64-encoded.  Fortunately, `XLSX.write` with `base64`
 type will generate compatible Base64 strings:
 
 ```js
-/* write XLSX workbook as base64 string */
+/* write XLSX workbook as Base64 string */
 var out = XLSX.write(workbook, { bookType: "xlsx", type: "base64" });
 /* create file */
 var newfile = file.create({

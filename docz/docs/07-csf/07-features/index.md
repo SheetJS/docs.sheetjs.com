@@ -6,7 +6,7 @@ import {useCurrentSidebarCategory} from '@docusaurus/theme-common';
 Even for basic features like date storage, the official Excel formats store the
 same content in different ways.  The parsers are expected to convert from the
 underlying file format representation to the Common Spreadsheet Format.  Writers
-are expected to convert from CSF back to the underlying file format.
+are expected to serialize SheetJS workbooks in the underlying file format.
 
 The following topics are covered in sub-pages:
 
@@ -124,11 +124,11 @@ follow the priority order:
 
 _Column Widths_
 
-Given the constraints, it is possible to determine the MDW without actually
+Given the constraints, it is possible to determine the `MDW` without actually
 inspecting the font!  The parsers guess the pixel width by converting from width
-to pixels and back, repeating for all possible MDW and selecting the MDW that
-minimizes the error.  XLML actually stores the pixel width, so the guess works
-in the opposite direction.
+to pixels and back, repeating for all possible `MDW` and selecting the value
+that minimizes the error.  XLML actually stores the pixel width, so the guess
+works in the opposite direction.
 
 Even though all of the information is made available, writers are expected to
 follow the priority order:
@@ -144,7 +144,7 @@ follow the priority order:
 The `cell.w` formatted text for each cell is produced from `cell.v` and `cell.z`
 format.  If the format is not specified, the Excel `General` format is used.
 The format can either be specified as a string or as an index into the format
-table.  Parsers are expected to populate `workbook.SSF` with the number format
+table.  Readers are expected to populate `workbook.SSF` with the number format
 table.  Writers are expected to serialize the table.
 
 The following example creates a custom format from scratch:
@@ -299,7 +299,7 @@ The visibility setting is stored in the `Hidden` property of sheet props array.
 If the respective Sheet entry does not exist or if the `Hidden` property is not
 set, the worksheet is visible.
 
-**List all worksheets and their visibilities**
+**List all worksheets and their visibility settings**
 
 ```js
 wb.Workbook.Sheets.map(function(x) { return [x.name, x.Hidden] })

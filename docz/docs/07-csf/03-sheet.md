@@ -8,7 +8,7 @@ Excel supports 4 different types of "sheets":
 - "worksheets": normal sheets
 - "chartsheets": full-tab charts
 - "macrosheets": legacy (pre-VBA) macros
-- "dialogsheets": legacy (pre-VBA) dialogs
+- "dialogsheets": legacy (pre-VBA) dialog windows
 
 ## Generic Sheet Object
 

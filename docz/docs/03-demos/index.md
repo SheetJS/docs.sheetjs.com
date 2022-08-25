@@ -6,7 +6,8 @@ hide_table_of_contents: true
 
 # Demo Projects
 
-The demo projects include small runnable examples and short explainers.
+Demos include complete examples and short discussions.  For features that can
+run in the web browser, demos will include interactive examples.
 
 ### JavaScript APIs
 

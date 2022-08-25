@@ -65,7 +65,7 @@ sudo npm i -g n
 sudo n 16
 ```
 
-3) follow <https://github.com/paul-nelson-baker/git-openssl-shellscript> to
+3) Follow <https://github.com/paul-nelson-baker/git-openssl-shellscript> to
 build and install a version of Git with proper SSL support:
 
 ```bash

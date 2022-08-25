@@ -12,7 +12,7 @@ serve:
 
 .PHONY: spell
 spell:
-	npx spellchecker-cli -d .spelling -f 'docz/**/*.md*' --no-suggestions
+	npx spellchecker-cli -q -d .spelling -f 'docz/**/*.md*' --no-suggestions
 
 .PHONY: index
 index: readme ## Rebuild site

@@ -18,7 +18,7 @@ while the writer will translate from A1-Style strings to the file format.
 | XLSB              |   ✔   |       |   ✔   |    ✔    | BIFF parsed tokens     |
 | XLS               |   ✔   |       |   ✔   |         | BIFF parsed tokens     |
 | XLML              |   ✔   |   ✔   |   ✔   |         | RC-style strings       |
-| SYLK              |   ✔   |   ✔   |       |         | A1 / RC-style strings  |
+| SYLK              |   ✔   |   ✔   |       |         | `A1`/RC-style strings  |
 | CSV / TXT         |   ✔   |   ✔   |       |         | A1-Style strings       |
 | ODS / FODS / UOS  |   ✔   |   ✔   |       |         | OpenFormula strings    |
 | WK\*              |   ✔   |       |       |         | Lotus parsed tokens    |
@@ -51,7 +51,7 @@ const workbook = XLSX.read(ab, { cellFormula: true });
   <TabItem value="nodejs" label="NodeJS">
 
 Typically file data will be available as a `Buffer` from a network request / API
-or stored in the filesystem.  `cellFormula: true` should be added to the second
+or stored in the file system.  `cellFormula: true` should be added to the second
 options argument to `read` or `readFile`:
 
 **`XLSX.read`**
@@ -75,8 +75,8 @@ const workbook = XLSX.readFile("test.xlsx", { cellFormula: true });
   <TabItem value="bun" label="Bun">
 
 Typically file data will be available as a `Uint8Array` from a network request
-or stored in the filesystem.  `cellFormula: true` should be added to the second
-options argument to `read` or `readFile`:
+or stored in the file system. `cellFormula: true` should be set in the options
+argument to `read` or `readFile`:
 
 **`XLSX.read`**
 
@@ -98,9 +98,9 @@ const workbook = XLSX.readFile("test.xlsx", { cellFormula: true });
   </TabItem>
   <TabItem value="deno" label="Deno">
 
-Typically file data will be available as a `Uint8Array` / `ArrayBuffer` from an
-API or stored in the filesystem.  `cellFormula: true` should be added to the
-second options argument to `read` or `readFile`:
+Typically file data will be available as a `Uint8Array` or `ArrayBuffer` from
+API or stored in the file system.  `cellFormula: true` should be set in the
+options argument to `read` or `readFile`:
 
 **`XLSX.read`**
 
@@ -128,11 +128,11 @@ The A1-Style formula string is stored in the `f` field of the cell object.
 Spreadsheet software typically represent formulae with a leading `=` sign, but
 SheetJS formulae omit the `=`.
 
-["A1-Style"](../general#a1-style) describes A1 style in more detail.
+["A1-Style"](../general#a1-style) describes A1-Style in more detail.
 
 For example, consider [this test file](pathname:///files/concat.xlsx):
 
-![`D1=CONCAT("Sheet", "JS")`](pathname:///files/concat.png)
+![Screenshot](pathname:///files/concat.png)
 
 ```jsx live
 /* The live editor requires this function wrapper */

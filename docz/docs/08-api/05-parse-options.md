@@ -57,7 +57,7 @@ The read functions accept an options argument:
 - `bookVBA` merely exposes the raw VBA CFB object.  It does not parse the data.
   XLSM and XLSB store the VBA CFB object in `xl/vbaProject.bin`. BIFF8 XLS mixes
   the VBA entries alongside the core Workbook entry, so the library generates a
-  new XLSB-compatible blob from the XLS CFB container.
+  new blob from the XLS CFB container that works in XLSM and XLSB files.
 - `codepage` is applied to BIFF2 - BIFF5 files without `CodePage` records and to
   CSV files without BOM in `type:"binary"`.  BIFF8 XLS always defaults to 1200.
 - `PRN` affects parsing of text files without a common delimiter character.
@@ -78,7 +78,7 @@ tells the library how to parse the data argument:
 |------------|-----------------------------------------------------------------|
 | `"base64"` | string: Base64 encoding of the file                             |
 | `"binary"` | string: binary string (byte `n` is `data.charCodeAt(n)`)        |
-| `"string"` | string: JS string (characters interpreted as UTF8)              |
+| `"string"` | string: JS string (only appropriate for UTF-8 text formats)     |
 | `"buffer"` | nodejs Buffer                                                   |
 | `"array"`  | array: array of 8-bit unsigned int (byte `n` is `data[n]`)      |
 | `"file"`   | string: path of file that will be read (nodejs only)            |
@@ -101,8 +101,8 @@ file but Excel will know how to handle it.  This library applies similar logic:
 | `0x50` | ZIP Archive   | XLSB or XLSX/M or ODS or UOS2 or NUMBERS or text    |
 | `0x49` | Plain Text    | SYLK or plain text                                  |
 | `0x54` | Plain Text    | DIF or plain text                                   |
-| `0xEF` | UTF8 Encoded  | SpreadsheetML / Flat ODS / UOS1 / HTML / plain text |
-| `0xFF` | UTF16 Encoded | SpreadsheetML / Flat ODS / UOS1 / HTML / plain text |
+| `0xEF` | UTF-8 Text    | SpreadsheetML / Flat ODS / UOS1 / HTML / plain text |
+| `0xFF` | UTF-16 Text   | SpreadsheetML / Flat ODS / UOS1 / HTML / plain text |
 | `0x00` | Record Stream | Lotus WK\* or Quattro Pro or plain text             |
 | `0x7B` | Plain text    | RTF or plain text                                   |
 | `0x0A` | Plain text    | SpreadsheetML / Flat ODS / UOS1 / HTML / plain text |
@@ -112,7 +112,7 @@ file but Excel will know how to handle it.  This library applies similar logic:
 DBF files are detected based on the first byte as well as the third and fourth
 bytes (corresponding to month and day of the file date)
 
-Works for Windows files are detected based on the BOF record with type `0xFF`
+Works for Windows files are detected based on the `BOF` record with type `0xFF`
 
 Plain text format guessing follows the priority order:
 

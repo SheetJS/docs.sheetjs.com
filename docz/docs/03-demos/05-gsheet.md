@@ -131,7 +131,7 @@ This can be converted to a SheetJS worksheet using `XLSX.utils.aoa_to_sheet`:
 
 ### Generating an XLSB file
 
-`XLSX.writeFile` will write a file in the filesystem:
+`XLSX.writeFile` will write a file in the file system:
 
 ```js
 /* write to SheetJS.xlsb */
@@ -235,7 +235,7 @@ includes detailed instructions for running locally.
 
 ### Reading the Workbook File
 
-`XLSX.readFile` can read files from the filesystem.  The following line reads
+`XLSX.readFile` can read files from the file system.  The following line reads
 `sheetjs.xlsx` from the current directory:
 
 ```js

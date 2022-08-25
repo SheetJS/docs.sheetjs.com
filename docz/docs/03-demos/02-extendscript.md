@@ -17,7 +17,7 @@ support.  Over the years there have been a few different JavaScript platforms:
 
 - "UXP": This is the current Adobe recommendation for new CC extensions.
 
-This demo intends to cover the SheetJS-related parts.  General setup as well as
+This demo intends to cover parts relevant to SheetJS.  General setup as well as
 general Adobe considerations are not covered here.  A basic familiarity with
 extension development is assumed.
 
@@ -122,8 +122,8 @@ XLSX.writeFile(workbook, thisFile.absoluteURI);
 <details open><summary><b>Complete Example</b> (click to hide)</summary>
 
 In this example, the script will show a dialog to select an output file.  Once
-selected, the library will create a new workbook with one worksheet.  Cell A1
-will be "Author" and cell B1 will be the active Photoshop document Author.
+selected, the library will create a new workbook with one worksheet.  Cell `A1`
+will be "Author" and cell `B1` will be the active Photoshop document Author.
 The PS author is available as `activeDocument.info.author`.
 
 This demo was verified in Photoshop CS6 64-bit on Windows 10.

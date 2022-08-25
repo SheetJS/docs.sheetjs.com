@@ -59,8 +59,8 @@ The following table covers some common formats:
 | `mm`     | Long (2-digit) minutes       |
 | `s`      | Short (1-digit) seconds      |
 | `ss`     | Long (2-digit) seconds       |
-| `A/P`    | Meridien ("A" or "P")        |
-| `AM/PM`  | Meridien ("AM" or "PM")      |
+| `A/P`    | Meridiem ("A" or "P")        |
+| `AM/PM`  | Meridiem ("AM" or "PM")      |
 
 :::note
 
@@ -144,8 +144,8 @@ Excel and other spreadsheet software, but this represents .
 XLS, XLSB, and most binary formats store the raw date codes.  Special number
 formats are used to indicate that the values are intended to be dates/times.
 
-CSV and other plaintext formats typically store actual formatted date values.
-They are interpreted as dates and times in the user timezone.
+CSV and other text formats typically store actual formatted date values.  They
+are interpreted as dates and times in the user timezone.
 
 XLSX actually supports both!  Typically dates are stored as `n` numeric cells,
 but the format supports a special type `d` where the data is an ISO 8601 date
@@ -175,7 +175,7 @@ with an appropriate number format.
 The actual values stored in cells are intended to be correct from the
 perspective of an Excel user in the current timezone.
 
-The value formatter understands date formats and converts when relevant.
+The value formatting logic understands date formats and converts when relevant.
 
 ### Utility Functions
 

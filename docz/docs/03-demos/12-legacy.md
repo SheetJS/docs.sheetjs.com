@@ -67,7 +67,7 @@ demo pages should be downloaded and hosted using a simple HTTP server.
 :::
 
 <http://oss.sheetjs.com/sheetjs/ajax.html> uses XMLHttpRequest to download test
-files and convert to CSV.
+files and convert to CSV
 
 <https://oss.sheetjs.com/sheetjs/> demonstrates reading files with `FileReader`.
 
@@ -108,11 +108,11 @@ input_dom_element.addEventListener('change', handle_fr, false);
 
 `Blob#arrayBuffer` is not supported in IE!
 
-**ActiveX-based Upload**
+**ActiveX Upload**
 
 Through the `Scripting.FileSystemObject` object model, a script in the VBScript
-scripting language can read from an arbitrary path on the filesystem.  The shim
-includes a special `IE_LoadFile` function to read binary strings from file. This
+scripting language can read from an arbitrary path on the file system. The shim
+includes a special `IE_LoadFile` function to read binary data from files. This
 should be called from a file input `onchange` event:
 
 ```js
@@ -136,7 +136,7 @@ approach is embedded in `XLSX.writeFile` and no additional shims are necessary.
 
 **Flash-based Download**
 
-It is possible to write to the file system using a SWF.  `Downloadify` library
+It is possible to write to the file system using a SWF file.  `Downloadify`
 implements one solution.  Since a genuine click is required, there is no way to
 force a download.  The safest data type is Base64:
 
@@ -159,7 +159,7 @@ Downloadify.create(element_id, {
 });
 ```
 
-**ActiveX-based Download**
+**ActiveX Download**
 
 Through the `Scripting.FileSystemObject` object model, a script in the VBScript
 scripting language can write to an arbitrary path on the filesystem.  The shim

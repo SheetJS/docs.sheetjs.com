@@ -81,7 +81,7 @@ accepts an options argument:
 | (string)         | Use specified cell (A1-Style cell)                        |
 | (number >= 0)    | Start from the first column at specified row (0-indexed)  |
 | -1               | Append to bottom of worksheet starting on first column    |
-| (default)        | Start from cell A1                                        |
+| (default)        | Start from cell `A1`                                      |
 
 
 The example worksheet can be built up in the order `A1:G1, A2:B4, E2:G4, A5:G5`:
@@ -206,7 +206,7 @@ an options argument:
 | (string)         | Use specified cell (A1-Style cell)                        |
 | (number >= 0)    | Start from the first column at specified row (0-indexed)  |
 | -1               | Append to bottom of worksheet starting on first column    |
-| (default)        | Start from cell A1                                        |
+| (default)        | Start from cell `A1`                                      |
 
 
 This example worksheet can be built up in the order `A1:G1, A2:B4, E2:G4, A5:G5`:
@@ -269,7 +269,7 @@ function SheetJSHeaderOrder() {
 
 ### HTML Table Input
 
-**Create a worksheet or workbook from a HTML DOM TABLE**
+**Create a worksheet or workbook from a TABLE element**
 
 ```js
 var ws = XLSX.utils.table_to_sheet(elt, opts);
@@ -329,7 +329,7 @@ var ws = wb.Sheets[wb.SheetNames[0]];
 
 :::
 
-**Add data from a HTML DOM TABLE to an existing worksheet**
+**Add data from a TABLE element to an existing worksheet**
 
 ```js
 XLSX.utils.sheet_add_dom(ws, elt, opts);
@@ -355,7 +355,7 @@ an options argument:
 | (string)         | Use specified cell (A1-Style cell)                        |
 | (number >= 0)    | Start from the first column at specified row (0-indexed)  |
 | -1               | Append to bottom of worksheet starting on first column    |
-| (default)        | Start from cell A1                                        |
+| (default)        | Start from cell `A1`                                      |
 
 
 A common use case for `sheet_add_dom` involves adding multiple tables to a
@@ -480,7 +480,7 @@ var txt = XLSX.utils.sheet_to_txt(ws, opts);
 
 The `txt` output type uses the tab character as the field separator.  If the
 `codepage` library is available (included in full distribution but not core),
-the output will be encoded in `CP1200` and the BOM will be prepended.
+the output will be encoded in `CP1200` and the UTF-16 BOM will be added.
 
 `XLSX.utils.sheet_to_txt` takes the same arguments as `sheet_to_csv`.
 
@@ -566,7 +566,7 @@ takes an options argument:
 
 | `header`         | Description                                               |
 | :--------------- | :-------------------------------------------------------- |
-| `1`              | Generate an array of arrays ("2D Array")                  |
+| `1`              | Generate an array of arrays                               |
 | `"A"`            | Row object keys are literal column labels                 |
 | array of strings | Use specified strings as keys in row objects              |
 | (default)        | Read and disambiguate first row as keys                   |

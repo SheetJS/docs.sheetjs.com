@@ -65,7 +65,7 @@ npm run build
 npm start
 ```
 
-If you have [VSCodium](https://vscodium.com/) installed, the folder can be opened with
+If [VSCodium](https://vscodium.com/) is installed, the folder can be opened:
 
 ```powershell
 codium .
@@ -111,8 +111,8 @@ The `manifest.xml` should also be updated to reflect the function namespace:
 After making the change, save the files.  Close the terminal window and the
 Excel window (do not save the Excel file).  Re-run `npm start`.
 
-In the new Excel window, enter the formula `=SHEETJS.VERSION()` in cell E1. You
-should see something similar to the following screenshot:
+In the new Excel window, enter the formula `=SHEETJS.VERSION()` in cell `E1`.
+You should see something similar to the following screenshot:
 
 ![`SHEETJS.VERSION` output](pathname:///files/xlcfversion.png)
 
@@ -201,7 +201,7 @@ var aoa = XLSX.utils.sheet_to_json(ws, {header: 1}); // get data as array of arr
 
 To demonstrate the parsing ability, a Base64-encoded version of the file will
 be used.  This file contains no binary characters and should "just work".  Once
-the aforementioned Excel bug is fixed, the non-Base64 version can be used.
+the aforementioned Excel bug is fixed, the raw binary files can be used.
 
 This new function should be added to `src\functions\functions.js`:
 
@@ -239,8 +239,8 @@ async function extern() {
 After making the change, save the files.  Close the terminal window and the
 Excel window (do not save the Excel file).  Re-run `npm start`.
 
-Enter the formula `=SHEETJS.EXTERN()` in cell D1 and press Enter.  Excel should
-pull in the data and generate a dynamic array:
+Enter the formula `=SHEETJS.EXTERN()` in cell `D1` and press Enter.  Excel
+should pull in the data and generate a dynamic array:
 
 ![`SHEETJS.VERSION` output](pathname:///files/xlcfextern1.png)
 

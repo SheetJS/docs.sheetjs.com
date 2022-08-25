@@ -8,8 +8,8 @@ title: Typed Arrays and ML
 </head>
 
 Machine learning libraries in JS typically use "Typed Arrays". Typed Arrays are
-not JS Arrays! SheetJS expects bona fide JS Arrays. With some data wrangling,
-translating between SheetJS worksheets and typed arrays is straightforward.
+not JS Arrays! With some data wrangling, translating between SheetJS worksheets
+and typed arrays is straightforward.
 
 This demo covers conversions between worksheets and Typed Arrays for use with
 [TensorFlow.js](https://js.tensorflow.org/js/) and other ML libraries.
@@ -43,7 +43,7 @@ function worksheet_to_csv_url(worksheet) {
 }
 ```
 
-[This demo mirrors TFjs docs](https://js.tensorflow.org/api/latest/#data.csv),
+[This demo mirrors `TFjs` docs](https://js.tensorflow.org/api/latest/#data.csv),
 fetching [an XLSX export of the example dataset](https://sheetjs.com/data/bht.xlsx).
 
 <details><summary><b>TF CSV Demo using XLSX files</b> (click to show)</summary>
@@ -193,7 +193,7 @@ var sepal_lengths = [5.1, 4.9, ...];
 var sepal_widths  = [3.5, 3, ...];
 ```
 
-When a 2D tensor can be exported, it will look different from the spreadsheet:
+When a `tensor2d` can be exported, it will look different from the spreadsheet:
 
 ```js
 var data_set_2d = [
@@ -292,7 +292,7 @@ var col1 = tensor.slice([0,0], [1,tensor.shape[1]]).flatten();
 var col2 = tensor.slice([1,0], [1,tensor.shape[1]]).flatten();
 ```
 
-For exporting, `stack` can be used to linearize the columns:
+For exporting, `stack` can be used to collapse the columns into a linear array:
 
 ```js
 /* pull data into a Float32Array */

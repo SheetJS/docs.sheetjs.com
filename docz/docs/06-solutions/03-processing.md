@@ -45,8 +45,8 @@ _Access the first Worksheet_
 var first_ws = workbook.Sheets[workbook.SheetNames[0]];
 ```
 
-Combining the previous examples, `workbook.Sheets[workbook.SheetNames[n]]` is
-the `n`-th worksheet if it exists in the workbook.
+Combining the previous examples, `workbook.Sheets[workbook.SheetNames[0]]` is
+the first worksheet if it exists in the workbook.
 
 
 _Replace a Worksheet in place_

@@ -42,7 +42,7 @@ A1-Style is the default address style in Lotus 1-2-3 and Excel.
 Columns are specified with letters, counting from `A` to `Z`, then `AA` to `ZZ`,
 then `AAA`.  Some sample values, along with SheetJS column indices, are listed:
 
-| Ordinal | A1 Name | SheetJS |
+| Ordinal | `A1`    | SheetJS |
 |:--------|:--------|--------:|
 | First   | `A`     |     `0` |
 | Second  | `B`     |     `1` |
@@ -78,7 +78,7 @@ fourth columns.
 A row range is represented by the top-most row, followed by `:`, followed by the
 bottom-most column.  For example, `2:4` represents the second/third/fourth rows.
 
-### A1 Utilities
+### Utilities
 
 #### Column Names
 

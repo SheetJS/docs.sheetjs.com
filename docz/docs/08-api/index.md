@@ -42,7 +42,7 @@ Write options are described in the [Writing Options](./write-options) section.
 
 Utilities are available in the `XLSX.utils` object.
 
-The following are described in [A1 Utilities](../csf/general#a1-utilities)
+The following are described in [`A1` Utilities](../csf/general#utilities)
 
 **Cell and cell address manipulation:**
 
@@ -71,9 +71,9 @@ The following are described in the [Utility Functions](./utilities):
 
 - `sheet_to_json` converts a worksheet object to an array of JSON objects.
 - `sheet_to_csv` generates delimiter-separated-values output.
-- `sheet_to_txt` generates UTF16 formatted text.
+- `sheet_to_txt` generates UTF-16 formatted text.
 - `sheet_to_html` generates HTML output.
-- `sheet_to_formulae` generates a list of the formulae (with value fallbacks).
+- `sheet_to_formulae` generates a list of formulae or cell value assignments.
 
 **Miscellaneous**
 
@@ -96,7 +96,7 @@ Due to broad inconsistencies in ESM implementations, the `mjs` build does not
 import any dependencies.  Instead, they must be manually passed to the library:
 
 `XLSX.set_cptable` sets the internal `codepage` instance.  This provides support
-for different language encodings.
+for different languages in XLS or text parsing.
 
 `XLSX.set_fs` set `fs` instance (using `readFileSync` and `writeFileSync`). This
 provides NodeJS ESM support for `XLSX.readFile` and `XLSX.writeFile`.

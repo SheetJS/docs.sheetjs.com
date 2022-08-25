@@ -448,27 +448,10 @@ is to adjust the server process or Lambda function to accept Base64 strings.
 
 :::
 
-A complete example using XHR is [included in the XHR demo](../demos/network), along
-with examples for fetch and wrapper libraries.  This example assumes the server
-can handle Base64-encoded files (see the demo for a basic nodejs server):
+A complete example using XHR is [included in the XHR demo](../demos/network),
+along with examples for fetch and wrapper libraries.
 
-```js
-/* in this example, send a base64 string to the server */
-var wbout = XLSX.write(workbook, { bookType: "xlsx", type: "base64" });
-
-/* prepare data for POST */
-var formdata = new FormData();
-formdata.append("file", "test.xlsx"); // <-- server expects `file` to hold name
-formdata.append("data", wbout); // <-- `data` holds the base64-encoded data
-
-/* perform POST request */
-var req = new XMLHttpRequest();
-req.open("POST", "/upload", true);
-req.send(formdata);
-```
-
-For servers that do not parse POST request bodies as UTF-8 strings, a `Blob` can
-be generated from the `array` output:
+Under normal circumstances, a `Blob` can be generated from the `array` output:
 
 ```js
 /* in this example, send a Blob to the server */
@@ -481,6 +464,24 @@ formdata.append("file", blob, "test.xlsx");
 
 /* perform POST request */
 fetch("/upload", { method: 'POST', body: formdata });
+```
+
+When binary data is not supported, Base64 strings should be passed along.  This
+will require the server to expect and decode the data:
+
+```js
+/* in this example, send a Base64 string to the server */
+var wbout = XLSX.write(workbook, { bookType: "xlsx", type: "base64" });
+
+/* prepare data for POST */
+var formdata = new FormData();
+formdata.append("file", "test.xlsx"); // <-- server expects `file` to hold name
+formdata.append("data", wbout); // <-- `data` holds the data encoded in Base64
+
+/* perform POST request */
+var req = new XMLHttpRequest();
+req.open("POST", "/upload", true);
+req.send(formdata);
 ```
 
   </TabItem>
@@ -753,7 +754,7 @@ _Generate a CSV from a single worksheet_
 var csv = XLSX.utils.sheet_to_csv(worksheet, opts);
 ```
 
-This snapshot is designed to replicate the "CSV UTF8 (`.csv`)" output type.
+This snapshot is designed to replicate the "CSV UTF-8 (`.csv`)" output type.
 ["Delimiter-Separated Output"](../api/utilities#delimiter-separated-output) describes the
 function and the optional `opts` argument in more detail.
 
@@ -763,7 +764,7 @@ _Generate "Text" from a single worksheet_
 var txt = XLSX.utils.sheet_to_txt(worksheet, opts);
 ```
 
-This snapshot is designed to replicate the "UTF16 Text (`.txt`)" output type.
+This snapshot is designed to replicate the "UTF-16 Text (`.txt`)" output type.
 ["Delimiter-Separated Output"](../api/utilities#delimiter-separated-output) describes the
 function and the optional `opts` argument in more detail.
 

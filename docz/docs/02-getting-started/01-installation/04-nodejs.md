@@ -111,7 +111,7 @@ The package will be installed and accessible as `xlsx`.
 #### CommonJS `require`
 
 By default, the module supports `require` and it will automatically add support
-for streams and filesystem access:
+for streams and file system access:
 
 ```js
 var XLSX = require("xlsx");
