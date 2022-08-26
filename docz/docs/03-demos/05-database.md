@@ -270,8 +270,7 @@ The following example shows how to query for each table in an SQLite database,
 query for the data for each table, add each non-empty table to a workbook, and
 export as XLSX.
 
-[The Northwind database is available in SQLite form](https://github.com/jpwhite3/northwind-SQLite3/raw/master/Northwind_large.sqlite.zip).
-Download and expand the zip archive to reveal `Northwind_large.sqlite`
+[The Northwind database is available in SQLite form](https://raw.githubusercontent.com/jpwhite3/northwind-SQLite3/master/dist/northwind.db).
 
 <Tabs>
   <TabItem value="nodejs" label="NodeJS">
@@ -298,7 +297,7 @@ import * as fs from 'fs';
 XLSX.set_fs(fs);
 
 /* Initialize database */
-var db = Database("Northwind_large.sqlite");
+var db = Database("northwind.db");
 
 /* Create new workbook */
 var wb = XLSX.utils.book_new();
@@ -348,7 +347,7 @@ import * as fs from 'fs';
 XLSX.set_fs(fs);
 
 /* Initialize database */
-var db = Database.open("Northwind_large.sqlite");
+var db = Database.open("northwind.db");
 
 /* Create new workbook */
 var wb = XLSX.utils.book_new();
@@ -374,6 +373,51 @@ XLSX.writeFile(wb, "bun.xlsx");
 ```
 
 3) Run `bun bun.mjs` and open `bun.xlsx`
+
+  </TabItem>
+  <TabItem value="deno" label="Deno">
+
+[`sqlite` library](https://deno.land/x/sqlite/) returns raw arrays of arrays.
+
+1) Save the following to `deno.ts`:
+
+```ts title="deno.ts"
+/* Load SQLite3 connector library */
+import { DB } from "https://deno.land/x/sqlite/mod.ts";
+
+/* Load SheetJS library */
+// @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
+import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
+
+/* Initialize database */
+var db = new DB("northwind.db");
+
+/* Create new workbook */
+var wb = XLSX.utils.book_new();
+
+/* Get list of table names */
+var sql = db.prepareQuery("SELECT name FROM sqlite_master WHERE type='table'");
+var result = sql.all();
+/* Loop across each name */
+result.forEach(function(row) {
+  /* Get first 100K rows */
+  var query = db.prepareQuery("SELECT * FROM '" + row[0] + "' LIMIT 100000")
+  var aoa = query.all();
+  if(aoa.length > 0) {
+		/* Create array of arrays */
+		var data = [query.columns().map(x => x.name)].concat(aoa);
+    /* Create Worksheet from the aoa */
+    var ws = XLSX.utils.aoa_to_sheet(data, {dense: true});
+    /* Add to Workbook */
+    XLSX.utils.book_append_sheet(wb, ws, row[0]);
+  }
+});
+
+/* Write File */
+XLSX.writeFile(wb, "deno.xlsx");
+```
+
+3) Run `deno run --allow-read --allow-write deno.ts` and open `deno.xlsx`
 
   </TabItem>
 </Tabs>

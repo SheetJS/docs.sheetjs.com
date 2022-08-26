@@ -32,9 +32,9 @@ but the Deno registry is out of date.
 
 :::
 
-## XLS Support
+## Encoding support
 
-If XLS support is required, `cpexcel.full.mjs` must be manually imported:
+If Encoding support is required, `cpexcel.full.mjs` must be manually imported:
 
 <pre><code parentName="pre" {...{"className": "language-ts"}}>{`\
 /* load the codepage support library for extended support with older formats  */

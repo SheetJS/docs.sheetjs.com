@@ -78,9 +78,9 @@ yarn add https://cdn.sheetjs.com/xlsx-${current}/xlsx-${current}.tgz`}
 
 :::
 
-## XLS Support
+## Encoding support
 
-If XLS support is required, `cpexcel.full.mjs` must be manually imported:
+If Encoding support is required, `cpexcel.full.mjs` must be manually imported:
 
 ```js
 /* load the codepage support library for extended support with older formats  */

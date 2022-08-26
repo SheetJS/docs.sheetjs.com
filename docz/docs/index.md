@@ -78,12 +78,12 @@ function Table2XLSX(props) {
 
   /* Callback invoked when the button is clicked */
   const xport = React.useCallback(async () => {
-      /* Create worksheet from HTML DOM TABLE */
-      const table = document.getElementById("Table2XLSX");
-      const wb = XLSX.utils.table_to_book(table);
+    /* Create worksheet from HTML DOM TABLE */
+    const table = document.getElementById("Table2XLSX");
+    const wb = XLSX.utils.table_to_book(table);
 
-      /* Export to file (start a download) */
-      XLSX.writeFile(wb, "SheetJSTable.xlsx");
+    /* Export to file (start a download) */
+    XLSX.writeFile(wb, "SheetJSTable.xlsx");
   });
 
   return (<>

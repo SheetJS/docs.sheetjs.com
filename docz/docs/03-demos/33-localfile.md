@@ -311,7 +311,7 @@ import * as fs from 'fs';
 set_fs(fs);
 
 var wb = XLSX.readFile("sheetjs.numbers");
-XLSX.writeFile(wb, "sheetjs.xls");
+XLSX.writeFile(wb, "sheetjs.xlsx");
 ```
 
 ### Deno
@@ -324,6 +324,19 @@ XLSX.writeFile(wb, "sheetjs.xls");
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 
 const wb = XLSX.readFile("sheetjs.numbers");
+XLSX.writeFile(wb, "sheetjs.xlsx");
+```
+
+### Bun
+
+Bun requires the `fs` module:
+
+```js
+import * as XLSX from 'xlsx';
+import * as fs from 'fs';
+XLSX.set_fs(fs);
+
+var wb = XLSX.readFile("sheetjs.numbers");
 XLSX.writeFile(wb, "sheetjs.xlsx");
 ```
 

@@ -27,11 +27,13 @@ After downloading the script, it can be directly imported:
 
 ```js
 import * as XLSX from './xlsx.mjs';
+import * as fs from 'fs';
+XLSX.set_fs(fs);
 ```
 
-## XLS Support
+## Encoding support
 
-If XLS support is required, `cpexcel.full.mjs` must be manually imported.
+If Encoding support is required, `cpexcel.full.mjs` must be manually imported.
 
 <div><a href={`https://cdn.sheetjs.com/xlsx-${current}/package/dist/cpexcel.full.mjs`}>https://cdn.sheetjs.com/xlsx-{current}/package/dist/cpexcel.full.mjs</a> is the URL for {current}</div><br/>
 

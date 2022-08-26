@@ -80,7 +80,7 @@ onMount(async() => {
   // highlight-start
   pres = utils.sheet_to_json(ws); // generate objects and update state
   // highlight-end
-})
+});
 
 /* get state data and export to XLSX */
 function exportFile() {
@@ -131,7 +131,7 @@ onMount(async() => {
   // highlight-start
   html = utils.sheet_to_html(ws); // generate HTML and update state
   // highlight-end
-})
+});
 
 /* get state data and export to XLSX */
 function exportFile() {

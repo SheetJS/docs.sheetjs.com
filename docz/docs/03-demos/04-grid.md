@@ -1,5 +1,5 @@
 ---
-title: Data Grids and UI
+title: Data Grids and Tables
 ---
 
 Various JavaScript UI components provide a more interactive editing experience.

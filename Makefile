@@ -6,9 +6,17 @@ build:
 	mv docz/build/ docs
 	cp CNAME docs
 
+.PHONY: init
+init:
+	cd docz; npm i; cd ..
+
+.PHONY: dev
+dev:
+	cd docz; npm run start; cd ..
+
 .PHONY: serve
 serve:
-	cd docs; python -mSimpleHTTPServer || python3 -mhttp.server; cd -
+	npx -y http-server docs
 
 .PHONY: spell
 spell:
