@@ -1,0 +1,515 @@
+---
+title: HTTP Network Requests
+---
+
+<head>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/superagent@7.1.1/dist/superagent.min.js"></script>
+</head>
+
+
+`XMLHttpRequest` and `fetch` browser APIs enable binary data transfer between
+web browser clients and web servers.  Since this library works in web browsers,
+server conversion work can be offloaded to the client!  This demo shows a few
+common scenarios involving browser APIs and popular wrapper libraries.
+
+:::caution Third-Party Hosts and Binary Data
+
+Some services like AWS will corrupt raw binary uploads / downloads by encoding
+requests and responses in UTF-8.  Typically, these services have options for
+disabling this behavior.
+
+For AWS, in the "Binary Media Types" section of the API Gateway console, the
+following types should be added to ensure smooth uploads and downloads:
+
+- `"multipart/form-data"` (for Lambda functions to receive files from clients)
+- `"application/vnd.ms-excel"` (for Lambda functions to send files to clients)
+
+:::
+
+## Downloading Binary Data
+
+Most interesting spreadsheet files are binary data that contain byte sequences
+that represent invalid UTF-8 characters.
+
+The APIs generally have a way to control the interpretation of the downloaded
+data.  The `arraybuffer` response type usually forces the data to be presented
+as a pure `ArrayBuffer` which can be parsed directly with `XLSX.read`.
+
+For example, with `fetch`:
+
+```js
+const res = await fetch("https://sheetjs.com/pres.numbers");
+const ab = await res.arrayBuffer(); // recover data as ArrayBuffer
+
+const wb = XLSX.read(ab);
+```
+
+## Uploading Binary Data
+
+`FormData` objects can hold `File` blobs generated from `XLSX.write`:
+
+```js
+/* generate XLSX file bytes */
+var data = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+
+/* build FormData with the generated file */
+var fdata = new FormData();
+fdata.append('data', new File([data], 'sheetjs.xlsx'));
+// field name ^^^^           file name ^^^^^^^^^^^^
+```
+
+The `FormData` object can be passed along to the POST request.  For example:
+
+```js
+var req = new XMLHttpRequest();
+req.open("POST", "/upload", true);
+req.send(fdata);
+```
+
+## Browser Demos
+
+The included demos focus on an editable table.  There are two separate flows:
+
+- When the page is accessed, the browser will attempt to download <https://sheetjs.com/pres.numbers>
+  and read the workbook.  The old table will be replaced with an editable table
+  whose contents match the first worksheet.  The table is generated using the
+  `sheet_to_html` utility with `editable:true` option
+
+- When the upload button is clicked, the browser will generate a new worksheet
+  using `table_to_book` and build up a new workbook.  It will then attempt to
+  generate a file, upload it to <https://s2c.sheetjs.com> and show the response.
+
+### XMLHttpRequest
+
+For downloading data, the `arraybuffer` response type generates an `ArrayBuffer`
+that can be viewed as an `Uint8Array` and fed to `XLSX.read` using `array` type:
+
+```js
+/* set up an async GET request */
+var req = new XMLHttpRequest();
+req.open("GET", url, true);
+req.responseType = "arraybuffer";
+
+req.onload = function(e) {
+  /* parse the data when it is received */
+  var data = new Uint8Array(req.response);
+  var workbook = XLSX.read(data, {type:"array"});
+  /* DO SOMETHING WITH workbook HERE */
+};
+req.send();
+```
+
+<details><summary><b>Live Download demo</b> (click to show)</summary>
+
+This demo uses `XMLHttpRequest` to download <https://sheetjs.com/pres.numbers>
+and show the data in an HTML table.
+
+```jsx live
+function SheetJSXHRDL() {
+  const [html, setHTML] = React.useState("");
+
+  /* Fetch and update HTML */
+  React.useEffect(async() => {
+    /* Fetch file */
+    const req = new XMLHttpRequest();
+    req.open("GET", "https://sheetjs.com/pres.numbers", true);
+    req.responseType = "arraybuffer";
+    req.onload = e => {
+      /* Parse file */
+      const wb = XLSX.read(new Uint8Array(req.response));
+      const ws = wb.Sheets[wb.SheetNames[0]];
+
+      /* Generate HTML */
+      setHTML(XLSX.utils.sheet_to_html(ws));
+    };
+    req.send();
+  }, []);
+
+  return (<div dangerouslySetInnerHTML={{__html: html}}/>);
+}
+```
+
+</details>
+
+For uploading data, this demo populates a `FormData` object with an ArrayBuffer
+generated with the `array` output type:
+
+```js
+/* generate XLSX as array buffer */
+var data = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+
+/* build FormData with the generated file */
+var fd = new FormData();
+fd.append('data', new File([data], 'sheetjs.xlsx'));
+
+/* send data */
+var req = new XMLHttpRequest();
+req.open("POST", url, true);
+req.send(fd);
+```
+
+<details><summary><b>Live Upload demo</b> (click to show)</summary>
+
+This demo uses `XMLHttpRequest` to upload data to <https://s2c.sheetjs.com>.  It
+will parse the workbook and return an HTML table.
+
+```jsx live
+function SheetJSXHRUL() {
+  const [html, setHTML] = React.useState("");
+  const [sz, setSz] = React.useState(0);
+  const csv = "a,b,c\n1,2,3";
+  /* Fetch and update HTML */
+  const xport = React.useCallback(async() => {
+    /* Make Workbook from CSV */
+    const wb = XLSX.read(csv, { type: "string" });
+
+    /* Make FormData */
+    const data = XLSX.write(wb, {bookType: 'xlsx', type: 'array'});
+    setSz(data.length || data.byteLength);
+    const fdata = new FormData();
+    fdata.append('file', new File([data], 'sheetjs.xlsx'));
+
+    /* Upload */
+    const url = "https://s2c.sheetjs.com";
+    const req = new XMLHttpRequest();
+    req.open("POST", url, true);
+    req.onload = (e) => setHTML(req.responseText);
+    req.send(fdata);
+  });
+
+  return (<pre>
+    <b>CSV Data</b>
+    <div>{csv}</div>
+    {sz ? (<>
+      <b>Generated file size: {sz} bytes</b>
+      <div dangerouslySetInnerHTML={{__html: html}}/>
+    </>) : (<button onClick={xport}><b>Export and Upload!</b></button>)}
+  </pre>);
+}
+```
+
+</details>
+
+### fetch
+
+For downloading data, `Response#arrayBuffer` resolves to an `ArrayBuffer` that
+can be converted to `Uint8Array` and passed to `XLSX.read`:
+
+```js
+fetch(url).then(function(res) {
+  /* get the data as a Blob */
+  if(!res.ok) throw new Error("fetch failed");
+  return res.arrayBuffer();
+}).then(function(ab) {
+  /* parse the data when it is received */
+  var data = new Uint8Array(ab);
+  var workbook = XLSX.read(data, {type:"array"});
+
+  /* DO SOMETHING WITH workbook HERE */
+});
+```
+
+<details><summary><b>Live Download demo</b> (click to show)</summary>
+
+This demo uses `fetch` to download <https://sheetjs.com/pres.numbers> and show
+the data in an HTML table.
+
+```jsx live
+function SheetJSFetchDL() {
+  const [html, setHTML] = React.useState("");
+
+  /* Fetch and update HTML */
+  React.useEffect(async() => {
+    /* Fetch file */
+    const res = await fetch("https://sheetjs.com/pres.numbers");
+    const ab = await res.arrayBuffer();
+
+    /* Parse file */
+    const wb = XLSX.read(ab);
+    const ws = wb.Sheets[wb.SheetNames[0]];
+
+    /* Generate HTML */
+    setHTML(XLSX.utils.sheet_to_html(ws));
+  }, []);
+
+  return (<div dangerouslySetInnerHTML={{__html: html}}/>);
+}
+```
+
+</details>
+
+`fetch` takes a second parameter which allows for setting POST request body:
+
+```js
+// assuming `fdata` is a FormData object from "Uploading Binary Data" section
+fetch("/upload", { method: "POST", body: fdata });
+```
+
+<details><summary><b>Live Upload demo</b> (click to show)</summary>
+
+This demo uses `fetch` to upload data to <https://s2c.sheetjs.com>.  It will parse
+the workbook and return an HTML table.
+
+```jsx live
+function SheetJSFetchUL() {
+  const [html, setHTML] = React.useState("");
+  const [sz, setSz] = React.useState(0);
+  const csv = "a,b,c\n1,2,3";
+  /* Fetch and update HTML */
+  const xport = React.useCallback(async(e) => {
+    /* Make Workbook from CSV */
+    const wb = XLSX.read(csv, { type: "string" });
+    const data = XLSX.write(wb, {bookType: 'xlsx', type: 'array'});
+
+    /* Make FormData */
+    setSz(data.length || data.byteLength);
+    const fdata = new FormData();
+    fdata.append('file', new File([data], 'sheetjs.xlsx'));
+
+    /* Upload */
+    const url = "https://s2c.sheetjs.com";
+    const res = await fetch(url, {method:"POST", body: fdata});
+
+    /* Set HTML */
+    setHTML((await res.text()));
+  });
+
+  return (<pre>
+    <b>CSV Data</b>
+    <div>{csv}</div>
+    {sz ? (<>
+      <b>Generated file size: {sz} bytes</b>
+      <div dangerouslySetInnerHTML={{__html: html}}/>
+    </>) : (<button onClick={xport}><b>Export and Upload!</b></button>)}
+  </pre>);
+}
+```
+
+</details>
+
+
+### Wrapper Libraries
+
+Before `fetch` shipped with browsers, there were various wrapper libraries to
+simplify `XMLHttpRequest`.  Due to limitations with `fetch`, these libraries
+are still relevant.
+
+#### axios
+
+The `axios` library presents a Promise interface. Setting `responseType` to
+`arraybuffer` ensures the return type is an ArrayBuffer:
+
+```js
+async function workbook_dl_axios(url) {
+  const res = await axios(url, {responseType:'arraybuffer'});
+  const workbook = XLSX.read(res.data);
+  return workbook;
+}
+```
+
+<details><summary><b>Live Download demo</b> (click to show)</summary>
+
+This demo uses `axios` to download <https://sheetjs.com/pres.numbers> and show
+the data in an HTML table.
+
+```jsx live
+function SheetJSAxiosDL() {
+  const [html, setHTML] = React.useState("");
+
+  /* Fetch and update HTML */
+  React.useEffect(async() => {
+    /* Fetch file */
+    const res = await axios("https://sheetjs.com/pres.numbers", {responseType: "arraybuffer"});
+
+    /* Parse file */
+    const wb = XLSX.read(res.data);
+    const ws = wb.Sheets[wb.SheetNames[0]];
+
+    /* Generate HTML */
+    setHTML(XLSX.utils.sheet_to_html(ws));
+  }, []);
+
+  return (<div dangerouslySetInnerHTML={{__html: html}}/>);
+}
+```
+
+</details>
+
+Uploading form data is nearly identical to the `fetch` example:
+
+```js
+axios("/upload", { method: "POST", data: fdata });
+```
+
+<details><summary><b>Live Upload demo</b> (click to show)</summary>
+
+This demo uses `axios` to upload data to <https://s2c.sheetjs.com>.  It will parse
+the workbook and return an HTML table.
+
+```jsx live
+function SheetJSAxiosUL() {
+  const [html, setHTML] = React.useState("");
+  const [sz, setSz] = React.useState(0);
+  const csv = "a,b,c\n1,2,3";
+  /* Fetch and update HTML */
+  const xport = React.useCallback(async() => {
+    /* Make Workbook from CSV */
+    const wb = XLSX.read(csv, { type: "string" });
+
+    /* Make FormData */
+    const data = XLSX.write(wb, {bookType: 'xlsx', type: 'array'});
+    setSz(data.length || data.byteLength);
+    const fdata = new FormData();
+    fdata.append('file', new File([data], 'sheetjs.xlsx'));
+
+    /* Upload */
+    const url = "https://s2c.sheetjs.com";
+    const res = await axios(url, {method:"POST", data: fdata});
+
+    /* Set HTML */
+    setHTML(res.data);
+  });
+
+  return (<pre>
+    <b>CSV Data</b>
+    <div>{csv}</div>
+    {sz ? (<>
+      <b>Generated file size: {sz} bytes</b>
+      <div dangerouslySetInnerHTML={{__html: html}}/>
+    </>) : (<button onClick={xport}><b>Export and Upload!</b></button>)}
+  </pre>);
+}
+```
+
+</details>
+
+#### superagent
+
+The `superagent` library usage mirrors XHR:
+
+```js
+/* set up an async GET request with superagent */
+superagent.get(url).responseType('arraybuffer').end(function(err, res) {
+  /* parse the data when it is received */
+  var data = new Uint8Array(res.body);
+  var workbook = XLSX.read(data, {type:"array"});
+
+  /* DO SOMETHING WITH workbook HERE */
+});
+```
+
+<details><summary><b>Live Download demo</b> (click to show)</summary>
+
+This demo uses `superagent` to download <https://sheetjs.com/pres.numbers> and
+show the data in an HTML table.
+
+```jsx live
+function SheetJSSuperAgentDL() {
+  const [html, setHTML] = React.useState("");
+
+  /* Fetch and update HTML */
+  React.useEffect(async() => {
+    /* Fetch file */
+    superagent
+      .get("https://sheetjs.com/pres.numbers")
+      .responseType("arraybuffer")
+      .end((err, res) => {
+        /* Parse file */
+        const wb = XLSX.read(res.body);
+        const ws = wb.Sheets[wb.SheetNames[0]];
+
+        /* Generate HTML */
+        setHTML(XLSX.utils.sheet_to_html(ws));
+      });
+  }, []);
+
+  return (<div dangerouslySetInnerHTML={{__html: html}}/>);
+}
+```
+
+</details>
+
+The upload portion only differs in the actual request command:
+
+```js
+/* send data (fd is the FormData object) */
+superagent.post("/upload").send(fd);
+```
+
+<details><summary><b>Live Upload demo</b> (click to show)</summary>
+
+This demo uses `superagent` to upload data to <https://s2c.sheetjs.com>.  It will
+parse the workbook and return an HTML table.
+
+```jsx live
+function SheetJSSuperAgentUL() {
+  const [html, setHTML] = React.useState("");
+  const [sz, setSz] = React.useState(0);
+  const csv = "a,b,c\n1,2,3";
+  /* Fetch and update HTML */
+  const xport = React.useCallback(async() => {
+    /* Make Workbook from CSV */
+    const wb = XLSX.read(csv, { type: "string" });
+
+    /* Make FormData */
+    const data = XLSX.write(wb, {bookType: 'xlsx', type: 'array'});
+    setSz(data.length || data.byteLength);
+    const fdata = new FormData();
+    fdata.append('file', new File([data], 'sheetjs.xlsx'));
+
+    /* Upload */
+    const url = "https://s2c.sheetjs.com";
+    superagent.post(url).send(fdata).end((err, res) => {
+      /* Set HTML */
+      setHTML(res.text);
+    });
+
+  });
+
+  return (<pre>
+    <b>CSV Data</b>
+    <div>{csv}</div>
+    {sz ? (<>
+      <b>Generated file size: {sz} bytes</b>
+      <div dangerouslySetInnerHTML={{__html: html}}/>
+    </>) : (<button onClick={xport}><b>Export and Upload!</b></button>)}
+  </pre>);
+}
+```
+
+</details>
+
+## NodeJS Demos
+
+This demo focuses on a number of strategies. Some of these demos were written
+before NodeJS added `fetch`.
+
+### request
+
+:::warning
+
+`request` has been deprecated and should only be used in legacy deployments.
+
+:::
+
+Setting the option `encoding: null` passes raw buffers:
+
+```js
+var XLSX = require('xlsx'), request = require('request');
+var url = 'https://sheetjs.com/pres.numbers';
+
+/* call `request` with the option `encoding: null` */
+// highlight-next-line
+request(url, {encoding: null}, function(err, res, data) {
+  if(err || res.statusCode !== 200) return;
+
+  /* if the request was succesful, parse the data */
+  // highlight-next-line
+  var wb = XLSX.read(data);
+
+  /* print the first worksheet to console */
+  var ws = wb.Sheets[wb.SheetNames[0]];
+  console.log(XLSX.utils.sheet_to_csv(ws, {blankrows:false}));
+});
+```

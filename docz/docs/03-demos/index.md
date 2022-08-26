@@ -1,6 +1,5 @@
 ---
 pagination_prev: getting-started/index
-sidebar_position: 1
 hide_table_of_contents: true
 ---
 
@@ -23,6 +22,7 @@ run in the web browser, demos will include interactive examples.
 
 - [`Angular`](./angular)
 - [`React`](./react)
+- [`Svelte`](./svelte)
 - [`VueJS`](./vue)
 - [`Angular.JS`](./legacy#angularjs)
 - [`Knockout`](./legacy#knockout)
