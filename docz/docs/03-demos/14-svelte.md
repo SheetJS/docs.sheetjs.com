@@ -7,6 +7,10 @@ title: Svelte
 This demo tries to cover common Svelte data flow ideas and strategies. Svelte
 familiarity is assumed.
 
+Other demos cover general React deployments, including:
+
+- [iOS applications powered by CapacitorJS](./mobile#capacitorjs)
+
 
 ## Installation
 

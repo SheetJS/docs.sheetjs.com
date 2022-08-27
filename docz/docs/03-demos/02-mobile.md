@@ -1518,3 +1518,187 @@ npx @ionic/cli cordova emulate ios
 ```
 
 </details>
+
+## CapacitorJS
+
+:::note
+
+This demo was tested on an Intel Mac on 2022 August 26 with Svelte.
+
+The iOS simulator runs iOS 15.5 on an iPhone 13 Pro Max.
+
+:::
+
+:::warning Telemetry
+
+Before starting this demo, manually disable telemetry.  On Linux and MacOS:
+
+```bash
+npx @capacitor/cli telemetry off
+```
+
+To verify telemetry was disabled:
+
+```bash
+npx @capacitor/cli telemetry
+```
+
+:::
+
+### Integration Details
+
+This example uses Svelte, but the same principles apply to other frameworks.
+
+#### Reading data
+
+The standard HTML5 File Input element logic works in CapacitorJS:
+
+```html
+<script>
+import { read, utils } from 'xlsx';
+
+let html = "";
+
+/* show file picker, read file, load table */
+async function importFile(evt) {
+  // highlight-start
+  const f = evt.target.files[0];
+  const wb = read(await f.arrayBuffer());
+  // highlight-end
+  const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+  html = utils.sheet_to_html(ws); // generate HTML and update state
+}
+</script>
+
+<main>
+  <!-- highlight-next-line -->
+  <input type="file" on:change={importFile}/>
+  <div bind:this={tbl}>{@html html}</div>
+</main>
+```
+
+#### Writing data
+
+`@capacitor/fileysstem` can write Base64 strings:
+
+```html
+<script>
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { utils, writeXLSX } from 'xlsx';
+
+let html = "";
+let tbl;
+
+/* get state data and export to XLSX */
+async function exportFile() {
+  const elt = tbl.getElementsByTagName("TABLE")[0];
+  const wb = utils.table_to_book(elt);
+  /* generate Base64 string for Capacitor */
+  // highlight-start
+  const data = writeXLSX(wb, { type: "base64" });
+  await Filesystem.writeFile({
+    data,
+    path: "SheetJSCap.xlsx",
+    directory: Directory.Documents
+  }); // write file
+  // highlight-end
+}
+
+</script>
+
+<main>
+  <button on:click={exportFile}>Export XLSX</button>
+  <div bind:this={tbl}>{@html html}</div>
+</main>
+```
+
+### Demo
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) Disable telemetry as noted in the warning.
+
+Follow the [React Native demo](#demo) to ensure iOS and Android sims are ready.
+
+
+1) Create a new Svelte project:
+
+```bash
+npm create vite@latest sheetjs-cap -- --template svelte
+cd sheetjs-cap
+```
+
+2) Install dependencies:
+
+```bash
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+npm i --save @capacitor/core @capacitor/cli @capacitor/ios @capacitor/filesystem
+```
+
+3) Create CapacitorJS structure:
+
+```bash
+npx cap init sheetjs-cap com.sheetjs.cap --web-dir=dist
+npx cap add ios
+```
+
+4) Replace the contents of `src/App.svelte` with the following:
+
+```html title="src/App.svelte"
+<script>
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { onMount } from 'svelte';
+import { read, utils, version, writeXLSX } from 'xlsx';
+
+let html = "";
+let tbl;
+
+/* Fetch and update the state once */
+onMount(async() => {
+  const f = await (await fetch("https://sheetjs.com/pres.xlsx")).arrayBuffer();
+  const wb = read(f); // parse the array buffer
+  const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+  html = utils.sheet_to_html(ws); // generate HTML and update state
+});
+
+/* get state data and export to XLSX */
+async function exportFile() {
+  const elt = tbl.getElementsByTagName("TABLE")[0];
+  const wb = utils.table_to_book(elt);
+  /* generate Base64 string for Capacitor */
+  const data = writeXLSX(wb, { type: "base64" });
+  /* write */
+  await Filesystem.writeFile({
+    path: "SheetJSCap.xlsx",
+    data,
+    directory: Directory.Documents
+  });
+}
+
+/* show file picker, read file, load table */
+async function importFile(evt) {
+  const f = evt.target.files[0];
+  const wb = read(await f.arrayBuffer());
+  const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+  html = utils.sheet_to_html(ws); // generate HTML and update state
+}
+</script>
+
+<main>
+  <h3>SheetJS × CapacitorJS { version }</h3>
+  <input type="file" on:change={importFile}/>
+  <button on:click={exportFile}>Export XLSX</button>
+  <div bind:this={tbl}>{@html html}</div>
+</main>
+```
+
+5) Test the app:
+
+```bash
+npm run build; npx cap sync; npx cap run ios
+```
+
+There are 3 steps: build the Svelte app, sync with CapacitorJS, and run sim.
+This sequence must be run every time to ensure changes are propagated.
+
+</details>
