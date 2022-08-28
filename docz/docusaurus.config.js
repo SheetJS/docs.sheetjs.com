@@ -158,7 +158,13 @@ const config = {
     }
   ],
   plugins: [
-   require.resolve("@cmfcmf/docusaurus-search-local")
+    require.resolve("@cmfcmf/docusaurus-search-local"),
+    [ '@docusaurus/plugin-client-redirects', {
+      redirects: [
+        { from: '/docs/example', to: '/docs/getting-started/example' },
+        { from: '/docs/installation', to: '/docs/getting-started/' },
+      ]
+    }]
   ]
 };
 

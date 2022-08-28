@@ -1579,7 +1579,7 @@ async function importFile(evt) {
 
 #### Writing data
 
-`@capacitor/fileysstem` can write Base64 strings:
+`@capacitor/filesystem` can write Base64 strings:
 
 ```html
 <script>
