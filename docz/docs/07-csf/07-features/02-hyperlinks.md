@@ -28,6 +28,34 @@ Note that Excel does not automatically style hyperlinks.  They will be displayed
 using default style. <a href="https://sheetjs.com/pro">SheetJS Pro Basic</a>
 extends this export with support for hyperlink styling.
 
+<details><summary><b>Live Example</b> (click to show)</summary>
+
+```jsx live
+/* The live editor requires this function wrapper */
+function ExportSimpleLink(props) {
+
+  /* Callback invoked when the button is clicked */
+  const xport = React.useCallback(() => {
+    /* Create worksheet */
+    var ws = XLSX.utils.aoa_to_sheet([ [ "Link", "No Link" ] ]);
+    /* Add link */
+    ws["A1"].l = {
+      Target: "https://sheetjs.com",
+      Tooltip: "Find us @ SheetJS.com!"
+    };
+
+    /* Export to file (start a download) */
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "SheetJSSimpleLink.xlsx");
+  });
+
+  return (<button onClick={xport}><b>Export XLSX!</b></button>);
+}
+```
+
+</details>
+
 ## Remote Links
 
 HTTP / HTTPS links can be used directly:
@@ -93,7 +121,7 @@ function ExportHyperlink(props) {
     const wb = XLSX.utils.table_to_book(table);
 
     /* Export to file (start a download) */
-    XLSX.writeFile(wb, "SheetJSHyperlink1.xlsx");
+    XLSX.writeFile(wb, "SheetJSHTMLHyperlink.xlsx");
   });
 
   return (<>

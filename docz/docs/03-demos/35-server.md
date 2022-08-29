@@ -115,7 +115,7 @@ with `Response#send`:
 
 ```ts
 // @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
-import { read, utils } from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
+import { utils, write } from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 
 import * as Drash from "https://deno.land/x/drash@v2.5.4/mod.ts";
 

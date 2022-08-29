@@ -23,7 +23,7 @@ workarounds and solutions!
 
 #### SCRIPT5022: DataCloneError
 
-IE10 does not properly support Transferables.
+IE10 does not properly support `Transferable`.
 
 #### Object doesn't support property or method 'slice'
 
@@ -59,7 +59,7 @@ Old versions of the library did not automatically detect `ArrayBuffer` objects.
 
 :::warning Legacy workaround
 
-This soltion is not recommended for production deployments.  Native support
+This solution is not recommended for production deployments.  Native support
 for `ArrayBuffer` was added in library version `0.9.9`.
 
 :::

@@ -130,9 +130,13 @@ SheetJS formulae omit the `=`.
 
 ["A1-Style"](../general#a1-style) describes A1-Style in more detail.
 
+<details open><summary><b>Live Example</b> (click to hide)</summary>
+
 For example, consider [this test file](pathname:///files/concat.xlsx):
 
 ![Screenshot](pathname:///files/concat.png)
+
+The following code block fetches the file, parses and prints info on cell `D1`:
 
 ```jsx live
 /* The live editor requires this function wrapper */
@@ -162,6 +166,7 @@ VALUE (TYPE): "${v}" ("${t}")\n\
 }
 ```
 
+</details>
 
 ## Single-Cell Formulae
 
@@ -187,7 +192,7 @@ var worksheet = XLSX.utils.aoa_to_sheet([
 ]);
 ```
 
-<details open><summary><b>Live Example</b> (click to show)</summary>
+<details open><summary><b>Live Example</b> (click to hide)</summary>
 
 ```jsx live
 /* The live editor requires this function wrapper */
@@ -270,6 +275,47 @@ Utilities and writers are expected to check for the presence of a `F` field and
 ignore any possible formula element `f` in cells other than the starting cell.
 They are not expected to perform validation of the formulae!
 
+<details><summary><b>Live Example</b> (click to show)</summary>
+
+```jsx live
+/* The live editor requires this function wrapper */
+function ExportArrayFormulae(props) {
+
+  /* Callback invoked when the button is clicked */
+  const xport = React.useCallback(() => {
+    /* Starting data */
+    var D = [
+      [ "A", "B", , "Cell AF", "Expected", , "Range AF", "Expected" ],
+      [  1,   2 ],
+      [  3,   4 ],
+      [  5,   6 ]
+    ];
+    /* Add expected values */
+    let sum = 0;
+    for(let i = 1; i < D.length; ++i) sum += (D[i][7] = D[i][0] * D[i][1]);
+    D[1][4] = sum;
+
+    /* Create worksheet */
+    var ws = XLSX.utils.aoa_to_sheet(D);
+
+    /* D2 single-cell array formula */
+    XLSX.utils.sheet_set_array_formula(ws, "D2", "SUM(A2:A4*B2:B4)");
+
+    /* G2:G4 range array formula */
+    XLSX.utils.sheet_set_array_formula(ws, "G2:G4", "A2:A4*B2:B4");
+
+    /* Export to file (start a download) */
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "SheetJSArrayFormulae.xlsx");
+  });
+
+  return (<button onClick={xport}><b>Export XLSX!</b></button>);
+}
+```
+
+</details>
+
 
 ### Dynamic Array Formulae
 
@@ -293,6 +339,43 @@ XLSX.utils.sheet_set_array_formula(worksheet, "C1", "_xlfn.UNIQUE(A1:A3)", 1);
 // ... OR raw operations
 worksheet["C1"] = { t: "s", f: "_xlfn.UNIQUE(A1:A3)", F:"C1", D: 1 }; // dynamic
 ```
+
+<details><summary><b>Live Example</b> (click to show)</summary>
+
+```jsx live
+/* The live editor requires this function wrapper */
+function ExportDynamicArrayFormulae(props) {
+
+  /* Callback invoked when the button is clicked */
+  const xport = React.useCallback(() => {
+    /* Starting data */
+    var D = [
+      [ "A", , "Static", "Expected", , "Dynamic", "Expected" ],
+      [  1,  ,         , 1         , ,          ,          1 ],
+      [  2,  ,         ,           , ,          ,          2 ],
+      [  1, ]
+    ];
+
+    /* Create worksheet */
+    var ws = XLSX.utils.aoa_to_sheet(D);
+
+    /* C2 static formula */
+    XLSX.utils.sheet_set_array_formula(ws, "C2", "_xlfn.UNIQUE(A2:A4)");
+
+    /* F2 dynamic formula */
+    XLSX.utils.sheet_set_array_formula(ws, "F2", "_xlfn.UNIQUE(A2:A4)", 1);
+
+    /* Export to file (start a download) */
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "SheetJSDynamicFormulae.xlsx");
+  });
+
+  return (<button onClick={xport}><b>Export XLSX!</b></button>);
+}
+```
+
+</details>
 
 ## Localization
 
