@@ -301,6 +301,94 @@ XLSX.writeFile(wb, "sheetjs.xlsx");
 
 </details>
 
+### Dojo Toolkit
+
+_Live Demos_
+
+- [Download and display data](pathname:///dojo/read.html)
+- [Fetch JSON and generate a workbook](pathname:///dojo/write.html)
+
+
+The ["AMD" instructions](../getting-started/installation/amd#dojo-toolkit)
+includes details for use with `require`.
+
+<details><summary><b>Integration in the demos</b> (click to show)</summary>
+
+The demos use the async loading strategy with the SheetJS CDN:
+
+```html
+<script>
+dojoConfig = {
+  packages: [
+    { name: "xlsx", location: "https://cdn.sheetjs.com/xlsx-latest/package/dist", main: "xlsx.full.min" }
+  ]
+}
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="isDebug:1, async:1"></script>
+<script>
+require(["dojo/request/xhr", "xlsx"], function(xhr, _XLSX) {
+  /* XLSX-related operations happen in the callback */
+});
+</script>
+```
+
+</details>
+
+The ["Dojo" section in "Bundlers"](./bundler#dojo) includes a complete example
+mirroring the [official example](../getting-started/example)
+
+<details><summary><b>Details</b> (click to show)</summary>
+
+_Reading Data_
+
+When fetching spreadsheets with XHR, `handleAs: "arraybuffer"` yields an
+`ArrayBuffer` which can be passed to `XLSX.read`:
+
+```html
+<div id="tbl"></div>
+<script>
+require(["dojo/request/xhr", "xlsx"], function(xhr, _XLSX) {
+  xhr("https://sheetjs.com/pres.numbers", {
+    headers: { "X-Requested-With": null },
+// highlight-next-line
+    handleAs: "arraybuffer"
+  }).then(function(ab) {
+    /* read ArrayBuffer */
+// highlight-next-line
+    var wb = XLSX.read(ab);
+    /* display first worksheet data */
+    var ws = wb.Sheets[wb.SheetNames[0]];
+    document.getElementById("tbl").innerHTML = XLSX.utils.sheet_to_html(ws);
+  });
+});
+</script>
+```
+
+:::note
+
+The `X-Requested-With` header setting resolves some issues related to CORS.
+
+:::
+
+_Writing Data_
+
+`XLSX.writeFile` works as expected:
+
+```html
+<script>
+require(["xlsx"], function(_XLSX) {
+  var ws = XLSX.utils.aoa_to_sheet(["SheetJS".split(""), [5,4,3,3,7,9,5]]);
+  var wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  /* create an XLSX file and try to save to SheetJSDojo.xlsx */
+  // highlight-next-line
+  XLSX.writeFile(workbook, "SheetJSDojo.xlsx");
+});
+</script>
+```
+
+</details>
+
+
 ### KnockoutJS
 
 [KnockoutJS](https://en.wikipedia.org/wiki/Knockout_(web_framework)) was a

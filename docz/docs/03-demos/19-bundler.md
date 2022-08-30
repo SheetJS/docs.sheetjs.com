@@ -168,6 +168,13 @@ bun bun.js
 </details>
 
 
+## Dojo
+
+Integration details are included [in the "AMD" installation](../getting-started/installation/amd#dojo-toolkit)
+
+Complete Examples are included [in the "Dojo" demo](./legacy#dojo-toolkit)
+
+
 ## esbuild
 
 The `xlsx.mjs` source file are written in a subset of ES6 that `esbuild`

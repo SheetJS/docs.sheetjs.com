@@ -91,7 +91,7 @@ The interpretation of date codes requires a shared understanding of date code
 The workbook's epoch can be determined by examining the workbook's `wb.Workbook.WBProps.date1904` property:
 
 ```js
-if(!!(((wb.Workbook||{}).WBProps||{}).date1904)) {
+if(!(wb?.Workbook?.WBProps?.date1904)) {
   /* uses 1904 date system */
 } else {
   /* uses 1900 date system */

@@ -314,6 +314,18 @@ var wb = XLSX.readFile("sheetjs.numbers");
 XLSX.writeFile(wb, "sheetjs.xlsx");
 ```
 
+### ExtendScript
+
+In Photoshop and other Adobe apps, `readFile` and `writeFile` use the `File`
+object under the hood:
+
+```js
+#include "xlsx.extendscript.js"
+
+var wb = XLSX.readFile("sheetjs.xlsx");
+XLSX.writeFile(wb, "sheetjs.csv");
+```
+
 ### Deno
 
 `Deno.readFileSync` and `Deno.writeFileSync` are supported by `readFile` and

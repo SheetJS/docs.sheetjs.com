@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head><title>SheetJS + Dojo Write Demo</title></head>
+<body>
+  <h1>SheetJS + Dojo Write Demo</h1>
+
+  (this HTML page is not minified -- feel free to view source!)<br/><br/>
+  <a href="https://docs.sheetjs.com">SheetJS CE Documentation</a>
+<script>
+dojoConfig = { packages: [
+  { name: "xlsx", location: "https://cdn.sheetjs.com/xlsx-latest/package/dist", main: "xlsx.full.min" }
+] };
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="isDebug:1, async:1"></script>
+<script>
+require(["dojo/request/xhr", "xlsx"], function(xhr, _XLSX) {
+  xhr("https://sheetjs.com/data/executive.json", {
+    headers: { "X-Requested-With": null },
+    handleAs: "json"
+  }).then(function(raw_data) {
+    /* filter for the Presidents */
+    var prez = raw_data.filter(function(row) {
+      return row.terms.some(function(term) { return term.type === "prez"; });
+    });
+
+    /* flatten objects */
+    var rows = prez.map(function(row) { return ({
+      name: row.name.first + " " + row.name.last,
+      birthday: row.bio.birthday
+    }); });
+
+    /* generate worksheet and workbook */
+    var worksheet = XLSX.utils.json_to_sheet(rows);
+    var workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+
+    /* fix headers */
+    XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+    /* calculate column width */
+    var max_width = rows.reduce(function(w, r) { return Math.max(w, r.name.length); }, 10);
+    worksheet["!cols"] = [ { wch: max_width } ];
+
+    /* create an XLSX file and try to save to Presidents.xlsx */
+    XLSX.writeFile(workbook, "Presidents.xlsx");
+  });
+});
+</script>
+</body>
+</html>

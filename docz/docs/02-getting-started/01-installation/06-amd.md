@@ -93,3 +93,77 @@ require(['xlsx'], function(XLSX) {
   // ... use XLSX here
 });
 ```
+
+## Dojo Toolkit
+
+Dojo has changed module loading strategies over the years.  These examples were
+tested with Dojo `1.10.4` and are not guaranteed to work with other versions.
+
+Live demos are included in ["Dojo Toolkit"](../../demos/legacy#dojo-toolkit)
+
+:::caution
+
+The standalone scripts add `window.XLSX`, so it is recommended to use `_XLSX`
+in the function arguments and access the library with `XLSX` in the callback:
+
+```js
+require(["xlsx"], function(
+  // highlight-next-line
+  _XLSX // !! NOTE: this is not XLSX! A different variable name must be used
+) {
+  // highlight-next-line
+  console.log(XLSX.version); // use XLSX in the callback
+})
+```
+
+:::
+
+#### Synchronous Loading
+
+When `async` is disabled, the scripts can be referenced directly in `require`
+calls.
+
+```html
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="isDebug:1, async:0"></script>
+<script>
+require([
+// highlight-next-line
+  "https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"
+], function(
+// highlight-next-line
+  _XLSX // !! NOTE: this is not XLSX! A different variable name must be used
+) {
+  // ... use XLSX here
+})
+</script>
+```
+
+#### Asynchronous Loading
+
+When `async` is enabled, Dojo will only understand the name `xlsx`.  The config
+object can map package names to scripts:
+
+```html
+<script>
+// This setting must appear *before* loading dojo.js
+dojoConfig = {
+  packages: [
+    // highlight-start
+    {
+      name: "xlsx",
+      // if self-hosting the script, location should be a folder relative to baseUrl setting
+      location: "https://cdn.sheetjs.com/xlsx-latest/package/dist",
+      // name of the script (without the .js extension)
+      main: "xlsx.full.min"
+    }
+    // highlight-end
+  ]
+}
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="isDebug:1, async:1"></script>
+<script>
+require(["xlsx"], function(_XLSX) {
+  // ... use XLSX here
+});
+</script>
+```

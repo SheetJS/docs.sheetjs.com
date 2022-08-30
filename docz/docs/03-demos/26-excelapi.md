@@ -2,6 +2,13 @@
 title: Excel JavaScript API
 ---
 
+:::info
+
+This demo focuses on the JavaScript API included with Excel. For reading and
+writing Excel files, [other demos](/docs/demos) cover a wide variety of use cases
+
+:::
+
 Office 2016 introduced a JavaScript API for interacting with the application.
 It offers solutions for custom functions as well as task panes.
 

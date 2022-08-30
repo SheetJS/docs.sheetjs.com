@@ -404,8 +404,8 @@ result.forEach(function(row) {
   var query = db.prepareQuery("SELECT * FROM '" + row[0] + "' LIMIT 100000")
   var aoa = query.all();
   if(aoa.length > 0) {
-		/* Create array of arrays */
-		var data = [query.columns().map(x => x.name)].concat(aoa);
+    /* Create array of arrays */
+    var data = [query.columns().map(x => x.name)].concat(aoa);
     /* Create Worksheet from the aoa */
     var ws = XLSX.utils.aoa_to_sheet(data, {dense: true});
     /* Add to Workbook */

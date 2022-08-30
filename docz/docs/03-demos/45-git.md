@@ -34,7 +34,7 @@ explores storing and comparing versions of structured CSV and JSON data.  The
 official ["Excel to CSV"](https://github.com/githubocto/flat-demo-xlsx) example
 uses SheetJS under the hood to generate CSV data from an XLSX file.
 
-This demo covers implementation details elided in the official writeup.
+This demo covers implementation details elided in the official write-up.
 
 ## Flat Data
 

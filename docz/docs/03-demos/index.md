@@ -25,6 +25,7 @@ run in the web browser, demos will include interactive examples.
 - [`Svelte`](./svelte)
 - [`VueJS`](./vue)
 - [`Angular.JS`](./legacy#angularjs)
+- [`Dojo`](./legacy#dojo)
 - [`Knockout`](./legacy#knockout)
 
 ### Front-End UI Components
@@ -50,7 +51,7 @@ run in the web browser, demos will include interactive examples.
 - [`ExtendScript for Adobe Apps`](./extendscript)
 - [`NetSuite SuiteScript`](./netsuite)
 - [`SalesForce Lightning Web Components`](./salesforce)
-- [`Excel JavaScript API`](./excel)
+- [`Excel JavaScript API`](./excelapi)
 - [`Headless Automation`](./headless)
 - [`Other JavaScript Engines`](./engines)
 - [`Azure Functions and Storage`](./azure)

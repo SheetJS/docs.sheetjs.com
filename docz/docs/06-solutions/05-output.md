@@ -794,13 +794,40 @@ Readable Stream.
 <Tabs>
   <TabItem value="nodejs" label="NodeJS">
 
-In a CommonJS context, NodeJS Streams immediately work with SheetJS.  This
-example reads a worksheet passed as an argument to the script, pulls the first
-worksheet, converts to CSV and writes to `out.csv`:
+:::note
+
+In a CommonJS context, NodeJS Streams and `fs` immediately work with SheetJS:
 
 ```js
-const XLSX = require("xlsx");
+const XLSX = require("xlsx"); // "just works"
+```
 
+In NodeJS ESM, the dependency must be loaded manually:
+
+```js
+import * as XLSX from 'xlsx';
+import { Readable } from 'stream';
+
+XLSX.stream.set_readable(Readable); // manually load stream helpers
+```
+
+Additionally, for file-related operations in NodeJS ESM, `fs` must be loaded:
+
+```js
+import * as XLSX from 'xlsx';
+import * as fs from 'fs';
+
+XLSX.set_fs(fs); // manually load fs helpers
+```
+
+**It is strongly encouraged to use CommonJS in NodeJS whenever possible.**
+
+:::
+
+This example reads a worksheet passed as an argument to the script, pulls the
+first worksheet, converts to CSV and writes to `out.csv`:
+
+```js
 const workbook = XLSX.readFile(process.argv[2]);
 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 // highlight-next-line

@@ -163,6 +163,9 @@ const config = {
       redirects: [
         { from: '/docs/example', to: '/docs/getting-started/example' },
         { from: '/docs/installation', to: '/docs/getting-started/' },
+        { from: '/docs/demos/excel', to: '/docs/demos/' },
+        { from: '/docs/getting-started/demos/', to: '/docs/demos/' },
+        { from: '/docs/getting-started/demos/excel', to: '/docs/demos/' },
       ]
     }]
   ]
