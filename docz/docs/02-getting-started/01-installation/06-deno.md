@@ -1,7 +1,7 @@
 ---
 pagination_prev: getting-started/index
 pagination_next: getting-started/example
-sidebar_position: 3
+sidebar_position: 6
 sidebar_custom_props:
   summary: Import ECMAScript Modules and TypeScript definitions
 ---

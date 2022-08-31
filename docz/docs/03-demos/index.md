@@ -25,7 +25,7 @@ run in the web browser, demos will include interactive examples.
 - [`Svelte`](./svelte)
 - [`VueJS`](./vue)
 - [`Angular.JS`](./legacy#angularjs)
-- [`Dojo`](./legacy#dojo)
+- [`Dojo`](./legacy#dojo-toolkit)
 - [`Knockout`](./legacy#knockout)
 
 ### Front-End UI Components
@@ -46,6 +46,7 @@ run in the web browser, demos will include interactive examples.
 - [`Electron`](./desktop#electron)
 - [`NW.js`](./desktop#nwjs)
 - [`Tauri`](./desktop#tauri)
+- [`Wails`](./desktop#wails)
 - [`Chrome and Chromium Extensions`](./chromium)
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)

@@ -11,6 +11,7 @@ Other demos cover general VueJS deployments, including:
 
 - [Static Site Generation powered by NuxtJS](./content#nuxtjs)
 - [iOS and Android applications powered by Quasar](./mobile#quasar)
+- [Desktop application powered by Tauri](./desktop#tauri)
 - [`vue3-table-lite` UI component](./grid#vue3-table-lite)
 
 

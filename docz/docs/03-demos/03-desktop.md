@@ -549,3 +549,215 @@ async function saveFile() {
   await writeBinaryFile(selected, d);
 }
 ```
+
+## Wails
+
+The [NodeJS Module](../getting-started/installation/nodejs) can be imported
+from JavaScript code.
+
+This demo was tested against Wails `v2.0.0-beta.44.2` on 2022 August 31 using
+the Svelte TypeScript starter.
+
+:::caution
+
+Wails currently does not provide the equivalent of NodeJS `fs` module.
+
+The HTML File Input Element does not show a file picker.  This is a known bug.
+
+All raw file operations must be performed in Go code.
+
+:::
+
+
+The "Complete Example" creates an app that looks like the screenshot:
+
+![SheetJS Wails MacOS screenshot](pathname:///wails/macos.png)
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) [Read Wails "Getting Started" guide and install dependencies.](https://wails.io/docs/gettingstarted/installation)
+
+1) Create a new Wails app:
+
+```bash
+wails init -n sheetjs-wails -t svelte-ts
+```
+
+2) Enter the directory:
+
+```bash
+cd sheetjs-wails
+```
+
+3) Install front-end dependencies:
+
+```bash
+cd frontend
+curl -L -o src/assets/logo.png https://sheetjs.com/sketch1024.png
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+cd ..
+```
+
+4) Download source files:
+
+- Download [`app.go`](pathname:///wails/app.go) and replace `app.go`
+- Download [`App.svelte`](pathname:///wails/App.svelte) and replace
+  `frontend/src/App.svelte`
+
+5) Build the app with
+
+```bash
+wails build
+```
+
+At the end, it will print the path to the generated program. Run the program!
+
+</details>
+
+All operations must be run from Go code.  This example passes Base64 strings.
+
+### Reading Files
+
+The file picker and reading operations can be combined in one Go function.
+
+#### Go
+
+```go
+import (
+  "context"
+// highlight-start
+  "encoding/base64"
+  "io/ioutil"
+  "github.com/wailsapp/wails/v2/pkg/runtime"
+// highlight-end
+)
+
+type App struct {
+  ctx context.Context
+}
+
+// ReadFile shows an open file dialog and returns the data as Base64 string
+func (a *App) ReadFile() string {
+  // highlight-next-line
+  selection, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+    Title: "Select File",
+    Filters: []runtime.FileFilter{
+      { DisplayName: "Excel Workbooks (*.xlsx)", Pattern: "*.xlsx", },
+      // ... more filters for more file types
+    },
+  })
+  if err != nil { return "" } // The demo app shows an error message
+  // highlight-next-line
+  data, err := ioutil.ReadFile(selection)
+  if err != nil { return "" } // The demo app shows an error message
+  // highlight-next-line
+  return base64.StdEncoding.EncodeToString(data)
+}
+```
+
+#### JS
+
+Wails will automatically create `window.go.main.App.ReadFile` for use in JS:
+
+```js title="frontend/src/App.svelte"
+import { read, utils } from 'xlsx';
+
+async function importFile(evt) {
+// highlight-start
+  const b64 = window['go']['main']['App']['ReadFile']();
+  const wb = read(b64, { type: "base64" });
+// highlight-end
+  const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+  html = utils.sheet_to_html(ws); // generate HTML and update state
+}
+```
+
+### Writing Files
+
+There is a multi-part dance since the library needs the file extension.
+
+1) Show the save file picker in Go, pass back to JS
+
+2) Generate the file data in JS, pass the data back to Go
+
+3) Write to file in Go
+
+##### Go
+
+Two Go functions will be exposed.
+
+- `SaveFile` will show the file picker and return the path:
+
+```go
+import (
+  "context"
+// highlight-start
+  "github.com/wailsapp/wails/v2/pkg/runtime"
+// highlight-end
+)
+
+type App struct {
+  ctx context.Context
+}
+
+func (a *App) SaveFile() string {
+// highlight-next-line
+  selection, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+    Title: "Select File",
+    DefaultFilename: "SheetJSWails.xlsx",
+    Filters: []runtime.FileFilter{
+      { DisplayName: "Excel Workbooks (*.xlsx)", Pattern: "*.xlsx", },
+      // ... more filters for more file types
+    },
+  })
+  if err != nil { return "" } // The demo app shows an error message
+  return selection
+}
+```
+
+- `WriteFile` performs the file write given a Base64 string and file path:
+
+```go
+import (
+  "context"
+// highlight-start
+  "encoding/base64"
+  "io/ioutil"
+// highlight-end
+)
+
+type App struct {
+  ctx context.Context
+}
+
+func (a *App) WriteFile(b64 string, path string) {
+  // highlight-start
+  buf, _ := base64.StdEncoding.DecodeString(b64);
+  _ = ioutil.WriteFile(path, buf, 0644);
+  // highlight-end
+}
+```
+
+#### JS
+
+Wails will automatically create bindings for use in JS:
+
+```js
+import { utils, write } from 'xlsx';
+
+async function exportFile(wb) {
+  /* generate workbook */
+  const elt = tbl.getElementsByTagName("TABLE")[0];
+  const wb = utils.table_to_book(elt);
+
+  /* show save picker and get path */
+  const path = await window['go']['main']['App']['SaveFile']();
+
+  /* generate base64 string based on the path */
+  const b64 = write(wb, { bookType: path.slice(path.lastIndexOf(".")+1), type: "base64" });
+
+  /* write to file */
+  await window['go']['main']['App']['WriteFile'](b64, path);
+  // The demo shows a success message at this point
+}
+```
