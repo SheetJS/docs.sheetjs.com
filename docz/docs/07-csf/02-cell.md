@@ -20,7 +20,7 @@ Cell objects are plain JS objects with keys and values following the convention:
 | `D` | if true, array formula is dynamic (if applicable)                      |
 |     | **Other Cell Properties** ([More Info](./features))                    |
 | `l` | cell hyperlink and tooltip ([More Info](./features/hyperlinks))        |
-| `c` | cell comments ([More Info](./features#cell-comments)) |
+| `c` | cell comments ([More Info](./features/comments))                       |
 | `r` | rich text encoding (if applicable)                                     |
 | `h` | HTML rendering of the rich text (if applicable)                        |
 | `s` | the style/theme of the cell (if applicable)                            |
