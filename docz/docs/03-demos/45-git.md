@@ -162,7 +162,7 @@ the source data or artifacts from the `postprocess` script changed.
 
 ### Post-Processing Data
 
-:::caution
+:::warning
 
 The `flat-postprocessing` library includes a number of utilities for different
 data formats.  The `readXLSX` helper uses SheetJS under the hood.
@@ -175,17 +175,17 @@ releases, the examples import from the SheetJS CDN:
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 ```
 
+The official registry endpoint <https://deno.land/x/sheetjs> is out of date.
+[This is a known registry bug](https://github.com/denoland/dotland/issues/2072)
+
 :::
 
 #### Post-Process Script
 
 The first argument to the post-processing script is the filename.  The file can
-be read with `XLSX.readFile` directly.  On the export side, `writeCSV` from the
-`flat` library can write data generated from `XLSX.utils.sheet_to_csv`:
+be read with `XLSX.readFile` directly. `XLSX.utils.sheet_to_csv` generates CSV:
 
 ```ts title="postprocess.ts"
-import { writeCSV } from "https://deno.land/x/flat/mod.ts";
-// @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 /* load the codepage support library for extended support with older formats  */
 import * as cptable from 'https://cdn.sheetjs.com/xlsx-latest/package/dist/cpexcel.full.mjs';
@@ -206,7 +206,7 @@ const csv = XLSX.utils.sheet_to_csv(first_sheet);
 
 /* write CSV */
 // highlight-next-line
-await writeCSV(out_file, csv);
+Deno.writeFileSync(out_file, new TextEncoder().encode(csv));
 ```
 
 

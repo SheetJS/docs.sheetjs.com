@@ -534,7 +534,7 @@ const filters = [
   // ... other desired formats ...
 ];
 
-async function saveFile() {
+async function saveFile(wb) {
   /* show save file dialog */
   const selected = await save({
     title: "Save to Spreadsheet",
@@ -759,5 +759,241 @@ async function exportFile(wb) {
   /* write to file */
   await window['go']['main']['App']['WriteFile'](b64, path);
   // The demo shows a success message at this point
+}
+```
+
+## NeutralinoJS
+
+The [Standalone build](../getting-started/installation/standalone) can be added
+to the entry `index.html`
+
+This demo was tested against "binaries" `4.7.0` and "client" `3.6.0`
+
+:::note
+
+NeutralinoJS currently does not provide the equivalent of NodeJS `fs` module.
+The raw `Neutralino.filesystem` and `Neutralino.os` methods are used.
+
+:::
+
+The `os` and `filesystem` modules must be enabled in `neutralino.conf.json`.
+The starter already enables `os` so typically one line must be added:
+
+```json title="neutralino.config.json"
+  "nativeAllowList": [
+    "app.*",
+    "os.*",
+// highlight-next-line
+    "filesystem.*",
+    "debug.log"
+  ],
+```
+
+The "Complete Example" creates an app that looks like the screenshot:
+
+![SheetJS NeutralinoJS MacOS screenshot](pathname:///neu/macos.png)
+
+:::caution
+
+At the time of writing, `filters` did not work as expected on MacOS.  They have
+been omitted in the example and commented in the code snippets
+
+:::
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+The app core state will be the HTML table.  Reading files will add the table to
+the window.  Writing files will parse the table into a spreadsheet.
+
+1) Create a new NeutralinoJS app:
+
+```bash
+npx @neutralinojs/neu create sheetjs-neu
+cd sheetjs-neu
+```
+
+2) Download the standalone script and place in `resources/js/main.js`:
+
+```bash
+curl -L -o resources/js/xlsx.full.min.js https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js
+```
+
+3) Add the highlighted lines to `neutralino.conf.json` in `nativeAllowList`:
+
+```json title="neutralino.config.json"
+  "nativeAllowList": [
+    "app.*",
+// highlight-start
+    "os.*",
+    "filesystem.*",
+// highlight-end
+    "debug.log"
+  ],
+```
+
+4) Set up skeleton app and print version info:
+
+- Edit `resources/index.html` and replace the `<body>` with the code below:
+
+```html title="resources/index.html"
+  <body>
+    <div id="neutralinoapp">
+      <h1>SheetJS × NeutralinoJS</h1>
+      <button onclick="importData()">Import Data</button>
+      <button onclick="exportData()">Export Data</button>
+      <div id="info"></div>
+    </div>
+    <script src="js/neutralino.js"></script>
+    <!-- Load the browser build and make XLSX available to main.js -->
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+```
+
+- Append the following code to `resources/styles.css` to center the table:
+
+```css title="resources/styles.css"
+#info {
+    width:100%;
+    text-align: unset;
+}
+table {
+    margin: 0 auto;
+}
+```
+
+- Print the version number in the `showInfo` method of `resources/js/main.js`:
+
+```js title="resources/js/main.js"
+        ${NL_APPID} is running on port ${NL_PORT}  inside ${NL_OS}
+        <br/><br/>
+        <span>server: v${NL_VERSION} . client: v${NL_CVERSION}</span>
+// highlight-start
+        <br/><br/>
+        <span>SheetJS version ${XLSX.version}</span>
+// highlight-end
+        `;
+```
+
+5) Run the app:
+
+```bash
+npx @neutralinojs/neu run
+```
+
+You should see `SheetJS Version ` followed by the library version number.
+
+6) Add the following code to the bottom of `resources/js/main.js`:
+
+```js
+(async() => {
+  const ab = await (await fetch("https://sheetjs.com/pres.numbers")).arrayBuffer();
+  const wb = XLSX.read(ab);
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  document.getElementById('info').innerHTML = XLSX.utils.sheet_to_html(ws);
+})();
+```
+
+Save the source file, close the app and re-run the command from step 5.
+
+When the app loads, a table should show in the main screen.
+
+7) Add `importFile` and `exportFile` to the bottom of `resources/js/main.js`:
+
+```js
+async function importData() {
+  /* show open dialog */
+  const [filename] = await Neutralino.os.showOpenDialog('Open a spreadsheet');
+
+  /* read data */
+  const ab = await Neutralino.filesystem.readBinaryFile(filename);
+  const wb = XLSX.read(ab);
+
+  /* make table */
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  document.getElementById('info').innerHTML = XLSX.utils.sheet_to_html(ws);
+}
+
+async function exportData() {
+    /* show save dialog */
+  const filename = await Neutralino.os.showSaveDialog('Save to file');
+
+  /* make workbook */
+  const tbl = document.getElementById('info').querySelector("table");
+  const wb = XLSX.utils.table_to_book(tbl);
+
+  /* make file */
+  const bookType = filename.slice(filename.lastIndexOf(".") + 1);
+  const data = XLSX.write(wb, { bookType, type: "buffer" });
+  await Neutralino.filesystem.writeBinaryFile(filename, data);
+}
+```
+
+Save the source file, close the app and re-run the command from step 5.
+
+When the app loads, click the "Import File" button and select a spreadsheet to
+see the contents.  Click "Export File" and enter `SheetJSNeu.xlsx` to write.
+
+8) Build production apps:
+
+```bash
+npx @neutralinojs/neu run
+```
+
+Platform-specific programs will be created in the `dist` folder.
+
+</details>
+
+### Reading Files
+
+There are two steps to reading files: obtaining a path and reading binary data:
+
+```js
+const filters = [
+  {name: "Excel Binary Workbook", extensions: ["xlsb"]},
+  {name: "Excel Workbook", extensions: ["xlsx"]},
+]
+
+async function openFile() {
+  /* show open file dialog */
+  const [filename] = await Neutralino.os.showOpenDialog(
+    'Open a spreadsheet',
+    { /* filters, */ multiSelections: false }
+  );
+
+  /* read data into an ArrayBuffer */
+  const ab = await Neutralino.filesystem.readBinaryFile(filename);
+
+  /* parse with SheetJS */
+  const wb = XLSX.read(ab);
+  return wb;
+}
+```
+
+This method can be called from a button click or other event.
+
+### Writing Files
+
+There are two steps to writing files: obtaining a path and writing binary data:
+
+```js
+const filters = [
+  {name: "Excel Binary Workbook", extensions: ["xlsb"]},
+  {name: "Excel Workbook", extensions: ["xlsx"]},
+]
+
+async function saveFile(wb) {
+  /* show save file dialog */
+  const filename = await Neutralino.os.showSaveDialog(
+    'Save to file',
+    { /* filters */ }
+  );
+
+  /* Generate workbook */
+  const bookType = filename.slice(filename.lastIndexOf(".") + 1);
+  const data = XLSX.write(wb, { bookType, type: "buffer" });
+
+  /* save data to file */
+  await Neutralino.filesystem.writeBinaryFile(filename, data);
 }
 ```

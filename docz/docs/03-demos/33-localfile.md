@@ -339,6 +339,14 @@ const wb = XLSX.readFile("sheetjs.numbers");
 XLSX.writeFile(wb, "sheetjs.xlsx");
 ```
 
+:::note
+
+Any script using `XLSX.readFile` requires the `--allow-read` permission.
+
+Any script using `XLSX.writeFile` requires the `--allow-write` permission.
+
+:::
+
 ### Bun
 
 Bun requires the `fs` module:
