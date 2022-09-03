@@ -35,7 +35,7 @@ run in the web browser, demos will include interactive examples.
 - [`react-data-grid`](./grid#react-data-grid)
 - [`vue3-table-lite`](./grid#vue3-table-lite)
 - [`angular-ui-grid`](./grid#angular-ui-grid)
-
+- [`material ui`](./grid#material-ui-table)
 ### Platforms and Integrations
 
 - [`Command-Line Tools`](./cli)

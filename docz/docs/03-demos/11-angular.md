@@ -15,7 +15,7 @@ and TypeScript familiarity is assumed.
 Other demos cover general Angular deployments, including:
 
 - [iOS and Android applications powered by NativeScript](./mobile#nativescript)
-- [iOS and Android applications powered by ionic](./mobile#ionic)
+- [iOS and Android applications powered by Ionic](./mobile#ionic)
 
 :::warning
 

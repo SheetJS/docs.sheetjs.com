@@ -8,7 +8,7 @@ build:
 
 .PHONY: init
 init:
-	cd docz; npm i; cd ..
+	cd docz; npm i || npm i --legacy-peer-deps; cd ..
 
 .PHONY: dev
 dev:

@@ -205,3 +205,104 @@ Inspect the output and compare with the data in `SheetJSRedisTest.mjs`.
 Open `SheetJSRedis.xlsx` and verify the columns have the correct data
 
 </details>
+
+
+### PouchDB
+
+`Database#allDocs` is the standard approach for bulk data export. The generated
+row objects have an additional `_id` and `_rev` keys that should be removed.
+
+Nested objects must be flattened. The ["Tutorial"](../getting-started/example)
+includes an example of constructing a simple array.
+
+```js
+function export_pouchdb_to_xlsx(db) {
+  /* fetch all rows, including the underlying data */
+  db.allDocs({include_docs: true}, function(err, doc) {
+    
+    /* pull the individual data rows */
+    const aoo = doc.rows.map(r => {
+      /* `rest` will include every field from `r` except for _id and _rev */
+      const { _id, _rev, ...rest } = r;
+      return rest;
+    });
+
+    /* generate worksheet */
+    const ws = XLSX.utils.json_to_sheet(aoo);
+
+    /* generate workbook and export */
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "SheetJSPouch.xlsx");
+  });
+}
+```
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) Download the "Working Version" from the Getting Started guide.
+
+[ZIP](https://github.com/nickcolley/getting-started-todo/archive/master.zip)
+
+The ZIP file should have `MD5` checksum `ac4da7cb0cade1be293ba222462f109c`:
+
+```bash
+curl -LO https://github.com/nickcolley/getting-started-todo/archive/master.zip
+md5sum master.zip || md5 master.zip
+### the checksum will be printed
+```
+
+If the download is unavailable, a mirror is available at
+<https://docs.sheetjs.com/pouchdb/master.zip>
+
+1) Unzip the `master.zip` file and enter the folder:
+
+```bash
+unzip master.zip
+cd getting-started-todo-master
+```
+
+2) Edit `index.html` to reference the SheetJS library and add a button:
+
+```html title="index.html"
+  <body>
+<!-- highlight-start -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <button id="xport">Export!</button>
+<!-- highlight-end -->
+    <section id="todoapp">
+```
+
+3) Just before the end of `app.js`, add a `click` event listener:
+
+```js title="app.js"
+  if (remoteCouch) {
+    sync();
+  }
+
+  // highlight-start
+  document.getElementById("xport").addEventListener("click", function() {
+    db.allDocs({include_docs: true}, function(err, doc) {
+      const aoo = doc.rows.map(r => {
+        const { _id, _rev, ... rest } = r.doc;
+        return rest;
+      });
+      const ws = XLSX.utils.json_to_sheet(aoo);
+      const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, "SheetJSPouch.xlsx");
+    });
+  });
+  // highlight-end
+})();
+```
+
+4) Start a local web server:
+
+```bash
+npx http-server .
+```
+
+Access `http://localhost:8080` from your browser.  Add a few items and click
+the "Export!" button to generate a new file.
+
+</details>
