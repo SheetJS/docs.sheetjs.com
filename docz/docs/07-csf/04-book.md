@@ -4,15 +4,20 @@ sidebar_position: 4
 
 # Workbook Object
 
-`workbook.SheetNames` is an ordered list of the sheets in the workbook
+For a given workbook object `wb`:
 
-`wb.Sheets[sheetname]` returns an object representing the worksheet.
+`wb.SheetNames` is an ordered list of the sheets in the workbook.
+
+`wb.Sheets` is an object whose keys are worksheet names (from `SheetNames`) and
+whose values are worksheet objects.
 
 `wb.Props` is an object storing the standard properties.  `wb.Custprops` stores
 custom properties.  Since the XLS standard properties deviate from the XLSX
 standard, XLS parsing stores core properties in both places.
 
 `wb.Workbook` stores [workbook-level attributes](#workbook-level-attributes).
+
+When reading a file, `wb.bookType` is the determined book type.
 
 ## File Properties
 

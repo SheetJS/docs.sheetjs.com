@@ -95,8 +95,8 @@ mv duktape-2.7.0/src/*.{c,h} .
 1) Download the standalone script, shim and test file:
 
 <ul>
-<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js`}>xlsx.full.min.js</a></li>
 <li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js`}>shim.min.js</a></li>
+<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js`}>xlsx.full.min.js</a></li>
 <li><a href="https://sheetjs.com/pres.numbers">pres.numbers</a></li>
 </ul>
 

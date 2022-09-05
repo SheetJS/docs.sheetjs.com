@@ -186,6 +186,7 @@ The first argument to the post-processing script is the filename.  The file can
 be read with `XLSX.readFile` directly. `XLSX.utils.sheet_to_csv` generates CSV:
 
 ```ts title="postprocess.ts"
+// @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 /* load the codepage support library for extended support with older formats  */
 import * as cptable from 'https://cdn.sheetjs.com/xlsx-latest/package/dist/cpexcel.full.mjs';
@@ -242,7 +243,6 @@ You will be redirected to the new project.
    the main editor window:
 
 ```ts title="postprocess.ts"
-import { writeCSV } from "https://deno.land/x/flat/mod.ts";
 // @deno-types="https://cdn.sheetjs.com/xlsx-latest/package/types/index.d.ts"
 import * as XLSX from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
 /* load the codepage support library for extended support with older formats  */
@@ -261,7 +261,8 @@ const first_sheet = workbook.Sheets[workbook.SheetNames[0]];
 const csv = XLSX.utils.sheet_to_csv(first_sheet);
 
 /* write CSV */
-await writeCSV(out_file, csv);
+// highlight-next-line
+Deno.writeFileSync(out_file, new TextEncoder().encode(csv));
 ```
 
 

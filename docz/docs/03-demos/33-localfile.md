@@ -139,6 +139,13 @@ drop_dom_element.addEventListener("drop", handleDropAsync, false);
 
 ## File System Access API
 
+:::caution Limited Browser Support
+
+At the time of writing, browser support was fairly limited.  Chrome introduced
+the feature in version 86.  Safari did not support File System Access API.
+
+:::
+
 _Reading Files_
 
 `window.showOpenFilePicker` shows a file picker and resolves to an array of
@@ -220,7 +227,6 @@ function SheetJSRoundTripFileSystemAPI() { return ( <button onClick={async () =>
     suggestedName: "SheetJSRT.xlsx",
     types: [ { description: 'XLSX', accept: { 'application/vnd.ms-excel': ['.xlsx'] } } ]
   });
-  console.log(wFile);
   const wstream = await wFile.createWritable();
 
   /* write */
@@ -237,8 +243,14 @@ function SheetJSRoundTripFileSystemAPI() { return ( <button onClick={async () =>
 
 ## File and Directory Entries API
 
-In the web browser, the File and Directory Entries API does not project to the
-local file system. `cordova-plugin-file` *does* write to device in mobile apps!
+:::caution Deprecated
+
+In the web browser, the File and Directory Entries API has been deprecated and
+is not recommended for new applications.
+
+`cordova-plugin-file` still uses the API patterns.
+
+:::
 
 _Writing Files_
 

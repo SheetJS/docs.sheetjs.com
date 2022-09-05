@@ -156,7 +156,6 @@ _Adding a cell to a range_
 function range_add_cell(range, cell) {
   var rng = XLSX.utils.decode_range(range);
   var c = typeof cell == 'string' ? XLSX.utils.decode_cell(cell) : cell;
-  console.log(rng, c);
   if(rng.s.r > c.r) rng.s.r = c.r;
   if(rng.s.c > c.c) rng.s.c = c.c;
 

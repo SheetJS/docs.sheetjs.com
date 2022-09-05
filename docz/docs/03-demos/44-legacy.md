@@ -36,8 +36,8 @@ This demo includes all of the support files for the Flash and ActiveX methods.
 1) Download the standalone script and shim to a server that will host the demo:
 
 <ul>
-<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js`}>xlsx.full.min.js</a></li>
 <li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js`}>shim.min.js</a></li>
+<li><a href={`https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js`}>xlsx.full.min.js</a></li>
 </ul>
 
 2) [Download the demo ZIP](pathname:///ie/SheetJSIESupport.zip) to the server.

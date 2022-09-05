@@ -10,22 +10,19 @@ important to ensure code is cleanroom.  [Contribution Notes](https://raw.githubu
 <details>
   <summary><b>File organization</b> (click to show)</summary>
 
-At a high level, the final script is a concatenation of the individual files in
-the `bits` folder.  Running `make` should reproduce the final output on all
-platforms.
-
 Folders:
 
 | folder       | contents                                                      |
 |:-------------|:--------------------------------------------------------------|
-| `bits`       | raw source files that make up the final script                |
 | `bin`        | server-side bin scripts (`xlsx.njs`)                          |
+| `bits`       | raw source files that make up the final script                |
 | `dist`       | dist files for web browsers and nonstandard JS environments   |
-| `demos`      | demo projects for platforms like ExtendScript and Webpack     |
-| `tests`      | browser tests (run `make ctest` to rebuild)                   |
-| `types`      | typescript definitions and tests                              |
 | `misc`       | miscellaneous supporting scripts                              |
+| `modules`    | TypeScript source files that generate some of the bits        |
+| `packages`   | Support libraries and tools                                   |
 | `test_files` | test files (pulled from the test files repository)            |
+| `tests`      | browser tests (run `make ctest` to rebuild)                   |
+| `types`      | TypeScript definitions and tests                              |
 
 </details>
 
