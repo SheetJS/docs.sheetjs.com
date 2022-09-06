@@ -1,2 +1,2 @@
-const current = "0.18.10";
+const current = "0.18.11";
 export default current;
