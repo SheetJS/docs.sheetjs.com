@@ -128,8 +128,8 @@ input.click();
 
 ## Electron
 
-The [NodeJS Module](../getting-started/installation/nodejs) can be imported from the main or
-the renderer thread.
+The [NodeJS Module](../getting-started/installation/nodejs) can be imported
+from the main or the renderer thread.
 
 Electron presents a `fs` module.  The `require('xlsx')` call loads the CommonJS
 module, so `XLSX.readFile` and `XLSX.writeFile` work in the renderer thread.
@@ -995,5 +995,213 @@ async function saveFile(wb) {
 
   /* save data to file */
   await Neutralino.filesystem.writeBinaryFile(filename, data);
+}
+```
+
+## React Native Windows
+
+The [NodeJS Module](../getting-started/installation/nodejs) can be imported
+from the main app script.  File operations must be written in native code.
+
+This demo was tested against `v0.69.6` on 2022 September 07 in Windows 10.
+
+:::warning
+
+There is no simple standalone executable file at the end of the process.
+
+[The official documentation describes distribution strategies](https://microsoft.github.io/react-native-windows/docs/native-code#distribution)
+
+:::
+
+React Native Windows use [Turbo Modules](https://reactnative.dev/docs/the-new-architecture/pillars-turbomodules)
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) Follow the ["Getting Started" guide](https://microsoft.github.io/react-native-windows/docs/getting-started)
+
+1) Create a new project using React Native `0.69` with C# app language:
+
+```powershell
+npx react-native init SheetJSWin --template react-native@^0.69.0
+cd .\SheetJSWin\
+npx react-native-windows-init --no-telemetry --overwrite --language=cs
+npm install --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+```
+
+To ensure that the app works, launch the app:
+
+```powershell
+npx react-native run-windows --no-telemetry
+```
+
+2) Create the file `windows\SheetJSWin\DocumentPicker.cs` with the following:
+
+```csharp title="windows\SheetJSWin\DocumentPicker.cs"
+using System;
+using Microsoft.ReactNative.Managed;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.Security.Cryptography;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI.Core;
+
+namespace SheetJSWin {
+  [ReactModule]
+  class DocumentPicker {
+    private ReactContext context;
+    [ReactInitializer]
+    public void Initialize(ReactContext reactContext) { context = reactContext; }
+
+    [ReactMethod("PickAndRead")]
+    public async void PickAndRead(IReactPromise<string> result) {
+      context.Handle.UIDispatcher.Post(async() => { try {
+        var picker = new FileOpenPicker();
+        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        picker.FileTypeFilter.Add(".xlsx");
+        picker.FileTypeFilter.Add(".xls");
+
+        var file = await picker.PickSingleFileAsync();
+        if(file == null) throw new Exception("File not found");
+
+        var buf = await FileIO.ReadBufferAsync(file);
+        result.Resolve(CryptographicBuffer.EncodeToBase64String(buf));
+      } catch(Exception e) { result.Reject(new ReactError { Message = e.Message }); }});
+    }
+  }
+}
+```
+
+3) Add the highlighted line to `windows\SheetJSWin\SheetJSWin.csproj`. Look for
+the `ItemGroup` that contains `ReactPackageProvider.cs`:
+
+```xml title="windows\SheetJSWin\SheetJSWin.csproj"
+<!-- highlight-next-line -->
+    <Compile Include="DocumentPicker.cs" />
+    <Compile Include="ReactPackageProvider.cs" />
+  </ItemGroup>
+```
+
+Now the native module will be added to the app.
+
+4) Remove `App.js` and save the following to `App.tsx`:
+
+```tsx title="App.tsx"
+import React, { useState, type Node } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { read, utils, version } from 'xlsx';
+import { getEnforcing } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+const DocumentPicker = getEnforcing('DocumentPicker');
+
+const App: () => Node = () => {
+
+  const [ aoa, setAoA ] = useState(["SheetJS".split(""), "5433795".split("")]);
+
+  return (
+    <SafeAreaView style={styles.outer}>
+      <Text style={styles.title}>SheetJS × React Native Windows {version}</Text>
+      <TouchableHighlight onPress={async() => {
+        try {
+          const b64 = await DocumentPicker.PickAndRead();
+          const wb = read(b64);
+          setAoA(utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 } ));
+        } catch(err) { alert(`Error: ${err.message}`); }
+      }}><Text style={styles.button}>Click here to Open File!</Text></TouchableHighlight>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View style={styles.table}>{aoa.map((row,R) => (
+          <View style={styles.row} key={R}>{row.map((cell,C) => (
+            <View style={styles.cell} key={C}><Text>{cell}</Text></View>
+          ))}</View>
+        ))}</View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  cell: { flex: 4 },
+  row: { flexDirection: 'row', justifyContent: 'space-evenly', padding: 10, backgroundColor: 'white', },
+  table: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', },
+  outer: { marginTop: 32, paddingHorizontal: 24, },
+  title: { fontSize: 24, fontWeight: '600', },
+  button: { marginTop: 8, fontSize: 18, fontWeight: '400', },
+});
+
+export default App;
+```
+
+5) Test the app again:
+
+```powershell
+npx react-native run-windows --no-telemetry
+```
+
+Download <https://sheetjs.com/pres.xlsx>, then click on "open file". Use the
+file picker to select the `pres.xlsx` file and the app will show the data.
+
+</details>
+
+### Reading Files
+
+Only the main UI thread can show file pickers.  This is similar to Web Worker
+DOM access limitations in the Web platform.
+
+This example defines a `PickAndRead` function that will show the file picker,
+read the file contents, and return a Base64 string:
+
+```csharp
+namespace SheetJSWin {
+  [ReactModule]
+  class DocumentPicker {
+    /* The context must be stored when the module is initialized */
+    private ReactContext context;
+    [ReactInitializer]
+    public void Initialize(ReactContext ctx) { context = ctx; }
+
+    [ReactMethod("PickAndRead")]
+    public async void PickAndRead(
+      /* "out" param is a Promise that resolves to string or rejects */
+      // highlight-next-line
+      IReactPromise<string> result
+    ) {
+      /* perform file picker action in the UI thread */
+      // highlight-next-line
+      context.Handle.UIDispatcher.Post(async() => { try {
+        /* create file picker */
+        var picker = new FileOpenPicker();
+        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        picker.FileTypeFilter.Add(".xlsx");
+        picker.FileTypeFilter.Add(".xls");
+
+        /* show file picker */
+        // highlight-next-line
+        var file = await picker.PickSingleFileAsync();
+        if(file == null) throw new Exception("File not found");
+
+        /* read data and return base64 string */
+        var buf = await FileIO.ReadBufferAsync(file);
+        result.Resolve(CryptographicBuffer.EncodeToBase64String(buf));
+      } catch(Exception e) { result.Reject(new ReactError { Message = e.Message }); }});
+    }
+  }
+}
+```
+
+This module can be referenced from the Turbo Module Registry:
+
+```js
+import { read } from 'xlsx';
+import { getEnforcing } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+const DocumentPicker = getEnforcing('DocumentPicker');
+
+
+/* ... in some event handler ... */
+async() => {
+  const b64 = await DocumentPicker.PickAndRead();
+  const wb = read(b64);
+  // DO SOMETHING WITH `wb` HERE
 }
 ```

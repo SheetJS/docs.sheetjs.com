@@ -11,6 +11,7 @@ Other demos cover general React deployments, including:
 
 - [Static Site Generation powered by NextJS](./content#nextjs)
 - [iOS and Android applications powered by React Native](./mobile#react-native)
+- [Desktop application powered by React-Native-Windows](./desktop#react-native-windows)
 - [React Data Grid UI component](./grid#react-data-grid)
 
 
