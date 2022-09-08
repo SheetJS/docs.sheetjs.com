@@ -2,6 +2,9 @@
 title: Desktop Applications
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Web technologies like JavaScript and HTML have been adapted to the traditional
 app space.  Typically these frameworks bundle a JavaScript engine as well as a
 windowing framework. SheetJS is compatible with many app frameworks.
@@ -1017,14 +1020,44 @@ React Native Windows use [Turbo Modules](https://reactnative.dev/docs/the-new-ar
 
 <details><summary><b>Complete Example</b> (click to show)</summary>
 
+:::note
+
+React Native Windows supports writing native code in C++ or C#.  This demo has
+been tested against both application types.
+
+:::
+
 0) Follow the ["Getting Started" guide](https://microsoft.github.io/react-native-windows/docs/getting-started)
 
-1) Create a new project using React Native `0.69` with C# app language:
+1) Create a new project using React Native `0.69`:
 
 ```powershell
 npx react-native init SheetJSWin --template react-native@^0.69.0
 cd .\SheetJSWin\
+```
+
+Create the Windows part of the application:
+
+<Tabs groupId="rnwlang">
+  <TabItem value="cs" label="C#">
+
+```powershell
 npx react-native-windows-init --no-telemetry --overwrite --language=cs
+```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```powershell
+npx react-native-windows-init --no-telemetry --overwrite
+```
+
+  </TabItem>
+</Tabs>
+
+Install library:
+
+```powershell
 npm install --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
 ```
 
@@ -1033,6 +1066,9 @@ To ensure that the app works, launch the app:
 ```powershell
 npx react-native run-windows --no-telemetry
 ```
+
+<Tabs groupId="rnwlang">
+  <TabItem value="cs" label="C#">
 
 2) Create the file `windows\SheetJSWin\DocumentPicker.cs` with the following:
 
@@ -1084,6 +1120,71 @@ the `ItemGroup` that contains `ReactPackageProvider.cs`:
     <Compile Include="ReactPackageProvider.cs" />
   </ItemGroup>
 ```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+2) Create the file `windows\SheetJSWin\DocumentPicker.h` with the following:
+
+```cpp title="windows\SheetJSWin\DocumentPicker.h"
+#pragma once
+
+#include "pch.h"
+#include <winrt/Windows.Storage.Pickers.h>
+#include <winrt/Windows.Security.Cryptography.h>
+#include "JSValue.h"
+#include "NativeModules.h"
+
+using namespace winrt::Microsoft::ReactNative;
+using namespace winrt::Windows::Foundation;
+using namespace winrt::Windows::Storage;
+using namespace winrt::Windows::Storage::Pickers;
+using namespace winrt::Windows::Security::Cryptography;
+
+namespace SheetJSWin {
+  REACT_MODULE(DocumentPicker);
+  struct DocumentPicker {
+    REACT_INIT(Initialize);
+    void Initialize(const ReactContext& reactContext) noexcept {
+      context = reactContext;
+    }
+
+    REACT_METHOD(PickAndRead);
+    void PickAndRead(ReactPromise<winrt::hstring> promise) noexcept {
+      auto prom = promise;
+      context.UIDispatcher().Post([prom = std::move(prom)]()->winrt::fire_and_forget {
+        auto p = prom;
+        winrt::Windows::Storage::Pickers::FileOpenPicker picker;
+        picker.SuggestedStartLocation(PickerLocationId::DocumentsLibrary);
+        picker.FileTypeFilter().Append(L".xlsx");
+        picker.FileTypeFilter().Append(L".xls");
+
+        StorageFile file = co_await picker.PickSingleFileAsync();
+        if(file == nullptr) { p.Reject("File not Found"); co_return; }
+
+        auto buf = co_await FileIO::ReadBufferAsync(file);
+        p.Resolve(CryptographicBuffer::EncodeToBase64String(buf));
+        co_return;
+      });
+    }
+
+    private:
+      ReactContext context{nullptr};
+  };
+}
+```
+
+3) Add the highlighted line to `windows\SheetJSWin\ReactPackageProvider.cpp`:
+
+```cpp title="windows\SheetJSWin\ReactPackageProvider.cpp"
+#include "ReactPackageProvider.h"
+// highlight-next-line
+#include "DocumentPicker.h"
+#include "NativeModules.h"
+```
+
+  </TabItem>
+</Tabs>
 
 Now the native module will be added to the app.
 
@@ -1150,7 +1251,10 @@ Only the main UI thread can show file pickers.  This is similar to Web Worker
 DOM access limitations in the Web platform.
 
 This example defines a `PickAndRead` function that will show the file picker,
-read the file contents, and return a Base64 string:
+read the file contents, and return a Base64 string.
+
+<Tabs groupId="rnwlang">
+  <TabItem value="cs" label="C#">
 
 ```csharp
 namespace SheetJSWin {
@@ -1162,11 +1266,7 @@ namespace SheetJSWin {
     public void Initialize(ReactContext ctx) { context = ctx; }
 
     [ReactMethod("PickAndRead")]
-    public async void PickAndRead(
-      /* "out" param is a Promise that resolves to string or rejects */
-      // highlight-next-line
-      IReactPromise<string> result
-    ) {
+    public async void PickAndRead(IReactPromise<string> result) {
       /* perform file picker action in the UI thread */
       // highlight-next-line
       context.Handle.UIDispatcher.Post(async() => { try {
@@ -1183,12 +1283,64 @@ namespace SheetJSWin {
 
         /* read data and return base64 string */
         var buf = await FileIO.ReadBufferAsync(file);
+        // highlight-next-line
         result.Resolve(CryptographicBuffer.EncodeToBase64String(buf));
       } catch(Exception e) { result.Reject(new ReactError { Message = e.Message }); }});
     }
   }
 }
 ```
+
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+
+```cpp
+namespace SheetJSWin
+{
+  REACT_MODULE(DocumentPicker);
+  struct DocumentPicker
+  {
+    /* The context must be stored when the module is initialized */
+    REACT_INIT(Initialize);
+    void Initialize(const ReactContext& reactContext) noexcept {
+      context = reactContext;
+    }
+
+    REACT_METHOD(PickAndRead);
+    void PickAndRead(ReactPromise<winrt::hstring> promise) noexcept {
+      auto prom = promise;
+      /* perform file picker action in the UI thread */
+      // highlight-next-line
+      context.UIDispatcher().Post([prom = std::move(prom)]()->winrt::fire_and_forget {
+        auto p = prom; // promise -> prom -> p dance avoids promise destruction
+
+        /* create file picker */
+        winrt::Windows::Storage::Pickers::FileOpenPicker picker;
+        picker.SuggestedStartLocation(PickerLocationId::DocumentsLibrary);
+        picker.FileTypeFilter().Append(L".xlsx");
+        picker.FileTypeFilter().Append(L".xls");
+
+        /* show file picker */
+        // highlight-next-line
+        StorageFile file = co_await picker.PickSingleFileAsync();
+        if(file == nullptr) { p.Reject("File not Found"); co_return; }
+
+        /* read data and return base64 string */
+        auto buf = co_await FileIO::ReadBufferAsync(file);
+        // highlight-next-line
+        p.Resolve(CryptographicBuffer::EncodeToBase64String(buf));
+        co_return;
+      });
+    }
+
+    private:
+      ReactContext context{nullptr};
+  };
+}
+```
+
+  </TabItem>
+</Tabs>
 
 This module can be referenced from the Turbo Module Registry:
 
