@@ -21,27 +21,30 @@ If `o` is omitted, the writer will use the third argument as the callback.
 
 The write functions accept an options argument:
 
-| Option Name |  Default | Description                                         |
-| :---------- | -------: | :-------------------------------------------------- |
-|`type`       |          | Output data encoding (see Output Type below)        |
-|`cellDates`  |  `false` | Store dates as type `d` (default is `n`)            |
-|`bookSST`    |  `false` | Generate Shared String Table **                     |
-|`bookType`   | `"xlsx"` | Type of Workbook (see below for supported formats)  |
-|`sheet`      |     `""` | Name of Worksheet for single-sheet formats **       |
-|`compression`|  `false` | Use ZIP compression for ZIP-based formats **        |
-|`Props`      |          | Override workbook properties when writing **        |
-|`themeXLSX`  |          | Override theme XML when writing XLSX/XLSB/XLSM **   |
-|`ignoreEC`   |   `true` | Suppress "number as text" errors **                 |
-|`numbers`    |          | Payload for NUMBERS export **                       |
+| Option Name |  Default | Description                                        |
+| :---------- | -------: | :------------------------------------------------- |
+|`type`       |          | Output data encoding (see Output Type below)       |
+|`cellDates`  |  `false` | Store dates as type `d` (default is `n`)           |
+|`codepage`   |          | If specified, use code page when appropriate **    |
+|`bookSST`    |  `false` | Generate Shared String Table **                    |
+|`bookType`   | `"xlsx"` | Type of Workbook (see below for supported formats) |
+|`sheet`      |     `""` | Name of Worksheet for single-sheet formats **      |
+|`compression`|  `false` | Use ZIP compression for ZIP-based formats **       |
+|`Props`      |          | Override workbook properties when writing **       |
+|`themeXLSX`  |          | Override theme XML when writing XLSX/XLSB/XLSM **  |
+|`ignoreEC`   |   `true` | Suppress "number as text" errors **                |
+|`numbers`    |          | Payload for NUMBERS export **                      |
 
 - `bookSST` is slower and more memory intensive, but has better compatibility
   with older versions of iOS Numbers
-- The raw data is the only thing guaranteed to be saved.  Features not described
+- The raw data is the only thing guaranteed to be saved. Features not described
   in this README may not be serialized.
 - `cellDates` only applies to XLSX output and is not guaranteed to work with
   third-party readers.  Excel itself does not usually write cells with type `d`
   so non-Excel tools may ignore the data or error in the presence of dates.
-- `Props` is an object mirroring the workbook `Props` field.  See the table from
+- `codepage` is applied to legacy formats including DBF.  Characters missing
+  from the encoding will be replaced with underscore characters (`_`).
+- `Props` is an object mirroring the workbook `Props` field. See the table from
   the [Workbook File Properties](../csf/book#file-properties) section.
 - if specified, the string from `themeXLSX` will be saved as the primary theme
   for XLSX/XLSB/XLSM files (to `xl/theme/theme1.xml` in the ZIP)

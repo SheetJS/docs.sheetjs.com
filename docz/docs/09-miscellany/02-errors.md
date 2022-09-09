@@ -100,6 +100,26 @@ The ESM build, used in tools like Webpack and in Deno, does not include the
 codepage tables by default.  The ["Frameworks and Bundlers"](../02-getting-started/01-installation/02-frameworks.md#encoding-support)
 section explains how to load support.
 
+#### DBF files with Chinese or Japanese characters have underscores
+
+As mentioned in the previous answer, codepage tables must be loaded.
+
+When reading legacy files that do not include character set metadata, the
+`codepage` option controls the codepage. Common values:
+
+| `codepage` | Description              |
+|-----------:|:-------------------------|
+|        874 | Windows Thai             |
+|        932 | Japanese Shift-JIS       |
+|        936 | Simplified Chinese GBK   |
+|        950 | Traditional Chinese Big5 |
+|       1200 | UTF-16 Little Endian     |
+|       1252 | Windows Latin 1          |
+
+When writing files in legacy formats like DBF, the default codepage 1252 will
+be used. The codepage option will override the setting.  Any characters missing
+from the character set will be replaced with underscores.
+
 #### Worksheet only includes one row of data
 
 Some third-party writer tools will not update the dimensions records in XLSX or
