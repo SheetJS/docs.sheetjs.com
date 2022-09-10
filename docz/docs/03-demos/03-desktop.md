@@ -1124,7 +1124,7 @@ the `ItemGroup` that contains `ReactPackageProvider.cs`:
   </TabItem>
   <TabItem value="cpp" label="C++">
 
-2) Create the file `windows\SheetJSWin\DocumentPicker.h` with the following:
+4) Create the file `windows\SheetJSWin\DocumentPicker.h` with the following:
 
 ```cpp title="windows\SheetJSWin\DocumentPicker.h"
 #pragma once
@@ -1174,7 +1174,7 @@ namespace SheetJSWin {
 }
 ```
 
-3) Add the highlighted line to `windows\SheetJSWin\ReactPackageProvider.cpp`:
+5) Add the highlighted line to `windows\SheetJSWin\ReactPackageProvider.cpp`:
 
 ```cpp title="windows\SheetJSWin\ReactPackageProvider.cpp"
 #include "ReactPackageProvider.h"
@@ -1188,7 +1188,7 @@ namespace SheetJSWin {
 
 Now the native module will be added to the app.
 
-4) Remove `App.js` and save the following to `App.tsx`:
+6) Remove `App.js` and save the following to `App.tsx`:
 
 ```tsx title="App.tsx"
 import React, { useState, type Node } from 'react';
@@ -1234,7 +1234,7 @@ const styles = StyleSheet.create({
 export default App;
 ```
 
-5) Test the app again:
+7) Test the app again:
 
 ```powershell
 npx react-native run-windows --no-telemetry
@@ -1343,6 +1343,329 @@ namespace SheetJSWin
 </Tabs>
 
 This module can be referenced from the Turbo Module Registry:
+
+```js
+import { read } from 'xlsx';
+import { getEnforcing } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+const DocumentPicker = getEnforcing('DocumentPicker');
+
+
+/* ... in some event handler ... */
+async() => {
+  const b64 = await DocumentPicker.PickAndRead();
+  const wb = read(b64);
+  // DO SOMETHING WITH `wb` HERE
+}
+```
+
+## React Native MacOS
+
+The [NodeJS Module](../getting-started/installation/nodejs) can be imported
+from the main app script.  File operations must be written in native code.
+
+This demo was tested against `v0.64.30` on 2022 September 10 in MacOS 12.4
+
+:::note
+
+At the time of writing, the latest supported React Native version was `v0.64.3`
+
+:::
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+0) Follow the [React Native](https://reactnative.dev/docs/environment-setup)
+   guide for React Native CLI on MacOS.
+
+:::caution
+
+NodeJS `v16` is required.  There are OS-specific tools for downgrading:
+
+- [`nvm-windows`](https://github.com/coreybutler/nvm-windows/releases) Windows
+- [`nvm`](https://github.com/nvm-sh/nvm/) Linux, MacOS, WSL, etc.
+
+:::
+
+1) Create a new project using React Native `0.64`:
+
+```bash
+npx react-native init SheetJSmacOS --template react-native@^0.64.0
+cd SheetJSmacOS
+```
+
+Create the MacOS part of the application:
+
+```bash
+npx react-native-macos-init --no-telemetry
+```
+
+Install Library:
+
+```
+npm i --save https://cdn.sheetjs.com/xlsx-latest/xlsx-latest.tgz
+```
+
+To ensure that the app works, launch the app:
+
+```powershell
+npx react-native run-macos
+```
+
+Close the running app from the dock and close the Metro terminal window.
+
+2) Create the file `macos/SheetJSmacOS-macOS/RCTDocumentPicker.h`:
+
+```objc title="macos/SheetJSmacOS-macOS/RCTDocumentPicker.h"
+#import <React/RCTBridgeModule.h>
+@interface RCTDocumentPicker : NSObject <RCTBridgeModule>
+@end
+```
+
+Create the file `macos/SheetJSmacOS-macOS/RCTDocumentPicker.m`:
+
+```objc title="macos/SheetJSmacOS-macOS/RCTDocumentPicker.m"
+#import <Foundation/Foundation.h>
+#import <React/RCTUtils.h>
+
+#import "RCTDocumentPicker.h"
+
+@implementation RCTDocumentPicker
+
+RCT_EXPORT_MODULE();
+
+RCT_EXPORT_METHOD(PickAndRead:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+  RCTExecuteOnMainQueue(^{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setCanChooseDirectories:NO];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setMessage:@"Select a spreadsheet to read"];
+
+    [panel beginWithCompletionHandler:^(NSInteger result){
+      if (result == NSModalResponseOK) {
+        NSURL *selected = [[panel URLs] objectAtIndex:0];
+        NSFileHandle *hFile = [NSFileHandle fileHandleForReadingFromURL:selected error:nil];
+        if(hFile) {
+          NSData *data = [hFile readDataToEndOfFile];
+          resolve([data base64EncodedStringWithOptions:0]);
+        } else reject(@"read_failure", @"Could not read selected file!", nil);
+      } else reject(@"select_failure", @"No file selected!", nil);
+    }];
+  });
+}
+@end
+```
+
+3) Edit the project file `macos/SheetJSmacOS.xcodeproj/project.pbxproj`.
+
+There are four places where lines must be added:
+
+A) Immediately after `/* Begin PBXBuildFile section */`
+
+```plist
+/* Begin PBXBuildFile section */
+// highlight-next-line
+    4717DC6A28CC499A00A9BE56 /* RCTDocumentPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4717DC6928CC499A00A9BE56 /* RCTDocumentPicker.m */; };
+    13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+```
+
+B) Immediately after `/* Begin PBXFileReference section */`
+
+```plist
+/* Begin PBXFileReference section */
+// highlight-start
+    4717DC6828CC495400A9BE56 /* RCTDocumentPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RCTDocumentPicker.h; path = "SheetJSMacOS-macOS/RCTDocumentPicker.h"; sourceTree = "<group>"; };
+    4717DC6928CC499A00A9BE56 /* RCTDocumentPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RCTDocumentPicker.m; path = "SheetJSMacOS-macOS/RCTDocumentPicker.m"; sourceTree = "<group>"; };
+// highlight-end
+    008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+```
+
+C) The goal is to add a reference to the `PBXSourcesBuildPhase` block for the
+`macOS` target.  To determine this, look in the `PBXNativeTarget section` for
+a block with the comment `SheetJSmacOS-macOS`:
+
+```plist
+/* Begin PBXNativeTarget section */
+...
+      productType = "com.apple.product-type.application";
+    };
+// highlight-next-line
+    514201482437B4B30078DB4F /* SheetJSmacOS-macOS */ = {
+      isa = PBXNativeTarget;
+...
+/* End PBXNativeTarget section */
+```
+
+Within the block, look for `buildPhases` and find the hex string for `Sources`:
+
+```plist
+      buildPhases = (
+        1A938104A937498D81B3BD3B /* [CP] Check Pods Manifest.lock */,
+        381D8A6F24576A6C00465D17 /* Start Packager */,
+// highlight-next-line
+        514201452437B4B30078DB4F /* Sources */,
+        514201462437B4B30078DB4F /* Frameworks */,
+        514201472437B4B30078DB4F /* Resources */,
+        381D8A6E24576A4E00465D17 /* Bundle React Native code and images */,
+        3689826CA944E2EF44FCBC17 /* [CP] Copy Pods Resources */,
+      );
+```
+
+Search for that hex string (`514201452437B4B30078DB4F` in our example) in the
+file and it should show up in a `PBXSourcesBuildPhase` section. Within `files`,
+add the highlighted line:
+
+```plist
+    514201452437B4B30078DB4F /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+// highlight-next-line
+        4717DC6A28CC499A00A9BE56 /* RCTDocumentPicker.m in Sources */,
+        514201502437B4B30078DB4F /* ViewController.m in Sources */,
+        514201582437B4B40078DB4F /* main.m in Sources */,
+        5142014D2437B4B30078DB4F /* AppDelegate.m in Sources */,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+```
+
+D) The goal is to add file references to the "main group".  Search for
+`/* Begin PBXProject section */` and there should be one Project object.
+Within the project object, look for `mainGroup`:
+
+```plist
+/* Begin PBXProject section */
+    83CBB9F71A601CBA00E9B192 /* Project object */ = {
+      isa = PBXProject;
+...
+        Base,
+      );
+// highlight-next-line
+      mainGroup = 83CBB9F61A601CBA00E9B192;
+      productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
+...
+/* End PBXProject section */
+```
+
+Search for that hex string (`83CBB9F61A601CBA00E9B192` in our example) in the
+file and it should show up in a `PBXGroup` section.  Within `children`, add the
+highlighted lines:
+
+```plist
+    83CBB9F61A601CBA00E9B192 = {
+      isa = PBXGroup;
+      children = (
+// highlight-start
+        4717DC6828CC495400A9BE56 /* RCTDocumentPicker.h */,
+        4717DC6928CC499A00A9BE56 /* RCTDocumentPicker.m */,
+// highlight-end
+        5142014A2437B4B30078DB4F /* SheetJSmacOS-macOS */,
+        13B07FAE1A68108700A75B9A /* SheetJSmacOS-iOS */,
+```
+
+4) Replace `App.js` with the following:
+
+```tsx title="App.js"
+import React, { useState, type Node } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { read, utils, version } from 'xlsx';
+import { getEnforcing } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+const DocumentPicker = getEnforcing('DocumentPicker');
+
+const App: () => Node = () => {
+
+  const [ aoa, setAoA ] = useState(["SheetJS".split(""), "5433795".split("")]);
+
+  return (
+    <SafeAreaView style={styles.outer}>
+      <Text style={styles.title}>SheetJS × React Native MacOS {version}</Text>
+      <TouchableHighlight onPress={async() => {
+        try {
+          const b64 = await DocumentPicker.PickAndRead();
+          const wb = read(b64);
+          setAoA(utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 } ));
+        } catch(err) { alert(`Error: ${err.message}`); }
+      }}><Text style={styles.button}>Click here to Open File!</Text></TouchableHighlight>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View style={styles.table}>{aoa.map((row,R) => (
+          <View style={styles.row} key={R}>{row.map((cell,C) => (
+            <View style={styles.cell} key={C}><Text>{cell}</Text></View>
+          ))}</View>
+        ))}</View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  cell: { flex: 4 },
+  row: { flexDirection: 'row', justifyContent: 'space-evenly', padding: 10, backgroundColor: 'white', },
+  table: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', },
+  outer: { marginTop: 32, paddingHorizontal: 24, },
+  title: { fontSize: 24, fontWeight: '600', },
+  button: { marginTop: 8, fontSize: 18, fontWeight: '400', },
+});
+
+export default App;
+```
+
+5) Test the app:
+
+```bash
+npx react-native run-macos
+```
+
+Download <https://sheetjs.com/pres.xlsx>, then click on "open file". Use the
+file picker to select the `pres.xlsx` file and the app will show the data.
+
+6) Make a release build:
+
+```bash
+xcodebuild -workspace macos/SheetJSmacOS.xcworkspace -scheme SheetJSmacOS-macOS -config Release
+```
+
+</details>
+
+### Reading Files
+
+Only the main UI thread can show file pickers.  This is similar to Web Worker
+DOM access limitations in the Web platform.
+
+This example defines a `PickAndRead` function that will show the file picker,
+read the file contents, and return a Base64 string.
+
+```objc
+/* the resolve/reject is projected on the JS side as a Promise */
+RCT_EXPORT_METHOD(PickAndRead:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+  /* perform file picker action in the UI thread */
+  // highlight-next-line
+  RCTExecuteOnMainQueue(^{
+    /* create file picker */
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    [panel setCanChooseDirectories:NO];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setMessage:@"Select a spreadsheet to read"];
+
+    /* show file picker */
+    // highlight-next-line
+    [panel beginWithCompletionHandler:^(NSInteger result){
+      if (result == NSModalResponseOK) {
+        /* read data and return base64 string */
+        NSURL *selected = [[panel URLs] objectAtIndex:0];
+        NSFileHandle *hFile = [NSFileHandle fileHandleForReadingFromURL:selected error:nil];
+        if(hFile) {
+          NSData *data = [hFile readDataToEndOfFile];
+          // highlight-next-line
+          resolve([data base64EncodedStringWithOptions:0]);
+        } else reject(@"read_failure", @"Could not read selected file!", nil);
+      } else reject(@"select_failure", @"No file selected!", nil);
+    }];
+  });
+}
+```
+
+This module is referenced in the same way as the React Native Windows example:
 
 ```js
 import { read } from 'xlsx';

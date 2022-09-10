@@ -7,6 +7,10 @@ docs.sheetjs.com
 TabItem
 DocCardList
 
+# frontmatter noise
+api
+csf
+
 # Excel-related terms
 A1-Style
 AutoFilter
@@ -111,6 +115,7 @@ Auth
 BOM
 Base64
 Base64-encoded
+Big5
 Booleans
 Browserify
 Bundlers
@@ -139,11 +144,13 @@ ES5
 ES6
 ESM
 ETH
+Endian
 Ethercalc
 ExpressJS
 ExtendScript
 Fastify
 FileReader
+GBK
 GatsbyJS
 Goja
 HTML
@@ -222,6 +229,7 @@ SWF
 Schemas
 Serverless
 SessionStorage
+Shift-JIS
 SlimerJS
 Snowpack
 SuiteScript
@@ -321,7 +329,3 @@ vscode-data-preview
 webpack
 weex
 wkhtmltopdf
-
-# frontmatter noise
-api
-csf
