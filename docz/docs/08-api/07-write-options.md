@@ -125,6 +125,8 @@ The scripts will be available at `xlsx/dist/xlsx.zahl` (CommonJS) and
 ```js
 import * as XLSX from "xlsx";
 import XLSX_ZAHL_PAYLOAD from "xlsx/dist/xlsx.zahl";
+import * as fs from "fs";
+XLSX.set_fs(fs);
 var wb = XLSX.utils.book_new(); var ws = XLSX.utils.aoa_to_sheet([
   ["SheetJS", "<3","விரிதாள்"],
   [72,,"Arbeitsblätter"],
