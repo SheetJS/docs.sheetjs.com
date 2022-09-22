@@ -48,7 +48,7 @@ const FeatureList = [
     description: (
       <>
         SheetJS runs everywhere: web browsers, servers, desktop apps, mobile
-        apps, SalesForce and Photoshop plugins, even within Excel!
+        apps, Salesforce and Photoshop plugins, even within Excel!
       </>
     ),
     denouement: (

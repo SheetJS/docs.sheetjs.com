@@ -51,7 +51,7 @@ run in the web browser, demos will include interactive examples.
 - [`Google Sheets API`](./gsheet)
 - [`ExtendScript for Adobe Apps`](./extendscript)
 - [`NetSuite SuiteScript`](./netsuite)
-- [`SalesForce Lightning Web Components`](./salesforce)
+- [`Salesforce Lightning Web Components`](./salesforce)
 - [`Excel JavaScript API`](./excelapi)
 - [`Headless Automation`](./headless)
 - [`Other JavaScript Engines`](./engines)

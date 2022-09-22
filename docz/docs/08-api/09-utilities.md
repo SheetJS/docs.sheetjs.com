@@ -31,10 +31,15 @@ var ws = XLSX.utils.aoa_to_sheet(aoa, opts);
 ```
 
 `XLSX.utils.aoa_to_sheet` takes an array of arrays of JS values and returns a
-worksheet resembling the input data.  Numbers, Booleans and Strings are stored
-as the corresponding styles.  Dates are stored as date or numbers.  Array holes
-and explicit `undefined` values are skipped.  `null` values may be stubbed. All
-other values are stored as strings.  The function takes an options argument:
+worksheet resembling the input data.  Values are interpreted as follows:
+
+- Numbers, Booleans and Strings are stored as the corresponding types.
+- Date objects are stored as Date cells or date codes (see `cellDates` option)
+- Array holes and explicit `undefined` values are skipped.
+- `null` values may be stubbed (see `sheetStubs` and `nullError` options)
+- Cell objects are used as-is.
+
+The function takes an options argument:
 
 | Option Name | Default | Description                                          |
 | :---------- | :-----: | :--------------------------------------------------- |

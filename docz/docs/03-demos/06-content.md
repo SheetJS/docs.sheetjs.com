@@ -169,7 +169,7 @@ export async function getServerSideProps() {
 
 ### Demo
 
-<details open><summary><b>Complete Example</b> (click to show)</summary>
+<details><summary><b>Complete Example</b> (click to show)</summary>
 
 0) Disable NextJS telemetry:
 
@@ -335,7 +335,6 @@ Through an override in `nuxt.config.js`, Nuxt Content will use custom parsers.
 Differences from a stock `create-nuxt-app` config are shown below:
 
 ```js
-// highlight-start
 import { readFile, utils } from 'xlsx';
 
 // This will be called when the files change
@@ -345,12 +344,10 @@ const parseSheet = (file, { path }) => {
   const o = wb.SheetNames.map(name => ({ name, data: utils.sheet_to_json(wb.Sheets[name])}));
   return { data: o };
 }
-// highlight-end
 
 export default {
 // ...
 
-// highlight-start
   // content.extendParser allows us to hook into the parsing step
   content: {
     extendParser: {
@@ -361,7 +358,6 @@ export default {
       // can add other extensions like ".fods" as desired
     }
   },
-// highlight-end
 
 // ...
 }

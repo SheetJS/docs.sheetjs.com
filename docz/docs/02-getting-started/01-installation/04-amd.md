@@ -66,15 +66,9 @@ downloaded and manually uploaded to the project.
 
 ## RequireJS
 
-After downloading the script, it can be referenced directly in `require` calls:
+:::caution
 
-```js
-require(['./xlsx.full.min'], function(XLSX) {
-  // ... use XLSX here
-});
-```
-
-#### Aliases
+The standalone script must be aliased to the path `xlsx`.
 
 The `requirejs.config` function can define aliases through the `paths` key:
 
@@ -86,7 +80,9 @@ requirejs.config({
 });
 ```
 
-Once that is set, app code can freely require `xlsx`:
+:::
+
+After configuring the alias, app code can freely require `xlsx`:
 
 ```js
 require(['xlsx'], function(XLSX) {
