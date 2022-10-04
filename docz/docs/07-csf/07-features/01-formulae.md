@@ -16,14 +16,17 @@ while the writer will translate from A1-Style strings to the file format.
 |:------------------|:-----:|:-----:|:-----:|:-------:|:-----------------------|
 | XLSX / XLSM       |   ✔   |   ✔   |   ✔   |    ✔    | A1-Style strings       |
 | XLSB              |   ✔   |       |   ✔   |    ✔    | BIFF parsed tokens     |
-| XLS               |   ✔   |       |   ✔   |         | BIFF parsed tokens     |
-| XLML              |   ✔   |   ✔   |   ✔   |         | RC-style strings       |
-| SYLK              |   ✔   |   ✔   |       |         | `A1`/RC-style strings  |
-| CSV / TXT         |   ✔   |   ✔   |       |         | A1-Style strings       |
-| ODS / FODS / UOS  |   ✔   |   ✔   |       |         | OpenFormula strings    |
-| WK\*              |   ✔   |       |       |         | Lotus parsed tokens    |
-| WQ\* / WB\* / QPW |       |       |       |         | Quattro Pro tokens     |
-| NUMBERS           |       |       |       |         | Numbers parsed tokens  |
+| XLS               |   ✔   |       |   ✔   |    *    | BIFF parsed tokens     |
+| XLML              |   ✔   |   ✔   |   ✔   |    *    | RC-style strings       |
+| SYLK              |   ✔   |   ✔   |       |    *    | A1/RC-style strings    |
+| CSV / TXT         |   ✔   |   ✔   |   *   |    *    | A1-Style strings       |
+| ODS / FODS / UOS  |   ✔   |   ✔   |       |    *    | OpenFormula strings    |
+| WK\*              |   ✔   |       |       |    *    | Lotus parsed tokens    |
+| WQ\* / WB\* / QPW |       |       |       |    *    | Quattro Pro tokens     |
+| NUMBERS           |       |       |       |    *    | Numbers parsed tokens  |
+
+Asterisks (*) mark features that are not supported by the file formats. There is
+no way to mark a dynamic array formula in the XLS file format.
 
 </details>
 

@@ -5,8 +5,8 @@ hide_table_of_contents: true
 ---
 
 Here are some common errors and their resolutions.  This is not comprehensive.
-The [issue tracker](https://github.com/SheetJS/sheetjs/issues) has a wealth of
-information and user-contributed examples.
+The [issue tracker](https://git.sheetjs.com/SheetJS/sheetjs/issues) has a
+wealth of information and user-contributed examples.
 
 If issues are not covered in the docs or the issue tracker, or if a solution is
 not discussed in the documentation, we would appreciate a bug report.

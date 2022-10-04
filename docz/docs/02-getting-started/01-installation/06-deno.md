@@ -10,6 +10,15 @@ import current from '/version.js';
 
 # Deno
 
+[Deno](https://deno.land/) is a JavaScript runtime powered by V8.
+
+:::caution Deno support is considered experimental.
+
+Great open source software grows with user tests and reports. Any issues should
+be reported to the Deno project for further diagnosis.
+
+:::
+
 Each standalone release script is available at <https://cdn.sheetjs.com/>.
 
 Using the URL imports, `deno run` will automatically download scripts and types:

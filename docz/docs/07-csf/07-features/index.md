@@ -11,12 +11,11 @@ are expected to serialize SheetJS workbooks in the underlying file format.
 The following topics are covered in sub-pages:
 
 <ul>{useCurrentSidebarCategory().items.map((item, index) => {
-  const listyle = (item.customProps?.icon) ? {
-    listStyleImage: `url("${item.customProps.icon}")`
-  } : {};
-  return (<li style={listyle} {...(item.customProps?.class ? {className: item.customProps.class}: {})}>
-    <a href={item.href}>{item.label}</a>{item.customProps?.summary && (" - " + item.customProps.summary)}
-  </li>);
+  const cP = item.customProps;
+  const listyle = (cP?.icon) ? { listStyleImage: `url("${cP.icon}")` } : {};
+  return ( <li style={listyle} {...(cP?.class ? {className: cP.class}: {})}>
+    <a href={item.href}>{item.label}</a>{cP?.summary && (" - " + cP.summary)}
+  </li> );
 })}</ul>
 
 ## Row and Column Properties
@@ -340,9 +339,9 @@ var vbablob = wb.vbaraw;
 
 #### Code Names
 
-By default, Excel will use `ThisWorkbook` or a translation `DieseArbeitsmappe`
-for the workbook.  Each worksheet will be identified using the default `Sheet#`
-naming pattern even if the worksheet names have changed.
+Excel will use `ThisWorkbook` (or a translation like `DieseArbeitsmappe`) as the
+default Code Name for the workbook.  Each worksheet will be identified using the
+default `Sheet#` naming pattern even if the worksheet names have changed.
 
 A custom workbook code name will be stored in `wb.Workbook.WBProps.CodeName`.
 For exports, assigning the property will override the default value.
@@ -374,4 +373,3 @@ function wb_has_macro(wb/*:workbook*/)/*:boolean*/ {
   return sheets.some((ws) => !!ws && ws['!type']=='macro');
 }
 ```
-

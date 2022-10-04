@@ -113,6 +113,7 @@ In addition to the aforementioned sheet keys, worksheets also add:
 | `pivotTables`         | Use PivotTable reports                  | disabled   |
 | `objects`             | Edit objects                            | enabled    |
 | `scenarios`           | Edit scenarios                          | enabled    |
+
 </details>
 
 - `ws['!autofilter']`: AutoFilter object following the schema:

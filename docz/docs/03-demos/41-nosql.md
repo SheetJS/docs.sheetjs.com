@@ -219,7 +219,7 @@ includes an example of constructing a simple array.
 function export_pouchdb_to_xlsx(db) {
   /* fetch all rows, including the underlying data */
   db.allDocs({include_docs: true}, function(err, doc) {
-    
+
     /* pull the individual data rows */
     const aoo = doc.rows.map(r => {
       /* `rest` will include every field from `r` except for _id and _rev */

@@ -6,6 +6,88 @@ With the advent of server-side frameworks and content management systems, it is
 possible to build sites whose source of truth is a spreadsheet!  This demo
 explores a number of approaches.
 
+## Lume
+
+[Lume](https://lume.land) is a static site generator for the Deno platform.
+
+The official [Sheets plugin](https://lume.land/plugins/sheets/) uses SheetJS
+to load data from spreadsheets.
+
+### Lume Demo
+
+:::note
+
+This was tested against `lume v1.12.0` on 2022 October 4.
+
+:::
+
+<details><summary><b>Complete Example</b> (click to show)</summary>
+
+1) Create a stock site:
+
+```bash
+mkdir sheetjs-lume
+cd sheetjs-lume
+deno run -A https://deno.land/x/lume/init.ts
+```
+
+When prompted, enter the following options:
+
+- `Use TypeScript for the configuration file`: press Enter (use default `N`)
+- `Do you want to use plugins`: type `sheets` and press Enter
+
+The project will be configured and modules will be installed.
+
+2) Download <https://sheetjs.com/pres.numbers> and place in a `_data` folder:
+
+```bash
+mkdir _data
+curl -LO https://sheetjs.com/pres.numbers
+mv pres.numbers _data
+```
+
+3) Create a `index.njk` file that references the file.  Since the file is
+   `pres.numbers`, the parameter name is `pres`:
+
+```liquid title="index.njk"
+<h2>Presidents</h2>
+<table><thead><th>Name</th><th>Index</th></thead>
+  <tbody>
+  {% for row in pres %}{% if (loop.index >= 1) %}
+    <tr>
+      <td>{{ row.Name }}</td>
+      <td>{{ row.Index }}</td>
+    </tr>
+  {% endif %}{% endfor %}
+  </tbody>
+</table>
+```
+
+4) Run the development server:
+
+```bash
+deno task lume --serve
+```
+
+To verify it works, access http://localhost:3000 from your web browser.
+Adding a new row and saving `pres.numbers` should refresh the data
+
+5) Stop the server (press `CTRL+C` in the terminal window) and run
+
+```bash
+deno task lume
+```
+
+This will create a static site in the `_site` folder, which can be served with:
+
+```bash
+npx http-server _site
+```
+
+Accessing the page http://localhost:8080 will show the page contents.
+
+</details>
+
 ## GatsbyJS
 
 [`gatsby-transformer-excel`](https://www.gatsbyjs.com/plugins/gatsby-transformer-excel/)
@@ -511,162 +593,5 @@ npx http-server dist
 Accessing the page http://localhost:8080 will show the page contents. Verifying
 the static nature is trivial: make another change in Excel and save.  The page
 will not change.
-
-</details>
-
-## Lume
-
-Lume is a static site generator for the Deno platform.
-
-`lume#loadData` can add custom loaders for data.  The loader method receives a
-path to the file, which can be read with `XLSX.readFile`.  This should be added
-to `_config.js`, like in the example below:
-
-```js title="_config.js"
-import lume from "lume/mod.ts";
-import { readFile, utils } from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
-
-function wbLoader(path) {
-  const wb = readFile(path);
-  const res = wb.SheetNames.map(n => ({
-    name: n,
-    data: utils.sheet_to_json(wb.Sheets[n])
-  }));
-  return { content: res };
-}
-
-const site = lume();
-const exts = [".xlsx", ".numbers", /* ... other supported extensions */];
-// highlight-next-line
-site.loadData(exts, wbLoader);
-
-export default site;
-```
-
-The actual spreadsheets should be placed in the `_data` subfolder.
-
-The variable name is the stem of the filename (`sheetjs` if `sheetjs.xlsx` or
-`sheetjs.numbers` exists).  A Nunjucks or JSX template can loop through the
-worksheets and the data rows. The example assumes each worksheet has a `name` and `index` column:
-
-```jsx title="index.jsx"
-export default ({sheetjs}) => {
-  return (<>{(sheetjs).map(sheet => (<>
-    <h2>{sheet.name}</h2>
-    <table><thead><th>Name</th><th>Index</th></thead>
-    <tbody>{sheet.data.map(row => (<tr>
-      <td>{row.name}</td>
-      <td>{row.index}</td>
-    </tr>))}</tbody>
-    </table>
-  </>))}</>);
-};
-```
-
-### Lume Demo
-
-<details><summary><b>Complete Example</b> (click to show)</summary>
-
-:::note
-
-This was tested against `lume v1.10.4` on 2022 August 25.
-
-:::
-
-1) Create a stock site:
-
-```bash
-mkdir sheetjs-lume
-cd sheetjs-lume
-deno run -A https://deno.land/x/lume/init.ts
-```
-
-When prompted, enter the following options:
-
-- `Use TypeScript for the configuration file`: press Enter (use default `N`)
-- `Do you want to use plugins`: type `jsx` and press Enter
-
-The project will be configured and modules will be installed.
-
-2) Make the following highlighted changes to `_config.js`:
-
-```js title="_config.js"
-import lume from "lume/mod.ts";
-import jsx from "lume/plugins/jsx.ts";
-
-// highlight-start
-import { readFile, utils } from 'https://cdn.sheetjs.com/xlsx-latest/package/xlsx.mjs';
-
-function wbLoader(path) {
-  const wb = readFile(path);
-  const res = wb.SheetNames.map(n => ({
-    name: n,
-    data: utils.sheet_to_json(wb.Sheets[n])
-  }));
-  return { content: res };
-}
-// highlight-end
-
-const site = lume();
-
-site.use(jsx());
-
-// highlight-start
-const exts = [".xlsx", ".numbers", /* ... other supported extensions */];
-site.loadData(exts, wbLoader);
-// highlight-end
-
-export default site;
-```
-
-This instructs Lume to watch for and load `.xlsx` and `.numbers` spreadsheets
-
-3) Download <https://sheetjs.com/pres.numbers> and place in a `_data` folder:
-
-```bash
-mkdir _data
-curl -LO https://sheetjs.com/pres.numbers
-mv pres.numbers _data
-```
-
-4) Create a `index.jsx` file that references the file.  Since the file is
-   `pres.numbers`, the parameter name is `pres`:
-
-```jsx title="index.jsx"
-export default ({pres}) => {
-  return (<>{(pres).map(sheet => (<>
-    <h2>{sheet.name}</h2>
-    <table><thead><th>Name</th><th>Index</th></thead>
-    <tbody>{sheet.data.map(row => (<tr>
-      <td>{row.Name}</td>
-      <td>{row.Index}</td>
-    </tr>))}</tbody>
-    </table>
-  </>))}</>);
-};
-```
-
-5) Run the development server:
-
-```bash
-deno task lume --serve
-```
-
-To verify it works, access http://localhost:3000 from your web browser.
-Adding a new row and saving `pres.numbers` should refresh the data
-
-6) Stop the server (press `CTRL+C` in the terminal window) and run
-
-```bash
-deno task lume
-```
-
-This will create a static site in the `_site` folder, which can be served with:
-
-```bash
-npx http-server _serve
-```
-
-Accessing the page http://localhost:8080 will show the page contents.
 
 </details>

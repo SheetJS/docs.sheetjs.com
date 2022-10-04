@@ -80,7 +80,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/sheetjs/sheetjs',
+            href: 'https://docs.sheetjs.com/docs/miscellany/source/',
             label: 'Source',
             position: 'right',
           },
@@ -132,7 +132,7 @@ const config = {
               },
               {
                 label: 'Source',
-                href: 'https://github.com/sheetjs/sheetjs',
+                href: 'https://docs.sheetjs.com/docs/miscellany/source/',
               },
             ],
           },

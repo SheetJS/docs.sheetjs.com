@@ -890,4 +890,4 @@ rd.resume();
 </Tabs>
 
 
-<https://github.com/sheetjs/sheetaki> pipes write streams to nodejs response.
+<https://sheetaki.now.sh/> pipes write streams to nodejs response.
