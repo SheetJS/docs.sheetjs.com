@@ -22,7 +22,7 @@ The examples are based on the following worksheet:
 </table>
 
 
-### Array of Arrays Input
+## Array of Arrays Input
 
 **Create a worksheet from an array of arrays**
 
@@ -105,7 +105,7 @@ XLSX.utils.sheet_add_aoa(ws, [[5,6,7], [6,7,8], [7,8,9]], {origin:{r:1, c:4}});
 XLSX.utils.sheet_add_aoa(ws, [[4,5,6,7,8,9,0]], {origin: -1});
 ```
 
-### Array of Objects Input
+## Array of Objects Input
 
 **Create a worksheet from an array of objects**
 
@@ -272,7 +272,7 @@ function SheetJSHeaderOrder() {
 
 :::
 
-### HTML Table Input
+## HTML Table Input
 
 **Create a worksheet or workbook from a TABLE element**
 
@@ -425,7 +425,38 @@ function MultiTable() {
 }
 ```
 
-### Delimiter-Separated Output
+### Value Override
+
+When the `raw: true` option is specified, the parser will generate text cells.
+When the option is not specified or when it is set to false, the parser will
+try to interpret the text of each TD element.
+
+To override the conversion for a specific cell, the following data attributes
+can be added to the individual TD elements:
+
+| Attribute | Description                                               |
+|:----------|:----------------------------------------------------------|
+| `data-t`  | Override [Cell Type](../csf/cell#data-types)              |
+| `data-v`  | Override Cell Value                                       |
+| `data-z`  | Override [Number Format](../csf/features/#number-formats) |
+
+For example:
+
+```html
+<!-- Parser interprets value as `new Date("2012-12-03")` default date format -->
+<td>2012-12-03</td>
+
+<!-- String cell "2012-12-03" -->
+<td data-t="s">2012-12-03</td>
+
+<!-- Numeric cell with the correct date code and General format -->
+<td data-t="n" data-v="41246">2012-12-03</td>
+
+<!-- Traditional Excel Date 2012-12-03 with style yyyy-mm-dd -->
+<td data-t="n" data-v="41246" data-z="yyyy-mm-dd">2012-12-03</td>
+```
+
+## Delimiter-Separated Output
 
 ```js
 var csv = XLSX.utils.sheet_to_csv(ws, opts);
@@ -490,7 +521,7 @@ the output will be encoded in `CP1200` and the UTF-16 BOM will be added.
 `XLSX.utils.sheet_to_txt` takes the same arguments as `sheet_to_csv`.
 
 
-### HTML Output
+## HTML Output
 
 ```js
 var html = XLSX.utils.sheet_to_html(ws, opts);
@@ -524,7 +555,7 @@ function SheetJSHTML() {
 }
 ```
 
-### Array Output
+## Array Output
 
 ```js
 var arr = XLSX.utils.sheet_to_json(ws, opts);
@@ -613,7 +644,7 @@ function SheetJSToJSON() {
 }
 ```
 
-### Formulae Output
+## Formulae Output
 
 ```js
 var fmla_arr = XLSX.utils.sheet_to_formulae(ws);
