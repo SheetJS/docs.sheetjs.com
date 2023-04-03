@@ -256,7 +256,7 @@ console.log(utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]));
 
 ```js title="SheetJSWriteToAzure.mjs"
 import { BlobServiceClient } from "@azure/storage-blob";
-import { read, utils } from "xlsx";
+import { write, utils } from "xlsx";
 
 /* replace these constants */
 const connStr = "<REPLACE WITH CONNECTION STRING>";
